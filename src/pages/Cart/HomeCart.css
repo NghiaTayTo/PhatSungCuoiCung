@@ -1,0 +1,119 @@
+/* HomeCart.css */
+
+.cart-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cart-content p {
+    font-size: 1.1em;
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.cart-product {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+    justify-content: space-between;
+}
+
+.product-details {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.product-image {
+    width: 120px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-details h3 {
+    font-size: 16px;
+    margin: 0 0 5px 0;
+    color: #444;
+}
+
+.product-details p {
+    font-size: 16px;
+    color: #888;
+    margin: 0;
+}
+
+.product-price,
+.product-quantity {
+    font-size: 16px;
+    color: #333;
+    text-align: right;
+}
+
+.product-price {
+    min-width: 120px;
+    font-weight: bold;
+}
+
+.product-quantity {
+    margin-left: 20px;
+    font-size: 1.5em;
+}
+
+.buttonCart {
+    background-color: #ff5a5f;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    font-size: 1.1em;
+}
+
+.cart-summary p {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.checkout-button {
+    background-color: #2a9d8f;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.checkout-button:hover {
+    background-color: #21867a;
+}
+
+.cart-content .cart-summary button {
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+}

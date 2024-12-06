@@ -1,0 +1,123 @@
+:root{
+    --primary-color: rgb(66, 66, 197);
+}
+
+
+.sidebarStyle {
+    width: 270px;
+    height: 100vh;
+    font-size: 1.7rem;
+    background-color: #ffffff;
+    padding: 0 10px;
+    position: fixed;
+    top: 80px;
+    overflow: auto;
+}
+
+.listStyle {
+    padding: 10px ;
+}
+
+.listStyle li{
+    margin-bottom: 5px;
+    width: 230px;
+}
+
+.itemStyle{
+    display: block;
+    align-items: center;
+    padding: 12px 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.itemStyle-click{
+    color: white !important;
+    background-color: var(--primary-color);
+    border-radius: 7px;
+    position: relative;
+}
+
+.color_white{
+    color: white !important;
+}
+
+.mr-5{
+    width: 20px;
+    margin-right: 7px;
+}
+
+.faAngleDown{
+    float: right;
+    margin-top: 5px;
+}
+
+.submenu{
+    display: block;
+    /* width: 100%; */
+    margin-top: 7px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px ;
+    animation: slideDown 0.3s ease-out;
+    background-color: transparent !important;
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+    }
+
+    50%{
+        opacity: 0.5;
+    }
+    
+    100%{
+        opacity: 1;
+    }
+}
+
+/* Khi menu con mở */
+.submenu-open {
+    display: block; /* Khi mở menu con sẽ chiếm không gian */
+}
+
+.submenu a{
+    display: block;
+    width: 204px;
+    height: 45px;
+    line-height: 45px;
+    border-left: 4px solid rgba(66, 66, 197, 0.577);
+    padding-left: 10px;
+}
+
+.submenu-item{
+    color: rgb(98, 93, 93) !important;
+    background-color: transparent;  
+    width: 196px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.submenu-item_click{
+    background-color: rgba(66, 66, 197, 0.249);
+    color: var(--primary-color) !important;
+    border-left: 4px solid var(--primary-color) !important;
+    width: 216px !important;
+}
+
+.submenu-item:hover{
+    background-color: rgba(66, 66, 197, 0.249);
+    color: var(--primary-color) !important;
+    border-left: 4px solid var(--primary-color) !important;
+    width: 216px !important;
+}
+.bg_white{
+    background-color: white !important;
+    border-radius: 6px;
+    width: 226px !important;
+    margin-left: -13px;
+    margin-bottom: -10px;
+    display: block !important;
+}

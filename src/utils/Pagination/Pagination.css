@@ -1,0 +1,22 @@
+.pagination {
+    display: flex;
+    align-items: center;
+}
+
+.pagination-btn {
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    background-color: #007bff; /* Màu nền cho nút đang được chọn */
+    color: white;
+}
+
+.ellipsis {
+    margin: 0 5px; /* Khoảng cách giữa các dấu ba chấm */
+    cursor: default; /* Không cho phép click */
+}

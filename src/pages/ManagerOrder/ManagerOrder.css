@@ -1,0 +1,60 @@
+.productbtn-item_update{
+    width: 300px;
+}
+
+.no-hover{
+    pointer-events: none;
+}
+
+.btn2 span{
+    color: #717171;
+}
+
+.table-container tbody tr{
+    height: 70px !important;
+}
+
+.xacnhan{
+    color: white !important;
+    background-color: rgb(51, 165, 95) !important;
+    width: 150px !important;
+    height: 30px !important;
+    margin-left: 10px;
+    
+}
+.huydon{
+    color: white !important;
+    background-color: rgb(207, 33, 33) !important;
+    width: 100px !important;
+    height: 30px !important;
+    margin-left: 10px;
+}
+.huydon:hover{
+    color: white !important;
+    background-color: rgb(207, 33, 33) !important;
+    cursor: default !important;
+}
+.danggiao{
+    color: white !important;
+    background-color: rgb(73, 202, 241) !important;
+    width: 150px !important;
+    height: 30px !important;
+    margin-left: 10px;
+    pointer-events: none;
+}
+.dagiao{
+    color: #602400 !important;
+    background-color: #FBDC5C !important;
+    width: 150px !important;
+    height: 30px !important;
+    margin-left: 10px;
+    pointer-events: none;
+}
+.trahang{
+    color: white !important;
+    background-color: rgb(221, 82, 27) !important;
+    width: 150px !important;
+    height: 30px !important;
+    margin-left: 10px;
+    pointer-events: none;
+}

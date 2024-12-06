@@ -1,0 +1,21 @@
+.choduyet{
+    border: 2px solid rgba(255, 225, 0, 0.178) !important;
+    background-color: rgba(239, 236, 131, 0.195) !important;
+    color: #302c2c;
+}
+.xong{
+    border: 2px solid rgba(0, 255, 136, 0.178) !important;
+    background-color: rgba(136, 247, 176, 0.195) !important;
+    color: #302c2c;
+}
+.huy{
+    border: 2px solid rgba(255, 0, 0, 0.178) !important;
+    background-color: rgba(255, 116, 116, 0.195) !important;
+    color: #302c2c;
+}
+
+.giaodich_img{
+    width: 320px !important;
+    height: 300px !important;
+    margin-top: -10px;
+}

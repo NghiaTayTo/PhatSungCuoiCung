@@ -1,0 +1,157 @@
+.register-container {
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.register-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.register-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.register-button {
+    background-color: #d87c28;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.register-button:hover {
+    background-color: #c56c1f;
+}
+
+.register-or {
+    margin: 20px 0;
+    color: #888;
+    font-size: 14px;
+    position: relative;
+}
+
+.register-or span {
+    background-color: #f9f9f9;
+    padding: 0 10px;
+}
+
+.register-or:before,
+.register-or:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.register-or:before {
+    left: 0;
+}
+
+.register-or:after {
+    right: 0;
+}
+
+.register-social {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.social-button {
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.facebook-button {
+    background-color: #3b5998;
+    color: white;
+}
+
+.google-button {
+    background-color: #db4437;
+    color: white;
+}
+
+.register-login-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 100px;
+}
+
+.register-login-link a {
+    color: #d87c28;
+    text-decoration: none;
+}
+
+.register-login-link a:hover {
+    text-decoration: underline;
+}
+.input-code-container {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 8px; */
+    overflow: hidden;
+    width: 100%; /* Chiều rộng container */
+    background-color: #fff;
+    justify-content: space-between;
+}
+
+.input-code {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background-color: #fff; /* Đồng bộ với nền container */
+}
+
+.send-code-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-left: 1px solid #ccc; /* Đường viền giữa ô nhập và nút */
+    transition: background-color 0.3s;
+}
+
+.send-code-button:hover {
+    background-color: #d6d6d6; /* Hiệu ứng khi hover */
+}
+.success-message {
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+

@@ -1,0 +1,260 @@
+.nganhang{
+    margin-top: 0px;
+    position: relative;
+    left: 0;
+}
+.credit-card-bg{
+    width: 100%;
+    height: 400px;
+    /* position: absolute;
+    top: 10px; */
+    /* left: -290px; */
+}
+.credit-card-bg img {
+    width: 100%; /* Điều chỉnh lại width nếu cần */
+    height: 100%; /* Điều chỉnh lại height nếu cần */
+    border-radius: 20px;
+    object-fit: cover;
+    filter: brightness(0.7);
+}
+.credit-card-card{
+    position: absolute;
+    top: -262px;
+    left: -400px;
+    width: 1500px;
+    height: 1200px;
+}
+.credit-card-card img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 10;
+}
+.credit-card-card_item{
+    position: absolute;
+    top: 510px;
+    left: 560px;
+    z-index: 11;
+    width: 400px;
+    color: #fff;
+}
+.credit-card-card_item p{
+    font-size: 1.2rem;
+}
+.credit-card-card_item h2{
+    font-size: 2.4rem;
+    letter-spacing: 3px;
+}
+.credit-card-card_item2{
+    position: absolute;
+    top: 340px;
+    left: 605px;
+    z-index: 11;
+    width: 100px;
+    color: #fff;
+}
+.credit-card-card_item2_img{
+    position: absolute;
+    top: 10px;
+    left: -60px;
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: cover;
+}
+.credit-card-card_item2 h1{
+    font-size: 3rem;
+    font-family: 'MarkoOne', sans-serif;
+}
+.credit-card-card_item3{
+    position: absolute;
+    top: 450px;
+    left: 559px;
+    z-index: 11;
+    width: 400px;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 600;
+    /* background-color: #009060; */
+}
+.credit-card-info{
+    height: auto !important;
+    position: absolute;
+    top: 90px;
+    left: 700px;
+    background-color: rgba(1, 1, 1, 0.267);
+    padding: 30px;
+    border-radius: 17px;
+    color: #fff;
+}
+.credit-card-info-title{
+    position: absolute;
+    top: 45px;
+    left: 730px;
+    background-color: rgba(1, 1, 1, 0.267);
+    padding: 10px;
+    color: #fff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+.credit-card-info-title h2{
+    font-size: 1.6rem !important;
+    font-family: 'MadimiOne', sans-serif;
+}
+.credit-card-info_item label{
+    display: block;
+    font-size: 1.7rem;
+}
+.credit-card-info_item input,
+.credit-card-info_item select{
+    display: block;
+    font-size: 2.3rem;
+    width: 330px;
+    height: 42px;
+    outline: none;
+    background-color: #ffffff00;
+    border-bottom: 2px solid #fff;
+    color: #fff;
+}
+.item-number-card{
+    font-family: 'MadimiOne', sans-serif;
+    letter-spacing: 3px;
+}
+.credit-card-info-save button{
+    position: absolute;
+    top: 330px;
+    left: 770px;
+    background-color: #1877f2;
+    padding: 10px 30px;
+    color: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.8rem;
+    font-family: 'MadimiOne', sans-serif;
+    font-weight: 400;
+}
+.credit-card-info-save button:hover{
+    background-color: #5197f3;
+}
+.credit-card-info_item select{
+    font-size: 1.7rem !important;
+}
+.credit-card-info_item select > option{
+    color: black !important;
+    background-color: #74abf43b;
+    height: 300px !important;
+}
+.cash-button{
+    display: flex;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #f1d357;
+    border:2px solid #e1b503;
+    width: 140px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #2f2929;
+    font-family: 'MadimiOne', sans-serif;
+    transition: all .2s ease-in-out;
+}
+.cash-button-update{
+    background-color: #33CC99 !important;
+    border:2px solid #009060 !important;
+    color: #ffffff !important;
+}
+.cash-button-icon{
+    font-size: 1.8rem;
+    margin-right: 10px;
+}
+.cash-button h3{
+    margin-top: 3px;
+}
+.cash-button:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 8px 0px #000000; 
+}
+.cash-button:active{
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0px #000000;
+}
+@keyframes showw {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+.form-card{
+    animation: showw .3s ease-in;
+}
+.vnd-css{
+    font-family: 'Vnd-Arial', sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 2.3rem !important;
+    position: absolute;
+    top: 60px;
+    right: 30px;
+}
+.radio-number-card{
+    width: 22px !important;
+    height: 22px !important;
+}
+.radio-number-card_err{
+    font-size: 1.4rem;
+    color: rgb(255, 255, 255);
+    background-color: rgba(255, 0, 0, 0.493);
+    padding: 0 10px;
+    text-align: center;
+    
+    margin-top: 12px !important;
+}
+.radio-number-card_err span{
+    border-bottom: 1px solid rgb(255, 255, 255);
+    cursor: pointer;
+    font-weight: 500;
+}
+.radio-number-card_err span:hover{
+    color: rgb(156, 255, 181);
+}
+.credit-card-info_item_flex{
+    display: flex;
+}
+.credit-card-info_item_flex label{
+    margin-top: -3px;
+    margin-left: 10px;
+}
+.credit-card-info-save_cash button{
+    left: 955px !important;
+}
+.my_cash{
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    display: block;
+    width: 100%;
+    height: 50px;
+    cursor: pointer;
+    /* background-color: #009060; */
+}
+.my_cash h2 strong{
+    letter-spacing: 3px;
+    font-size: 2rem !important;
+}
+.credit-card-info_item_update{
+    margin-top: 30px;
+}
+.err-text{
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: rgba(225, 58, 49, 0.788);
+    text-align: center;
+}
+.pointer-events-auto{
+    cursor: pointer !important;
+    z-index: 99999 !important;
+}

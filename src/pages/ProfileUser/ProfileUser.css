@@ -1,0 +1,168 @@
+.profile-page {
+    
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.profile-section {
+    width: 1200px;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    
+}
+
+.profile-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.profile-sidebar {
+    width: 200px;
+    margin-right: 20px;
+}
+
+.profile-sidebar h3 {
+    color: #e89922;
+    margin-bottom: 10px;
+}
+
+.profile-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-sidebar li {
+    margin: 8px 0;
+    color: #333;
+    cursor: pointer;
+}
+
+.profile-content {
+    flex: 1;
+}
+
+.profile-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.profile-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.profile-form {
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
+    max-width: 500px;
+    gap: 15px;
+}
+
+.profile-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-form-group label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.profile-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #555;
+}
+
+.profile-gender-options {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.save-button {
+    grid-column: span 2;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #e89922;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 200px;
+    margin-top: 20px;
+}
+
+.save-button:hover {
+    background-color: #d88b1f;
+}
+
+.profile-image-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    border-left: 1px solid #ddd;
+    padding-left: 20px;
+}
+
+.profile-image-placeholder {
+    width: 100px;
+    height: 100px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.choose-image-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #555;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.image-info {
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin-top: 10px;
+}
+.profile-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-sidebar li {
+    margin: 8px 0;
+}
+
+.sidebar-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.sidebar-link:hover {
+    color: #e89922; /* Màu cam khi hover */
+    text-decoration: underline;
+}

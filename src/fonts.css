@@ -1,0 +1,25 @@
+/* fonts.css */
+@font-face {
+    font-family: 'MadimiOne';
+    src: url('../public/fonts/MadimiOne-Regular.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ABeeZee';
+    src: url('../public/fonts/ABeeZee-Regular.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'MarkoOne';
+    src: url('../public/fonts/MarkoOne-Regular.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Mali';
+    src: url('../public/fonts/Mali-Regular.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}

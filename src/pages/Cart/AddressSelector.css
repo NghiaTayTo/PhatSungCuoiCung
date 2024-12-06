@@ -1,0 +1,51 @@
+/* AddressSelector.css */
+.address-selector-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.address-selector-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+}
+
+.address-list {
+    list-style: none;
+    padding: 0;
+}
+
+.address-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.address-list li:hover {
+    background: #f0f0f0;
+}
+
+.close-button {
+    margin-top: 10px;
+    background: #d9534f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    background: #c9302c;
+}

@@ -1,0 +1,136 @@
+.login-container {
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-button {
+    background-color: #d87c28;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.login-button:hover {
+    background-color: #c56c1f;
+}
+
+.forgot-password {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #d87c28;
+}
+
+.forgot-password a {
+    color: #d87c28;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.login-or {
+    margin: 20px 0;
+    color: #888;
+    font-size: 14px;
+    position: relative;
+}
+
+.login-or span {
+    background-color: #f9f9f9;
+    padding: 0 10px;
+}
+
+.login-or:before,
+.login-or:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.login-or:before {
+    left: 0;
+}
+
+.login-or:after {
+    right: 0;
+}
+
+.login-social {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 100px;
+}
+
+.social-button {
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.facebook-button {
+    background-color: #3b5998;
+    color: white;
+}
+
+.google-button {
+    background-color: #db4437;
+    color: white;
+}
+
+.login-register-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #888;
+}
+
+.login-register-link a {
+    color: #d87c28;
+    text-decoration: none;
+}
+
+.login-register-link a:hover {
+    text-decoration: underline;
+}
+.error-message{
+    margin-top: 10px;
+    font-size: 16px;
+    color: red;
+    }

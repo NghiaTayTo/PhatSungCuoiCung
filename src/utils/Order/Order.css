@@ -1,0 +1,153 @@
+#loader {
+    /* Uncomment this to make it run! */
+    /*
+       animation: loader 5s linear infinite; 
+    */
+
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-20%);
+    /* transform: translateY(-10%); */
+}
+
+@keyframes loader {
+    0% {
+        left: -100px
+    }
+
+    100% {
+        left: 110%;
+    }
+}
+
+#box-load {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    animation: animate .5s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 3px;
+}
+
+@keyframes animate {
+    17% {
+        border-bottom-right-radius: 3px;
+    }
+
+    25% {
+        transform: translateY(9px) rotate(22.5deg);
+    }
+
+    50% {
+        transform: translateY(18px) scale(1, .9) rotate(45deg);
+        border-bottom-right-radius: 40px;
+    }
+
+    75% {
+        transform: translateY(9px) rotate(67.5deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(90deg);
+    }
+}
+
+#shadow {
+    width: 50px;
+    height: 5px;
+    background: #000;
+    opacity: 0.1;
+    position: absolute;
+    top: 59px;
+    left: 0;
+    border-radius: 50%;
+    animation: shadow .5s linear infinite;
+}
+
+@keyframes shadow {
+    50% {
+        transform: scale(1.2, 1);
+    }
+}
+
+/* Kiểu dáng cơ bản cho alert */
+.alert {
+    width: 280px;
+    height: 85px;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1.5rem;
+    display: flex;
+    z-index: 999999999999999;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    position: fixed;
+    top: 4px;
+    right: 10px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Màu sắc cho từng loại alert */
+.alert-success {
+    background: #f6fef9;
+    border: 1px solid #2f9461;
+    color: #53b483;
+}
+
+.alert-error {
+    background: #fffbfa;
+    border: 1px solid #cd3636;
+    color: #cd3636;
+}
+
+/* Đóng alert */
+.alert-close {
+    background: none;
+    border: none;
+    color: #000000;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hiệu ứng biến mất */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* Áp dụng hiệu ứng khi thông báo xuất hiện */
+.notification.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Áp dụng hiệu ứng khi thông báo biến mất */
+.notification.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+}

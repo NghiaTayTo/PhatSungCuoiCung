@@ -1,0 +1,74 @@
+.update-form{
+    width: 430px !important;
+    height: 590px !important; 
+    padding: 20px; 
+    position: relative;
+    margin-top: 70px !important;
+} 
+
+.update-form_title{
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.update-form_p{
+    font-size: 17px;
+    margin-bottom: 30px;
+}
+
+.update-form_inp{
+    font-size: 16px;
+}
+.update-form_inp > div{
+    margin-bottom: 26px;
+    display: flex !important;
+}
+.update-form_inp > div > input,
+#option6{
+    width: 17px;
+    height: 17px;
+    margin-right: 10px;
+}
+.update-form_inp > div > label{
+    width: 400px;
+    margin-top: -4px;
+}
+.update-form_btn{
+    display: flex;
+    position: absolute;
+    bottom: 25px;
+    right: 20px;
+}
+.btn_mo{
+    filter: opacity(0.6);
+    cursor: default !important;
+}
+
+.update-form_btn button{
+    width: 120px;
+    height: 34px;
+    font-size: 17px;
+    font-weight: 500;
+    margin-left: 20px;
+}
+.update-form_btn button:nth-child(1){
+    background-color: #ebe9e9;
+    
+}
+.update-form_btn button:nth-child(2){
+    background-color: #ed4d2d;
+    color: #fff;
+}
+.viphamkhac{
+    width: 100%;
+}
+.viphamkhac input{
+    width: 100% !important;
+    height: 45px !important;
+    padding: 0 12px;
+    border: 2px solid #cccccc6a;
+    margin-top: -15px;
+    margin-left: 8px;
+    outline: #ed4d2d;
+}

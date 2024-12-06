@@ -1,0 +1,136 @@
+.address-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.address-header h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+.add-address-button {
+    background-color: #e89922;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-address-button:hover {
+    background-color: #d88b1f;
+}
+
+.address-list .address-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    position: relative;
+}
+
+.address-item p {
+    margin: 5px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.default-button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    position: absolute;
+    right: 10px;
+   
+}
+
+.address-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.update-action,
+.delete-action {
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.new-address-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 4px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.new-address-form h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.default-checkbox {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.back-button {
+    background-color: #ddd;
+    color: #333;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #bbb;
+}
+
+.submit-button {
+    background-color: #e89922;
+    color: white;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #d88b1f;
+}

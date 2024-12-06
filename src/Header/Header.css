@@ -1,0 +1,239 @@
+.headerStyle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 60px;
+    background-color: #f6f3ee;
+    color: white;
+    /* overflow: hidden; */
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    z-index: 9999;
+}
+
+
+/** Logo */
+
+.logoStyle {
+    font-size: 24px;
+    width: 10%;
+}
+
+a {
+    width: auto;
+}
+
+.logo {
+    width: 100px;
+}
+
+/** account  */
+
+.accountStyle {
+    width: 23.5%;
+    font-size: 15px;
+    color: #0E2C75;
+    display: flex;
+    align-items: center;
+}
+
+.custom-icon {
+    font-size: 26px;
+    color: #0e2b7584;
+    margin-right: 30px;
+    position: relative;
+}
+
+.accountStyle-details {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    line-height: 25px;
+    position: relative;
+    cursor: pointer;
+}
+
+.accountStyle-details img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.accountStyle-details_hover_ok {
+    position: absolute;
+    top: 67px;
+    left: 3px;
+    width: 210px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 6px 20px;
+    border-radius: 10px;
+    display: none;
+    animation: moveUp 0.5s ease-in-out forwards;
+}
+
+.accountStyle-details_hover_ok a li {
+    color: black !important;
+    font-size: 1.7rem;
+    padding: 6px 0;
+}
+
+.accountStyle-details_hover_ok a li {
+    transition: all 0.3s ease-in-out;
+}
+
+.accountStyle-details_hover_ok a:hover li {
+    color: rgb(2, 47, 182) !important;
+    margin-left: 7px;
+}
+
+.accountStyle-details_hover_ok a li:nth-child(3) {
+    border-bottom: 1px solid #ffffff;
+}
+
+
+.accountStyle-details_hover_ok::after {
+    content: "";
+    position: absolute;
+    top: -124px;
+    left: 15px;
+    width: 0;
+    height: 100%;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #ccc;
+}
+
+.accountStyle-details_hover_ok::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+}
+
+.accountStyle-details:hover .accountStyle-details_hover_ok {
+    display: block;
+}
+
+@keyframes moveUp {
+    0% {
+        transform: translateY(20px);
+    }
+
+    100% {
+        transform: translateY(6px);
+    }
+}
+
+.thongbao {
+    background-color: #fff;
+    width: 450px;
+    max-height: 450px; /* Giới hạn chiều cao tối đa */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    position: absolute;
+    top: 70px;
+    right: 180px;
+    overflow-y: auto; /* Hiển thị thanh cuộn dọc khi cần */
+    padding-right: 5px; /* Để nội dung không che lên thanh cuộn */
+}
+
+/* Tùy chỉnh thanh cuộn */
+.thongbao::-webkit-scrollbar {
+    width: 8px;
+}
+
+.thongbao::-webkit-scrollbar-thumb {
+    background-color: #aaa; /* Màu xám cho thanh cuộn */
+    border-radius: 4px;
+}
+
+.thongbao::-webkit-scrollbar-track {
+    background: transparent; /* Đặt nền trong suốt cho phần track */
+}
+
+.thongbao-header{
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+}
+.thongbao-header h2{
+    font-size: 1.8rem !important;
+}
+.thongbao-item {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    position: relative;
+    color: #505050;
+}
+.thongbao-item:hover{
+    background-color: #cbc9c986;
+    color: black;
+}
+.thongbao-item p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    line-height: 1.5;
+}
+.custom-icon-hidden{
+    cursor: pointer;
+    font-size: 1.6rem;
+    color: #878787cc;
+    padding: 6px 8px;
+    border-radius: 50%;
+}
+.custom-icon-hidden:hover{
+    color: #fff;
+    background-color: #e65c5c;
+}
+.thongbao-item-img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px #ccc;
+}
+.anh-san-pham{
+    width: 50px;
+    height: 70px;
+    position: inherit;
+    filter: brightness(0.7);
+}
+.custom-icon-ban,
+.custom-icon-check{
+    font-size: 3rem;
+    padding: 6px 8px;
+    border-radius: 50%; 
+    position: absolute;
+    right: 52px;
+}
+.custom-icon-ban{
+    color: #ff2828bf;
+}
+.custom-icon-check{
+    color: rgb(2, 255, 137);
+}
+.thongbao-ok{
+    background-color: rgba(149, 255, 198, 0.422);
+}
+.thongbao-no{
+    background-color: rgba(255, 167, 149, 0.219);
+}
+.thongbao-ok:hover{
+    background-color: rgb(36, 228, 126);
+}
+.thongbao-no:hover{
+    background-color: rgba(252, 107, 78, 0.789);
+}

@@ -1,0 +1,151 @@
+.chatForm{
+    width: 100%;
+    height: 580px !important;
+    font-size: 18px;
+}
+.chatbox{
+    width: 70%;
+    padding: 10px;
+    background-color: #fff;
+}
+.chatview{
+    height: 500px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 20px;
+    position: relative;
+}
+.chatForm_input{
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 7px 15px;
+    border-radius: 30px;
+    background-color: #eef0f8;
+    outline: none;
+}
+.profile{
+    width: 100%;
+    height: 70px;
+    border-radius: 10px;
+    display: flex;
+}
+.profile_img{
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+.chatMessage{
+    background-color: #eef0f8;
+    padding: 10px 20px;
+    color: black !important;
+    border-radius: 30px;
+}
+.chatMessageButton{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 20px;
+    margin-left: 10px;
+    color: rgb(26, 128, 236);
+    background-color: rgb(240, 236, 236);
+}
+/* .chatseller{
+    display: inline-block;
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
+    color: #fff;
+    background-color: #4893d6;
+    border-radius: 10px;
+    text-align: left;
+    -webkit-border-radius: 20px 20px 0 20px;
+        -moz-border-radius: 20px 20px 0 20px;
+        margin: 8px 0;
+}
+.chatuser{
+    display: inline-block;
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
+    background-color: #f0eeed;
+    border-radius: 10px;
+    text-align: left;
+    -webkit-border-radius: 20px 20px 20px 0;
+        -moz-border-radius: 20px 20px 20px 0;
+        margin: 8px 0;
+}
+
+.chat_image{
+    width: 30px;
+    height: 30px;
+    margin-top: -15px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: inline-block;
+}
+.chatAll{
+    display: flex;
+}
+.chatright{
+    text-align: right;
+}
+.chatleft{
+    text-align: left;
+}
+.chat_p{
+    margin: 0;
+} */
+
+.chatseller, .chatuser {
+    display: inline-flex; /* Sử dụng flexbox để quản lý bố cục */
+    flex-direction: column; /* Các phần tử con sẽ xếp theo cột */
+    align-items: flex-start; /* Văn bản căn trái */
+    width: auto;
+    height: 38px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin: 8px 5px;
+    text-align: left;
+}
+
+.chatseller {
+    color: #fff;
+    background-color: #4893d6;
+    border-radius: 20px 20px 0 20px;
+}
+
+.chatuser {
+    background-color: #f0eeed;
+    border-radius: 20px 20px 20px 0;
+}
+
+.chat_image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    align-self: flex-end; /* Đưa ảnh về phía dưới bên phải */
+}
+
+.chat_p {
+    margin: 0;
+    line-height: 1.5; /* Đảm bảo khoảng cách giữa các dòng chữ */
+    word-wrap: break-word; /* Văn bản không bị tràn */
+}
+.chatright{
+    text-align: right;
+}
+.chatleft{
+    text-align: left;
+}
+.small_date{
+    display: block;
+    margin: 0 34px;
+    margin-top: -5px;
+    font-size: 12px;
+    color: #888;
+    
+}

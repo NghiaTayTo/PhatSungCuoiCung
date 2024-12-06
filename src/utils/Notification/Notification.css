@@ -1,0 +1,225 @@
+/* * thông báo */
+.bg_black {
+    z-index: 99999999999 !important;
+}
+
+.modal-box {
+    padding: 20px;
+    /* top: 50%; */
+    margin-left: 578px;
+    margin-top: 250px;
+    /* transform: translateX( -50%) ; */
+    background-color: #fff;
+    width: 400px;
+    max-height: 1000px;
+    border-radius: 12px;
+    animation: identifierNotification .5s ease-in-out forwards;
+    position: absolute;
+}
+
+.modal-content {
+    font-size: 1.6rem;
+}
+
+.modal-content p {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.modal-content_h4{
+    font-size: 17px;
+}
+
+.modal-btn {
+    margin-top: 17px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.modal-btn button {
+    width: 100px;
+    height: 33px;
+    font-weight: 500;
+    border-radius: 7px;
+}
+
+.modal-btn button:nth-child(1) {
+    color: #828282;
+    border: 1px solid rgba(83, 76, 76, 0.234) !important;
+}
+
+.modal-btn button:nth-child(2) {
+    color: #fff;
+    background-color: #5065F6;
+    border: 1px solid #5065F6 !important;
+}
+
+@keyframes identifierNotification {
+    from {
+        opacity: 0;
+        margin-top: 260px;
+    }
+
+    to {
+        opacity: 1;
+        margin-top: 250px;
+    }
+}
+
+/* thông báo complete */
+.notification {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 8px;
+    position: fixed;
+    z-index: 9999999999999;
+    font-size: 1.5rem;
+    width: 280px !important;
+    height: auto !important; 
+}
+
+.managerPage {
+    top: 10px;
+    right: 600px;
+}
+
+.bookForm{
+    top: 10px;
+    right: 10px;
+}
+
+.notification__left {
+    display: flex;
+    flex-direction: row;
+    padding: 0px;
+    gap: 8px;
+    margin-right: 24px;
+}
+
+.notification__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+}
+
+.notification__title {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.notification__description {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.4rem;
+    padding: 0;
+}
+
+.notification__success {
+    background: #f6fef9;
+    border: 1px solid #2f9461;
+    border-radius: 8px;
+}
+
+.notification__error {
+    background: #fffbfa;
+    border: 1px solid #cd3636;
+    border-radius: 8px;
+}
+
+.notification__warning {
+    background: #fffcf5;
+    border: 1px solid #c8811a;
+    border-radius: 8px;
+}
+
+.notification__title__success,
+.notification__title__warning,
+.notification__title__error{
+    font-size: 1.6rem !important;
+}
+
+.notification__title__success {
+    color: #2f9461;
+}
+
+.notification__title__warning {
+    color: #c8811a;
+}
+
+.notification__title__error {
+    color: #cd3636;
+}
+
+.notification__description__success {
+    color: #53b483;
+}
+
+.notification__description__warning {
+    color: #e9a23b;
+}
+
+.notification__description__error {
+    color: #f34141;
+}
+
+.notification_icon_error {
+    color: #cd3636;
+    cursor: pointer;
+}
+
+.notification__icon__success {
+    color: #2f9461 !important;
+    cursor: pointer;
+}
+.notification__icon__error {
+    color: #f34141 !important;
+    cursor: pointer;
+}
+
+.notification__icon__warning {
+    color: #c8811a;
+    cursor: pointer;
+}
+.notification__icon__x{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+/* Hiệu ứng xuất hiện */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hiệu ứng biến mất */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* Áp dụng hiệu ứng khi thông báo xuất hiện */
+.notification.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Áp dụng hiệu ứng khi thông báo biến mất */
+.notification.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+}

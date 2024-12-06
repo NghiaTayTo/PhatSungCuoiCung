@@ -1,0 +1,372 @@
+.page {
+    float: right;
+    width: 90%;
+    height: 100vh;
+    background-color: #F5F5F5;
+    /* margin-top: 80px; */
+}
+
+.container {
+    padding: 20px;
+}
+
+.info-basic {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.info-basic_column1 {
+    width: 45%;
+    height: 120px;
+    position: relative;
+}
+
+.info-basic_column2 {
+    width: 22%;
+    height: 120px;
+    position: relative;
+}
+
+.info-basic_column3 {
+    width: 28%;
+    height: 120px;
+    position: relative;
+    background-color: rgb(190, 255, 195);
+}
+
+.info-store {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    position: relative;
+}
+
+.info-store>img {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255);
+    border-radius: 10px;
+    filter: brightness(0.6);
+}
+
+/* thông tin cửa hàng */
+.info-store_detail {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-store_avatar {
+    position: relative;
+}
+
+.info-store_avatar>img {
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    border: 2px solid #ccc;
+    z-index: 1;
+}
+
+.info-store_avatar>p {
+    background-color: red;
+    color: white;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    width: 80px;
+    padding: 3px 0;
+    margin-top: -5px;
+    text-align: center;
+    position: absolute;
+    top: 80px;
+    left: 4.5px;
+    z-index: 2;
+}
+
+.info-store_name {
+    color: white;
+    width: 320px;
+    margin-top: 20px;
+    margin-left: 10px;
+    overflow: hidden; /* Ẩn phần văn bản vượt quá */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm (...) */
+    white-space: nowrap; /* Ngừng xuống dòng khi vượt quá */
+}
+
+.info-store_name > h1 {
+    font-size: 23px !important;
+    font-family: 'Fredoka', sans-serif;
+    letter-spacing: 1px;
+    overflow: hidden; /* Đảm bảo tiêu đề không vượt quá */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm (...) */
+    white-space: nowrap; /* Ngừng xuống dòng */
+}
+
+.info-store_name > p {
+    font-size: 1.4rem;
+    overflow: hidden; /* Đảm bảo đoạn văn không vượt quá */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm (...) */
+    white-space: nowrap; /* Ngừng xuống dòng */
+}
+
+
+.info-store_icon {
+    background-color: #cccccc56;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    position: absolute;
+    top: 28px;
+    right: 14px;
+    cursor: pointer;
+}
+
+.info-store_icon--layout2 {
+    background-color: rgba(191, 191, 191, 0.418);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: inherit;
+    top: 7.5px;
+    left: 7.5px;
+}
+
+.faCheck {
+    font-size: 2.6rem;
+    position: inherit;
+    top: 12px;
+    left: 13px;
+    color: white;
+}
+
+.info-box {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+/* thông tin tổng quan của thẻ */
+.info-box_item {
+    width: 100%;
+    height: 100px;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1),
+        0 2px 15px rgba(0, 0, 0, 0.05) ;
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+
+/* viền ngoài cùng */
+.info-box_item_icon{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    /* background-color: #E9F9EF; */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+/* viền bên trong */
+.info-box_item_icon--layout2{
+    /* background-color: #28B95E; */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+/* icon bên trong */
+.faIcon{
+    font-size: 2.5rem;
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    color: white;
+}
+/* thông số */
+.info-box_item_parameter{
+    color: #adadad;
+    margin-top: 20px;
+    margin-left: 13px;
+    line-height: 27px;
+}
+/* doanh thu     */
+.info-box_item_money{
+    color: #adadad;
+    line-height: 27px;
+}
+
+.info-box_item_parameter h3
+{
+    font-size: 18px;
+}
+
+.info-box_item_money h3{
+    position: absolute;
+    top: 38px;
+    left: 90px;
+}
+
+.info-box_item_money p{
+    position: absolute;
+    top: 85px;
+    left: 35px;
+    font-weight: 500;
+}
+
+.info-box_item_parameter p,
+.info-box_item_money p{
+    font-size: 3rem;
+    color: black;
+}
+
+.info-box_item_money span{
+    font-size: 1.6rem;
+    color: gray;
+}
+/* btn rút tiền */
+.info-box_item--btn{
+    width: 100px;
+    height: 40px;
+    font-size: 2rem;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 400;
+    background-color: #FFDB45;
+    color: white;
+    border-radius: 7px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.515);
+    position: absolute;
+    bottom: 10px;
+    left: 125px;
+}
+
+.info-box_item--btn:hover{
+    background-color: #efc10b;
+}
+
+.chart{
+    margin-top: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chart-w{
+    width: 400px;
+}
+
+/* *----------------- Home ADMIN -------------------- */
+.admin-home{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.admin-home-item{
+    width: 23%;
+    padding: 16px 35px;
+    border-radius: 12px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+}
+.admin-home-item img{
+    object-fit: contain;
+    width: 50px;
+    height: 55px;
+    margin-top: 12px;
+}
+.admin-home-default{
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.6));
+}
+.admin-home-dif{
+    background: linear-gradient(to bottom, #0271e7, #007bffaa);
+}
+.admin-home-item_title{
+    font-size: 1.7rem;
+    font-weight: 500;
+    font-family: 'Fredoka', sans-serif;
+}
+.admin-home-item_data{
+    font-size: 3rem;
+    font-weight: 500;
+    font-family: 'Fredoka', sans-serif;
+}
+.admin-home-main{
+    width: 100%;
+    background-color: #fff;
+    border-radius: 12px;
+    margin: 25px 0;
+    padding: 20px;
+}
+.admin-home-account{
+    display: flex;
+}
+.admin-home-account-img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.admin-home-account-info{
+    font-size: 2.3rem;
+    font-family: 'Fredoka', sans-serif;
+    letter-spacing: 1px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.admin-home-account-info p:nth-child(2){
+    font-size: 2.1rem;
+    color: #adadad;
+}
+.admin-home-about{
+    width: 83%;
+    font-size: 2rem;
+    margin-left: 110px;
+}
+
+.admin-home-chart{
+    background-color: #fff;
+    margin: 0;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.chuaduyetcuahang{
+    width: 270px;
+    height: 579px;
+    background-color: rgb(255, 255, 255);
+    display: block;
+    z-index: 99999999999;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    position: absolute;
+    left: 0;
+    top: 150px;
+    text-align: center;
+    padding: 20px;
+}
+.chuaduyetcuahang img{
+    width: 100px;
+    height: 160px;
+    object-fit: contain;
+    margin-top: 30px;
+}
+.chuaduyetcuahang h2{
+    color: rgb(0, 0, 0);
+}
+.btn_trangthai{
+    padding: 7px 20px;
+    background-color: #4698ef;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 20px;
+    margin-top: 7px;
+}
+.btn_trangthai:hover{
+    background-color: #0a6dd7;  
+    box-shadow: 0 0 7px rgba(82, 80, 80, 0.37);
+}
