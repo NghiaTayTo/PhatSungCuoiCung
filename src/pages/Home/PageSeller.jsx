@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import HeaderUser from "../Component/HeaderUser";
 import FooterUser from "../Component/FooterUser";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMessage } from '@fortawesome/free-regular-svg-icons';
 import axios from "axios";
 import styles from "./HomeUser.module.css";
 import { useNavigate } from "react-router-dom";
 import ChatFormUser from "../../chat/ChatFormUser";
 import FormDep from "../../chat/ChatFormUser";
+
 
 const StorePage = () => {
   const { id_cua_hang } = useParams(); // Lấy id cửa hàng từ URL
@@ -69,30 +72,34 @@ const StorePage = () => {
 
   if (!storeInfo) return <p>Loading...</p>;
 
-  
+
 
   return (
     <div className={styles.parent}>
       <HeaderUser />
       <div className={styles.storeHeader}>
+        <div className={styles.bia_overlay}>
+          <img className={styles.bgShop} src={storeInfo.anh_bia} alt="" />
+          <div className={styles.overlay}></div>
+        </div>
         <div className={styles.storeInfo}>
           <img
             src={storeInfo.anh_dai_dien}
             alt={`Ảnh đại diện của ${storeInfo.ten_cua_hang}`}
             className={styles.storeAvatar}
           />
-          <div style={{ fontSize: '16px', fontWeight: '900' }}>
+          <div style={{ fontSize: '16px', fontWeight: '900' }} className={styles.info}>
             <h1 className={styles.storeName}>{storeInfo.ten_cua_hang}</h1>
             <p>Tham gia: {storeInfo.ngay_tao || "01/01/2024"}</p>
             <p>Địa chỉ: {storeInfo.dia_chi_cua_hang}</p>
-            <button onClick={handleChatOpen}>nhắn tin với cửa hàng</button>
+            <button onClick={handleChatOpen}><FontAwesomeIcon icon={faMessage} /> Chat ngay</button>
           </div>
         </div>
       </div>
 
       {
         formChat === true && (
-          <ChatFormUser storeID={id_cua_hang} userID={idUser} onClose={handleChatClose}/>
+          <ChatFormUser storeID={id_cua_hang} userID={idUser} onClose={handleChatClose} />
         )
       }
       {/* <ChatFormUser/> */}
@@ -134,7 +141,7 @@ const StorePage = () => {
         ))}
       </div>
 
-      
+
 
       <FooterUser />
     </div>

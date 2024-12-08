@@ -93,4 +93,9 @@
 }
 .storeHeader{
   font-size: 16px;
+  /* background-color: red; */
+}
+
+.storeName{
+  color: red !important;
 }

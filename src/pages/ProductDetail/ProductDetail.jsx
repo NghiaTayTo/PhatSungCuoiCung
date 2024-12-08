@@ -252,6 +252,7 @@ const ProductDetail = () => {
                     <div>
                         <p className="store-name">{storeInfo.ten_cua_hang}</p>
                         <p className="store-address">{storeInfo.dia_chi_cua_hang}</p>
+                        
                     </div>
                 </div>
 
