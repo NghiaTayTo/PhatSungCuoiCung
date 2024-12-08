@@ -6,17 +6,18 @@ import FooterUser from '../Component/FooterUser';
 import styles from './ProductDetail.css';
 import { getPhanHoiDanhGiaByMaDanhGia } from '../../utils/API/PhanHoiDanhGiaAPI';
 import axios from 'axios';
+import { getPhanHoiDanhGiaByMaDanhGia } from '../../utils/API/PhanHoiDanhGiaAPI';
 
 const ProductDetail = () => {
     const { id } = useParams(); // Lấy id sản phẩm từ URL
     const [product, setProduct] = useState(null); // Chi tiết sản phẩm
     const [reviews, setReviews] = useState([]); // Đánh giá sản phẩm
     const [storeInfo, setStoreInfo] = useState(null); // Thông tin cửa hàng
+
     const [randomProducts, setRandomProducts] = useState([]); // Sản phẩm ngẫu nhiên
     const [quantity, setQuantity] = useState(1); // Số lượng sản phẩm
     const [reportMenuVisible, setReportMenuVisible] = useState(false);
     const [responseSeller, setResponseSeller] = useState([])
-    const [feedbacks, setFeedbacks] = useState({});
     const [cc, setCC] = useState(false)
     const navigate = useNavigate();
 
@@ -38,6 +39,8 @@ const ProductDetail = () => {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    const [feedbacks, setFeedbacks] = useState({});
 
     // Lấy chi tiết sản phẩm
     useEffect(() => {
@@ -80,30 +83,6 @@ const ProductDetail = () => {
         };
         fetchProductData();
     }, [id]);
-
-
-    // useEffect(() => {
-    //     // Hàm lấy phản hồi cho từng đánh giá trong reviews
-    //     const fetchFeedbacks = async () => {
-    //         const newFeedbacks = {};
-    //         for (let comment of reviews) {
-    //             try {
-    //                 const feedback = await getPhanHoiDanhGiaByMaDanhGia(comment.ma_danh_gia);
-    //                 if (feedback) {
-    //                     newFeedbacks[comment.ma_danh_gia] = feedback; // Gắn phản hồi vào `newFeedbacks`
-    //                 }
-    //             } catch (error) {
-    //                 console.error('Error fetching feedback:', error);
-    //             }
-    //         }
-    //         setFeedbacks(newFeedbacks); // Cập nhật state với tất cả các phản hồi
-
-    //     };
-
-    //     fetchFeedbacks();
-
-    // }, [cc]);
-
 
     // Hàm random sản phẩm
     const getRandomProducts = (arr, num) => {

@@ -23,3 +23,9 @@
     font-weight: normal;
     font-style: normal;
 }
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../public/fonts/Montserrat-Regular.ttf') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}

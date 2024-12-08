@@ -1,5 +1,5 @@
 .parent {
-    background-color: #f8f9fa;
+    /* background-color: #f8f9fa; */
     padding-bottom: 20px;
     width: 1200px;
     margin: 0 auto;
@@ -21,7 +21,7 @@
 .section {
     margin: 30px auto;
     max-width: 1200px;
-    padding: 0 20px;
+    /* padding: 0 20px; */
 }
 
 .section h2 {
@@ -36,38 +36,93 @@
     gap: 20px;
 }
 
+.sliderCss {
+    width: 100%;
+    height: 360px !important;
+    margin: auto;
+    overflow: visible !important;
+    /* z-index: -1; */
+}
+
+.slick-slide {
+    overflow: visible;
+    position: relative;
+}
+
 .productCard {
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 20px;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
     width: 200px;
+    height: 380px;
+    box-sizing: border-box;
+    /* text-align: center; */
+    position: relative;
+    z-index: 1;
 }
 
 .productCard:hover {
-    transform: scale(1.05);
+    /* transform: scale(1.05); */
+    box-shadow: 0 0 10px #a29f9f;
+    border: 1px solid #ccc;
+    /* margin-top: -10px; */
+    position: relative;
+    z-index: 20;
 }
 
 .productImage {
-    width: 100%;
-    height: 180px;
+    width: 136px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 8px;
+    margin: 0 auto;
+}
+
+.tacGia, .tacGiaXepHang {
+    color: #20ad7c;
+    font-size: 13px;
+    margin: 0;
+    left: 0;
+}
+
+.tacGia:hover {
+    border-bottom: 1px solid #20ad7c;
 }
 
 .productName {
-    margin: 10px 0;
+    text-align: center;
+    /* margin: 10px auto; */
     font-size: 16px;
-    font-weight: 500;
+    height: 50px;
     color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Giới hạn số dòng là 2 */
+    -webkit-box-orient: vertical;
+    /* Đảm bảo hiển thị theo chiều dọc */
+    overflow: hidden;
+    /* Ẩn phần chữ vượt quá */
+    text-overflow: ellipsis;
+    /* Hiển thị dấu "..." */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+/* .price{
+    display: flex;
+    justify-content: space-between;
+} */
+.price .listCategoryHayItemSol {
+    margin-left: 0;
+    margin-top: -7px;
 }
 
 .productPrice {
-    font-size: 14px;
-    color: #007bff;
+    font-size: 16px;
+    color: #f25821;
     font-weight: bold;
+    display: inline-block;
+    text-align: left;
 }
 
 .viewMoreButton {
@@ -85,27 +140,32 @@
 .viewMoreButton:hover {
     background-color: #0056b3;
 }
-.menuBar{
+
+.menuBar {
     width: 296px;
     background-color: #fff;
     font-size: 16px;
     color: #7b7a7a;
     border-top: 1px solid #ccc;
 }
-.menuBar > ul > li{
+
+.menuBar>ul>li {
     padding: 12px 0;
     width: 100% !important;
     cursor: pointer;
 }
-.arrowR{
+
+.arrowR {
     float: right;
     font-size: 12px;
     margin-right: 10px;
     margin-top: 3px;
 }
-.menuBar > ul > li:hover{
+
+.menuBar>ul>li:hover {
     color: #f25821;
 }
+
 .carouselinner {
     display: flex;
     overflow: hidden;
@@ -137,6 +197,7 @@
     width: 100%;
     height: auto;
 }
+
 /* Pagination container */
 .pagination {
     display: flex;
@@ -184,4 +245,545 @@
         padding: 8px 12px;
         font-size: 14px;
     }
+}
+
+.bannerImgList {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.bannerImg {
+    width: 385px;
+    height: auto;
+    cursor: pointer;
+}
+
+.listCategoryHay {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.listCategoryHayItem {
+    padding: 10px 20px;
+    width: 290px;
+    height: auto;
+    background-color: #fff;
+    text-align: center;
+    transition: all .3s ease-in-out;
+}
+
+.listCategoryHayItem h3 {
+    font-weight: 600;
+    text-align: left;
+}
+
+.listCategoryHayItemIcon {
+    font-size: 20px;
+    padding: 7px 10px;
+    background-color: rgba(255, 0, 0, 0.855);
+    color: white;
+    border-radius: 50%;
+    text-align: right;
+    margin-right: -6px;
+    /* margin-top: -10px; */
+}
+
+.listCategoryHayItem img {
+    width: 170px;
+    height: 250px;
+    object-fit: cover;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.listCategoryHayItemName {
+    font-size: 17px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Giới hạn số dòng là 2 */
+    -webkit-box-orient: vertical;
+    /* Đảm bảo hiển thị theo chiều dọc */
+    overflow: hidden;
+    /* Ẩn phần chữ vượt quá */
+    text-overflow: ellipsis;
+    /* Hiển thị dấu "..." */
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.listCategoryHayItem strong {
+    font-size: 17px;
+    color: #e57838;
+    margin-left: -110px;
+}
+
+.listCategoryHayItemSol {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-left: 33px;
+}
+
+.listCategoryHayItemSol img {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    margin-right: 7px;
+}
+
+.listCategoryHayItemSol p {
+    font-size: 16px;
+}
+
+.listCategoryHayItem:hover {
+    box-shadow: 0 0 10px rgba(64, 62, 62, 0.384);
+}
+
+.listBook, .listBookBanner{
+    background-color: #fff;
+    width: 100%;
+    height: auto;
+    padding: 17px 0;
+    margin-bottom: 40px;
+}
+.bangXepHang{
+    background-color: #fff;
+    width: 100%;
+    height: auto;
+    margin-bottom: 40px;
+}
+
+.listBookHeader {
+    display: flex;
+    justify-content: space-between;
+    height: 35px;
+    line-height: 35px;
+    padding: 0 20px;
+    border-bottom: 1px solid #ccc;
+    /* background-color: #0056b3; */
+}
+
+.listBookHeader h3 {
+    font-weight: 600;
+    color: #625c66;
+    font-size: 19px;
+    font-family: 'ABeeZee', sans-serif;
+}
+
+.listBookOption ul {
+    display: flex;
+    font-size: 16px;
+}
+
+.listBookOption ul li {
+    color: #ccc;
+    margin: 0 20px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+.listBookOption ul li::after {
+    content: '';
+    width: 1px;
+    height: 20px;
+    background-color: #ccc;
+    position: absolute;
+    top: 0;
+    right: -20px;
+}
+
+.listBookOption ul p {
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 20px;
+    padding-right: 10px;
+    margin-top: -7px;
+    color: #df6924;
+    font-weight: 600;
+}
+
+.listBookOption ul p:hover {
+    color: #cf0606;
+}
+
+.listBookOption ul li:hover {
+    border-bottom: 1px solid rgb(14, 92, 202);
+    color: rgb(14, 92, 202);
+}
+
+.li_active {
+    color: #f25821 !important;
+    border-bottom: none !important;
+}
+.sliderCss button{
+    color: #20ad7c !important;
+    width: 40px !important;
+    height: 40px !important;
+    background-color: #68696a6e;
+    border-radius: 50%;
+    z-index: 1000;
+}
+.sliderCss button:nth-child(1){
+
+}
+.sliderCss button:hover{
+    background-color: #625c66;
+}
+/* Nút mũi tên */
+.sliderCss .slick-prev,
+.sliderCss .slick-next {
+    width: 50px !important;
+    height: 50px !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    border-radius: 50% !important;
+    color: #20ad7c !important;
+}
+.slick-prev:hover,
+.slick-next:hover {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    color: white !important;
+    cursor: pointer !important;
+}
+
+/* Mũi tên tùy chỉnh */
+.slick-prev:before,
+.slick-next:before {
+    content: '' !important;
+    /* Loại bỏ mũi tên mặc định */
+}
+
+.slick-list {
+    overflow: visible !important;
+    margin: 0 -10px;
+}
+
+.slick-track {
+    overflow: visible !important;
+}
+
+.formHover {
+    background-color: #efeded;
+    padding: 10px;
+    position: absolute;
+    top: -10px;
+    right: -170px;
+    width: 230px;
+    height: 370px;
+    border-radius: 10px;
+    display: none;
+    z-index: 9999;
+    cursor: default;
+    box-shadow: 0 0 5px rgb(100, 97, 97);
+    transition: all .2s ease-in-out;
+    animation: identifier .3s ease-in-out;
+}
+
+.listBookBannerProductItem:hover .formHover {
+    display: block;
+}
+@keyframes identifier {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+.formHover::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-right: 15px solid #efeded;
+    /* Màu mũi tên */
+    position: absolute;
+    top: 40px;
+    left: -14px;
+    /* Đặt mũi tên bên trái */
+    transform: rotate(0deg);
+    /* Xoay mũi tên sang bên trái */
+    z-index: 13;
+    /* Đảm bảo mũi tên nằm trên sản phẩm */
+}
+.formHoverInfo{
+    /* position: relative; */
+}
+.positionOk{
+    width: 90%;
+    position: absolute;
+    bottom: 8px;
+}
+.formHoverInfo h5 {
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.tg {
+    color: #20ad7c;
+}
+
+.mt {
+    font-size: 12px;
+    color: black;
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.formHoverInfo span {
+    color: rgb(24, 94, 223);
+    font-size: 12px;
+    margin: 0;
+}
+
+.money {
+    display: flex;
+    justify-content: space-between;
+}
+
+.money .productPrice {
+    font-size: 13px;
+}
+
+.money .listCategoryHayItemSol p {
+    font-size: 13px;
+}
+
+.money .listCategoryHayItemSol img {
+    width: 15px;
+    height: 15px;
+    margin-right: 3px;
+}
+
+.formHoverInfo button {
+    width: 100%;
+    height: 30px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 10px;
+}
+
+.addCart {
+    background-color: #33c18f;
+}
+
+.muangay {
+    background-color: #df6924;
+}
+
+.addCart:hover {
+    background-color: #df6924;
+}
+
+.muangay:hover {
+    background-color: #c9530f;
+}
+.listBookBannerBox{
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.listBookBannerBoxImg{
+    width: 25%;
+    filter: brightness(0.5);
+}
+.listBookBannerBoxImg2{
+    width: 25%;
+}
+.listBookBannerProduct{
+    width: 73%;
+    display: grid; /* Sử dụng Grid */
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0 auto;
+}
+.listBookBannerProductItem {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    position: relative;
+}
+.listBookBannerProductItem:hover{
+    box-shadow: 0 0 10px #9c9999;
+}
+.listBookBannerProductItem img{
+    display: block;
+    margin: 0 auto;
+}
+.listBookBannerProductItem .price{
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+}
+.listBookBannerProductItem .price .productPrice{
+    font-size: 14px !important;
+    margin: 0;
+    margin-top: -5px;
+    margin-right: 10px  ;
+}
+.listBookBannerProductItem .price .listCategoryHayItemSol p{
+    font-size: 14px !important;
+}
+.listBookBannerProductItem .price .listCategoryHayItemSol img{
+    width: 17px;
+    height: 17px;
+    margin-right: 4px;
+}
+.bangXepHangHeader{
+    width: 100%;
+    height: 60px;
+    position: relative;
+}
+.bangXepHangHeader img{
+    width: 100%;
+    height: 100%;
+}
+.bangXepHangHeader h3{
+    color: #fff;
+    font-family: 'MarkoOne', sans-serif;
+    font-size: 18px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+.categoryXepHang{
+    height: 45px;
+    line-height: 45px;
+}
+.categoryXepHang ul{
+    display: flex;
+}
+.categoryXepHang ul li{
+    display: inline-block;
+    margin-right: 30px;
+    font-size: 17px;
+    color: #888;
+    cursor: pointer;
+}
+
+.categoryXepHang ul li:hover{
+    color: #e76114;
+}
+.categoryXepHang_active{
+    color: #e76114 !important;
+    font-weight: 600;
+    font-family: 'MarkoOne', sans-serif;
+    border-bottom: 2px solid #df6924;
+}
+.bangXepHangContent{
+    padding: 20px 0;
+}
+.bangXepHangContent{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.bangXepHangProduct{
+    width: 42%;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+}
+.bangXepHangProductInfo{
+    width: 58%;
+    padding-right: 20px;
+}
+.bangXepHangProductItem{
+    display: flex;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    cursor: pointer;
+}
+.bangXepHangProductItem:hover{
+    /* box-shadow: 0 0 10px #888; */
+    border-right: 2px solid #faa236;
+}
+.bangXepHangProductItem:hover .xepHang{
+    color: #cf0606;
+}
+.bangXepHangProductItem img{
+    width: 70px;
+    height: 98px;
+    margin: 0 10px;
+}
+.xepHang{
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Mali', sans-serif;
+    margin: auto 0;
+}
+.bangXepHangProductItem div .price{
+    display: flex;
+    align-items: center;
+}
+.bangXepHangProductItem div .price .listCategoryHayItemSol{
+    margin-left: 20px;
+    margin-top: 3px;
+}
+.bangXepHangProductItem div .price .listCategoryHayItemSol img{
+    width: 16px;
+    height: 16px;
+    margin-right: 2px;
+}
+.productNameXepHang{
+    width: 100%;
+    color: black;
+    font-size: 17px;
+    font-family: 'Montserrat', Courier, monospace;
+    font-weight: 600;
+}
+.bangXepHangProductInfo{
+    display: flex;
+    justify-content: space-between;
+}
+.bangXepHangProductInfoImage{
+    width: 36%;
+}
+.bangXepHangProductInfoText{
+    width: 62%;
+}
+
+.bangXepHangProductInfoImage img{
+    width: 100%;
+}
+.bangXepHangProductInfoText p{
+    font-size: 16px;
+    color: #6c6c6c;
+}
+.bangXepHangProductInfoText h4{
+    font-size: 22px;
+    font-family: 'Montserrat', sans-serif;
+}
+.bangXepHangProductInfoText .price{
+    margin: 10px 0;
+}
+.bangXepHangProductInfoText .price .productPrice{
+    color: #c9530f;
+    font-size: 20px;
+}
+.bangXepHangProductInfoText strong{
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+}
+.listBookBannerProductItem img{
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    height: auto;
 }

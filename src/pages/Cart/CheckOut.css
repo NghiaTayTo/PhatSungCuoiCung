@@ -40,6 +40,10 @@ body {
     padding-bottom: 10px;
 }
 
+.payment-methodC h3{
+    margin-top: 8px;
+}
+
 .shipping-info p,
 .order-summary p,
 .payment-methodC p {
@@ -71,7 +75,7 @@ body {
 .product-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .product-table th,
