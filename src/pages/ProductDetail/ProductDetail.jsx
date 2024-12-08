@@ -4,6 +4,7 @@ import { getAllBook, getProductByMaSPUser } from '../../utils/API/ProductAPI';
 import HeaderUser from '../Component/HeaderUser';
 import FooterUser from '../Component/FooterUser';
 import styles from './ProductDetail.css';
+import { getPhanHoiDanhGiaByMaDanhGia } from '../../utils/API/PhanHoiDanhGiaAPI';
 import axios from 'axios';
 
 const ProductDetail = () => {
@@ -11,10 +12,12 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null); // Chi tiết sản phẩm
     const [reviews, setReviews] = useState([]); // Đánh giá sản phẩm
     const [storeInfo, setStoreInfo] = useState(null); // Thông tin cửa hàng
-    const [relatedProducts, setRelatedProducts] = useState([]); // Sản phẩm liên quan
     const [randomProducts, setRandomProducts] = useState([]); // Sản phẩm ngẫu nhiên
     const [quantity, setQuantity] = useState(1); // Số lượng sản phẩm
     const [reportMenuVisible, setReportMenuVisible] = useState(false);
+    const [responseSeller, setResponseSeller] = useState([])
+    const [feedbacks, setFeedbacks] = useState({});
+    const [cc, setCC] = useState(false)
     const navigate = useNavigate();
 
     // phan trang cho danh gia
@@ -54,23 +57,53 @@ const ProductDetail = () => {
                     `http://localhost:8080/api/v1/danhgia/ma_san_pham-${id}`
                 );
                 setReviews(reviewsResponse.data);
+                const listComments = reviewsResponse.data;
+                const newFeedbacks = {};
+                for (let comment of listComments) {
+                    try {
+                        const feedback = await getPhanHoiDanhGiaByMaDanhGia(comment.ma_danh_gia);
+                        if (feedback) {
+                            newFeedbacks[comment.ma_danh_gia] = feedback; // Gắn phản hồi vào `newFeedbacks`
+                        }
+                    } catch (error) {
+                        console.error('Error fetching feedback:', error);
+                    }
+                }
+                setFeedbacks(newFeedbacks);
 
                 // Lấy danh sách sản phẩm ngẫu nhiên
                 const allProducts = await getAllBook();
                 setRandomProducts(getRandomProducts(allProducts, 5));
-
-                // Lấy sản phẩm liên quan từ cùng cửa hàng
-                const relatedResponse = await axios.get(
-                    `http://localhost:8080/api/v1/product/cuahang-${productData.ma_cua_hang}/allinfo`
-                );
-                setRelatedProducts(relatedResponse.data.filter((p) => p.ma_san_pham !== parseInt(id))); // Loại trừ sản phẩm hiện tại
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
             }
         };
-
         fetchProductData();
     }, [id]);
+
+
+    // useEffect(() => {
+    //     // Hàm lấy phản hồi cho từng đánh giá trong reviews
+    //     const fetchFeedbacks = async () => {
+    //         const newFeedbacks = {};
+    //         for (let comment of reviews) {
+    //             try {
+    //                 const feedback = await getPhanHoiDanhGiaByMaDanhGia(comment.ma_danh_gia);
+    //                 if (feedback) {
+    //                     newFeedbacks[comment.ma_danh_gia] = feedback; // Gắn phản hồi vào `newFeedbacks`
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching feedback:', error);
+    //             }
+    //         }
+    //         setFeedbacks(newFeedbacks); // Cập nhật state với tất cả các phản hồi
+
+    //     };
+
+    //     fetchFeedbacks();
+
+    // }, [cc]);
+
 
     // Hàm random sản phẩm
     const getRandomProducts = (arr, num) => {
@@ -126,149 +159,174 @@ const ProductDetail = () => {
         navigate('/report');
     };
 
-    // Điều hướng đến cửa hàng
-    const handleStoreClick = () => {
-        if (storeInfo?.ma_cua_hang) {
-            navigate(`/cuahang/${storeInfo.ma_cua_hang}`);
-        }
-    };
 
     if (!product || !storeInfo) return <p>Loading...</p>;
 
-    return (
-        <div className={styles.parent}>
-            <HeaderUser />
+    const hienthi = reviews.map((review, index) => {
+        const feedback =  feedbacks[review.ma_danh_gia];
+        return (
+            <>
 
-            <section className="product-detail">
-                {/* Thông tin chính của sản phẩm */}
-                <div className="product-main-info">
-                    <img src={product.anh_san_pham} alt={product.ten_san_pham} className="product-imageCart" />
-                    <div className="product-info">
-                        <h1>{product.ten_san_pham}</h1>
-                        <p className="product-author">Tác giả: {product.tac_gia || "N/A"}</p>
-                        <p className="product-priceD">Giá: {product.gia.toLocaleString()} đ</p>
-                        <div className="quantity-control">
-                            <label>Số lượng:</label>
-                            <div className="quantityWrapper">
-                                <button
-                                    className="quantityBtn"
-                                    onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
-                                >
-                                    -
-                                </button>
-                                <input
-                                    
-                                    value={quantity}
-                                    min="1"
-                                    onChange={(e) => setQuantity(Number(e.target.value))}
-                                    className="quantityInput"
+        {
+            feedback && (
+                <>
+                    <div className="review" key={index}>
+                        <p className="review-user">Người dùng: {review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
+                        <p className="review-rating">Điểm: {review.diem_danh_gia}/5</p>
+                        <p className="review-content">{review.noi_dung_danh_gia}</p>
+                    </div>
+                    <div>
+                        <p>{feedback.noi_dung_phan_hoi}</p>
+                    </div>
+                </>
+            )
+        }
+
+        {
+            !feedback && (
+                <div className="review" key={index}>
+                    <p className="review-user">Người dùng: {review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
+                    <p className="review-rating">Điểm: {review.diem_danh_gia}/5</p>
+                    <p className="review-content">{review.noi_dung_danh_gia}</p>
+                </div>
+            )
+        }
+        </>
+        )
+})
+// console.log(reviews)s
+
+
+return (
+    <div className={styles.parent}>
+        <HeaderUser />
+
+        <section className="product-detail">
+            {/* Thông tin chính của sản phẩm */}
+            <div className="product-main-info">
+                <img src={product.anh_san_pham} alt={product.ten_san_pham} className="product-imageCart" />
+                <div className="product-info">
+                    <h1>{product.ten_san_pham}</h1>
+                    <p className="product-author">Tác giả: {product.tac_gia || "N/A"}</p>
+                    <p className="product-priceD">Giá: {product.gia.toLocaleString()} đ</p>
+                    <div className="quantity-control">
+                        <label>Số lượng:</label>
+                        <div className="quantityWrapper">
+                            <button
+                                className="quantityBtn"
+                                onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
+                            >
+                                -
+                            </button>
+                            <input
+
+                                value={quantity}
+                                min="1"
+                                onChange={(e) => setQuantity(Number(e.target.value))}
+                                className="quantityInput"
+                            />
+                            <button
+                                className="quantityBtn"
+                                onClick={() => setQuantity((prev) => (prev < product.con_hang ? prev + 1 : prev))}
+                            >
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    <div className="action-buttons">
+                        <div style={{ marginTop: '20px' }}>
+                            <button style={{ marginRight: '20px' }} className="add-to-cart-btn" onClick={addToCart}>THÊM VÀO GIỎ HÀNG</button>
+                            <button onClick={buyNow} className="buy-now-btn">MUA NGAY</button>
+                        </div>
+                        <div
+                            className={`${styles.reportMenu} ${reportMenuVisible ? styles.visible : ''
+                                }`}
+                        >
+                            <button onClick={handleReport}>
+                                Báo cáo sản phẩm
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {/* Thông tin chi tiết */}
+            <div className="product-details-section">
+                <h3>THÔNG TIN CHI TIẾT</h3>
+                <table className="product-details-table">
+                    <tbody>
+                        <tr><td>Nhà xuất bản:</td><td>{product.nha_xuat_ban || "N/A"}</td></tr>
+                        <tr><td>Ngày xuất bản:</td><td>{product.ngay_xuat_ban || "N/A"}</td></tr>
+                        <tr><td>Kích thước:</td><td>{product.kich_thuoc || "N/A"}</td></tr>
+                        <tr><td>Số trang:</td><td>{product.so_trang || "N/A"}</td></tr>
+                        <tr><td>Trọng lượng:</td><td>{product.trong_luong || "N/A"} gram</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style={{ marginTop: '20px', fontSize: '20px', color: 'blueviolet' }}>Cửa hàng bán sản phẩm</h3>
+            {/* Thông tin cửa hàng */}
+            <div
+                className="store-info"
+                onClick={() => navigate(`/PageSeller/${storeInfo.ma_cua_hang}`)}
+                style={{ cursor: 'pointer' }} // Thêm hiệu ứng con trỏ
+            >
+                <div>
+                    <img
+                        src={storeInfo.anh_dai_dien}
+                        alt={`Ảnh đại diện của ${storeInfo.ten_cua_hang}`}
+                        className="store-avatar"
+                        style={{ width: '100px', height: '100px', borderRadius: '50%', marginBottom: '10px' }}
+                    />
+                </div>
+                <div>
+                    <p className="store-name">{storeInfo.ten_cua_hang}</p>
+                    <p className="store-address">{storeInfo.dia_chi_cua_hang}</p>
+                </div>
+            </div>
+
+
+            {/* Đánh giá sản phẩm */}
+            <div className="product-reviews">
+                <h3>ĐÁNH GIÁ SẢN PHẨM</h3>
+                {reviews.length > 0 ? (
+                   <div>
+                    {hienthi}
+                   </div>
+                ) : (
+                    <p style={{ fontSize: '16px' }}>Chưa có đánh giá nào.</p>
+                )}
+            </div>
+
+            {/* Sản phẩm liên quan */}
+            <div className="related-products">
+                <h3>SẢN PHẨM CÙNG LOẠI</h3>
+                <div className="related-products-carousel">
+                    {randomProducts.map((relatedProduct) => (
+                        <div
+                            key={relatedProduct.ma_san_pham}
+                            className="related-product-card"
+                            onClick={() => handleProductClick(relatedProduct.ma_san_pham)}
+                        >
+                            <div className="product-image-placeholder">
+                                <img
+                                    src={relatedProduct.anh_san_pham}
+                                    alt={relatedProduct.ten_san_pham}
+                                    className="product-image"
                                 />
-                                <button
-                                    className="quantityBtn"
-                                    onClick={() => setQuantity((prev) => (prev < product.con_hang ? prev + 1 : prev))}
-                                >
-                                    +
-                                </button>
                             </div>
+                            <p className="related-product-name">{relatedProduct.ten_san_pham}</p>
+                            <p className="related-product-price">{relatedProduct.gia.toLocaleString()} đ</p>
                         </div>
-                        <div className="action-buttons">
-                            <div style={{ marginTop: '20px' }}>
-                                <button style={{ marginRight: '20px' }} className="add-to-cart-btn" onClick={addToCart}>THÊM VÀO GIỎ HÀNG</button>
-                                <button onClick={buyNow} className="buy-now-btn">MUA NGAY</button>
-                            </div>
-                            <div
-                                className={`${styles.reportMenu} ${reportMenuVisible ? styles.visible : ''
-                                    }`}
-                            >
-                                <button onClick={handleReport}>
-                                    Báo cáo sản phẩm
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
+                    ))}
                 </div>
+            </div>
+        </section>
 
-                {/* Thông tin chi tiết */}
-                <div className="product-details-section">
-                    <h3>THÔNG TIN CHI TIẾT</h3>
-                    <table className="product-details-table">
-                        <tbody>
-                            <tr><td>Nhà xuất bản:</td><td>{product.nha_xuat_ban || "N/A"}</td></tr>
-                            <tr><td>Ngày xuất bản:</td><td>{product.ngay_xuat_ban || "N/A"}</td></tr>
-                            <tr><td>Kích thước:</td><td>{product.kich_thuoc || "N/A"}</td></tr>
-                            <tr><td>Số trang:</td><td>{product.so_trang || "N/A"}</td></tr>
-                            <tr><td>Trọng lượng:</td><td>{product.trong_luong || "N/A"} gram</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3 style={{ marginTop: '20px', fontSize: '20px', color: 'blueviolet' }}>Cửa hàng bán sản phẩm</h3>
-                {/* Thông tin cửa hàng */}
-                <div
-                    className="store-info"
-                    onClick={() => navigate(`/PageSeller/${storeInfo.ma_cua_hang}`)}
-                    style={{ cursor: 'pointer' }} // Thêm hiệu ứng con trỏ
-                >
-                    <div>
-                        <img
-                            src={storeInfo.anh_dai_dien}
-                            alt={`Ảnh đại diện của ${storeInfo.ten_cua_hang}`}
-                            className="store-avatar"
-                            style={{ width: '100px', height: '100px', borderRadius: '50%', marginBottom: '10px' }}
-                        />
-                    </div>
-                    <div>
-                        <p className="store-name">{storeInfo.ten_cua_hang}</p>
-                        <p className="store-address">{storeInfo.dia_chi_cua_hang}</p>
-                    </div>
-                </div>
-
-
-                {/* Đánh giá sản phẩm */}
-                <div className="product-reviews">
-                    <h3>ĐÁNH GIÁ SẢN PHẨM</h3>
-                    {reviews.length > 0 ? (
-                        reviews.map((review, index) => (
-                            <div className="review" key={index}>
-                                <p className="review-user">Người dùng: {review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
-                                <p className="review-rating">Điểm: {review.diem_danh_gia}/5</p>
-                                <p className="review-content">{review.noi_dung_danh_gia}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p style={{ fontSize: '16px' }}>Chưa có đánh giá nào.</p>
-                    )}
-                </div>
-
-                {/* Sản phẩm liên quan */}
-                <div className="related-products">
-                    <h3>SẢN PHẨM CÙNG LOẠI</h3>
-                    <div className="related-products-carousel">
-                        {randomProducts.map((relatedProduct) => (
-                            <div
-                                key={relatedProduct.ma_san_pham}
-                                className="related-product-card"
-                                onClick={() => handleProductClick(relatedProduct.ma_san_pham)}
-                            >
-                                <div className="product-image-placeholder">
-                                    <img
-                                        src={relatedProduct.anh_san_pham}
-                                        alt={relatedProduct.ten_san_pham}
-                                        className="product-image"
-                                    />
-                                </div>
-                                <p className="related-product-name">{relatedProduct.ten_san_pham}</p>
-                                <p className="related-product-price">{relatedProduct.gia.toLocaleString()} đ</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <FooterUser />
-        </div>
-    );
+        <FooterUser />
+    </div>
+);
 };
 
 export default ProductDetail;
