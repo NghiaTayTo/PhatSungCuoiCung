@@ -5,18 +5,17 @@ import HeaderUser from '../Component/HeaderUser';
 import FooterUser from '../Component/FooterUser';
 import styles from './ProductDetail.css';
 import axios from 'axios';
-
-import Loading from '../../utils/Order/Loading';
+import { getPhanHoiDanhGiaByMaDanhGia } from '../../utils/API/PhanHoiDanhGiaAPI';
 
 const ProductDetail = () => {
     const { id } = useParams(); // Lấy id sản phẩm từ URL
     const [product, setProduct] = useState(null); // Chi tiết sản phẩm
     const [reviews, setReviews] = useState([]); // Đánh giá sản phẩm
     const [storeInfo, setStoreInfo] = useState(null); // Thông tin cửa hàng
-    const [relatedProducts, setRelatedProducts] = useState([]); // Sản phẩm liên quan
     const [randomProducts, setRandomProducts] = useState([]); // Sản phẩm ngẫu nhiên
     const [quantity, setQuantity] = useState(1); // Số lượng sản phẩm
     const [reportMenuVisible, setReportMenuVisible] = useState(false);
+    const [responseSeller, setResponseSeller] = useState([])
     const navigate = useNavigate();
 
     // phan trang cho danh gia
@@ -37,6 +36,8 @@ const ProductDetail = () => {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    const [feedbacks, setFeedbacks] = useState({});
 
     // Lấy chi tiết sản phẩm
     useEffect(() => {
@@ -60,12 +61,6 @@ const ProductDetail = () => {
                 // Lấy danh sách sản phẩm ngẫu nhiên
                 const allProducts = await getAllBook();
                 setRandomProducts(getRandomProducts(allProducts, 5));
-
-                // Lấy sản phẩm liên quan từ cùng cửa hàng
-                const relatedResponse = await axios.get(
-                    `http://localhost:8080/api/v1/product/cuahang-${productData.ma_cua_hang}/allinfo`
-                );
-                setRelatedProducts(relatedResponse.data.filter((p) => p.ma_san_pham !== parseInt(id))); // Loại trừ sản phẩm hiện tại
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
             }
@@ -73,6 +68,28 @@ const ProductDetail = () => {
 
         fetchProductData();
     }, [id]);
+
+    useEffect(() => {
+        // Hàm lấy phản hồi cho từng đánh giá trong reviews
+        const fetchFeedbacks = async () => {
+            const newFeedbacks = {};
+            for (let comment of reviews) {
+                try {
+                    const feedback = await getPhanHoiDanhGiaByMaDanhGia(comment.ma_danh_gia);
+                    if (feedback) {
+                        newFeedbacks[comment.ma_danh_gia] = feedback; // Gắn phản hồi vào `newFeedbacks`
+                    }
+                } catch (error) {
+                    console.error('Error fetching feedback:', error);
+                }
+            }
+            setFeedbacks(newFeedbacks); // Cập nhật state với tất cả các phản hồi
+
+        };
+
+        fetchFeedbacks();
+
+    }, [reviews]);
 
     // Hàm random sản phẩm
     const getRandomProducts = (arr, num) => {
@@ -135,8 +152,8 @@ const ProductDetail = () => {
         }
     };
 
-    // if (!product || !storeInfo) return <p>Loading...</p>;
-    if (!product || !storeInfo) return <Loading/>;
+    if (!product || !storeInfo) return <p>Loading...</p>;
+    console.log(reviews)
 
     return (
         <div className={styles.parent}>
@@ -158,8 +175,8 @@ const ProductDetail = () => {
                                 <p className="product-status">Tình trạng: <span className='product-hethang'>Hết hàng</span></p>
                             )
                         }
-                        
-                        
+
+
                         <div className="quantity-control">
                             <label>Số lượng:</label>
                             <div className="quantityWrapper">
@@ -170,7 +187,7 @@ const ProductDetail = () => {
                                     -
                                 </button>
                                 <input
-                                    
+
                                     value={quantity}
                                     min="1"
                                     onChange={(e) => setQuantity(Number(e.target.value))}
@@ -243,13 +260,34 @@ const ProductDetail = () => {
                 <div className="product-reviews">
                     <h3>ĐÁNH GIÁ SẢN PHẨM</h3>
                     {reviews.length > 0 ? (
-                        reviews.map((review, index) => (
-                            <div className="review" key={index}>
-                                <p className="review-user">Người dùng: {review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
-                                <p className="review-rating">Điểm: {review.diem_danh_gia}/5</p>
-                                <p className="review-content">{review.noi_dung_danh_gia}</p>
-                            </div>
-                        ))
+                        reviews.map((review, index) => {
+                            const feedback = feedbacks[review.ma_danh_gia];
+                            {
+                                feedback && (
+                                    <>
+                                        <div className="review" key={index}>
+                                            <p className="review-user">Người dùng: {review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
+                                            <p className="review-rating">Điểm: {review.diem_danh_gia}/5</p>
+                                            <p className="review-content">{review.noi_dung_danh_gia}</p>
+                                        </div>
+                                        <div>
+                                            <p>{feedback.noi_dung_phan_hoi}</p>
+                                        </div>
+                                    </>
+                                )
+                            }
+
+                            {
+                                !feedback && (
+                                    <div className="review" key={index}>
+                                        <p className="review-user">Người dùng: {review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
+                                        <p className="review-rating">Điểm: {review.diem_danh_gia}/5</p>
+                                        <p className="review-content">{review.noi_dung_danh_gia}</p>
+                                    </div>
+                                )
+                            }
+
+                        })
                     ) : (
                         <p style={{ fontSize: '16px' }}>Chưa có đánh giá nào.</p>
                     )}
