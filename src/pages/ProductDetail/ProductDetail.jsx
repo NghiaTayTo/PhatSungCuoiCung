@@ -6,6 +6,8 @@ import FooterUser from '../Component/FooterUser';
 import styles from './ProductDetail.css';
 import axios from 'axios';
 
+import Loading from '../../utils/Order/Loading';
+
 const ProductDetail = () => {
     const { id } = useParams(); // Lấy id sản phẩm từ URL
     const [product, setProduct] = useState(null); // Chi tiết sản phẩm
@@ -133,7 +135,8 @@ const ProductDetail = () => {
         }
     };
 
-    if (!product || !storeInfo) return <p>Loading...</p>;
+    // if (!product || !storeInfo) return <p>Loading...</p>;
+    if (!product || !storeInfo) return <Loading/>;
 
     return (
         <div className={styles.parent}>
@@ -145,8 +148,18 @@ const ProductDetail = () => {
                     <img src={product.anh_san_pham} alt={product.ten_san_pham} className="product-imageCart" />
                     <div className="product-info">
                         <h1>{product.ten_san_pham}</h1>
-                        <p className="product-author">Tác giả: {product.tac_gia || "N/A"}</p>
-                        <p className="product-priceD">Giá: {product.gia.toLocaleString()} đ</p>
+                        <p className="product-author"><span>Tác giả:</span>{product.tac_gia || "N/A"} </p>
+                        <p className="product-categoryy"><span>Thể loại:</span>{product.the_loai?.ten_the_loai || "N/A"} </p>
+                        <p className="product-priceD">{product.gia.toLocaleString()} đ</p>
+                        {
+                            product.con_hang > 0 ? (
+                                <p className="product-status">Tình trạng: <span>Còn hàng</span></p>
+                            ) : (
+                                <p className="product-status">Tình trạng: <span className='product-hethang'>Hết hàng</span></p>
+                            )
+                        }
+                        
+                        
                         <div className="quantity-control">
                             <label>Số lượng:</label>
                             <div className="quantityWrapper">
@@ -169,6 +182,7 @@ const ProductDetail = () => {
                                 >
                                     +
                                 </button>
+                                <p className="product-conhang">{product.con_hang?.toLocaleString()} sản phẩm có sẵn</p>
                             </div>
                         </div>
                         <div className="action-buttons">
