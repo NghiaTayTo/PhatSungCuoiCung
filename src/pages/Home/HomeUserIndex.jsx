@@ -312,7 +312,6 @@ const HomeUserIndex = () => {
                                             <p>0.1 SOL</p>
                                         </div>
                                     </div>
-
                                 </div>
 
                             </div>
