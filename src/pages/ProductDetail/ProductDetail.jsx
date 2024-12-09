@@ -6,7 +6,7 @@ import FooterUser from '../Component/FooterUser';
 import styles from './ProductDetail.css';
 import { getPhanHoiDanhGiaByMaDanhGia } from '../../utils/API/PhanHoiDanhGiaAPI';
 import axios from 'axios';
-import { getPhanHoiDanhGiaByMaDanhGia } from '../../utils/API/PhanHoiDanhGiaAPI';
+
 
 const ProductDetail = () => {
     const { id } = useParams(); // Lấy id sản phẩm từ URL
