@@ -3,6 +3,7 @@ import HeaderUser from '../Component/HeaderUser';
 import FooterUser from '../Component/FooterUser';
 import axios from 'axios';
 import styles from './Donhang.module.css';
+import RatingForm from '../Rating/RatingForm';
 
 const DonHang = () => {
     const [orderDetails, setOrderDetails] = useState([]);
@@ -11,6 +12,11 @@ const DonHang = () => {
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [orderDetailToCancel, setOrderDetailToCancel] = useState(null);
     const [activeStatus, setActiveStatus] = useState("Tất cả");
+    const [userId, setUserID] = useState(null)
+    const [idProduct, setIdProduct] = useState(null)
+    const [idOrderDetail, setIdOrderdetail] = useState(null)
+    
+
 
     useEffect(() => {
         const fetchAllOrderDetails = async () => {
@@ -25,6 +31,8 @@ const DonHang = () => {
         };
         fetchAllOrderDetails();
     }, []);
+
+
 
     const filterOrderDetails = (status) => {
         setActiveStatus(status); // Cập nhật trạng thái đã chọn
@@ -98,6 +106,27 @@ const DonHang = () => {
             console.error("Lỗi khi yêu cầu trả hàng/Hoàn tiền:", error);
         }
     };
+    const [showForm, setShowForm] = useState(false);
+
+    const handleRateClick = async (orderDetailId, productId) => {
+        const userId = JSON.parse(sessionStorage.getItem('user')).id_tai_khoan; // Lấy userId từ sessionStorage
+        setUserID(userId)
+        setIdOrderdetail(orderDetailId)
+        setIdProduct(productId)
+        setShowForm(true);
+        console.log(productId)
+    };
+
+    const handleCloseForm = () => {
+        setShowForm(false);
+    };
+
+    
+
+
+
+
+
 
     return (
         <div className={styles.parent}>
@@ -118,7 +147,7 @@ const DonHang = () => {
                 </div>
 
                 <div className={styles.orderList}>
-                    {filteredOrderDetails.map(detail => (
+                    {filteredOrderDetails.map((detail, index) => (
                         <div key={detail.ma_don_hang_chi_tiet} className={styles.orderDetailItem}>
                             <div className={styles.orderDetailHeaderM}>
                                 <div className={styles.orderDetailHeader}>
@@ -133,10 +162,10 @@ const DonHang = () => {
                             </div>
                             <div className={styles.orderDetailBodyM}>
                                 <div className={styles.orderDetailBody}>
-                                    <div style={{marginRight: '20px'}}><img src={detail.san_pham?.anh_san_pham} alt={detail.san_pham?.ten_san_pham} className={styles.productImage} /></div>
+                                    <div style={{ marginRight: '20px' }}><img src={detail.san_pham?.anh_san_pham} alt={detail.san_pham?.ten_san_pham} className={styles.productImage} /></div>
                                     <div>
                                         <h4 style={{ marginBottom: '20px', fontSize: '20px' }}>{detail.san_pham?.ten_san_pham}</h4>
-                                        <p style={{fontSize: '16px'}}>Số lượng: {detail.so_luong}</p>
+                                        <p style={{ fontSize: '16px' }}>Số lượng: {detail.so_luong}</p>
                                     </div>
                                 </div>
                                 <div>
@@ -153,10 +182,19 @@ const DonHang = () => {
                                         <button className={styles.confirmOrderButton} onClick={() => confirmReceivedOrderDetail(detail.ma_don_hang_chi_tiet)}>Đã nhận hàng</button>
                                     )}
                                     {detail.trang_thai?.ma_trang_thai === 13 && (
-                                        <button className={styles.rateButton} onClick={() => confirmTraHang(detail.ma_don_hang_chi_tiet)}>Đánh giá</button>
+                                        <>
+                                            <button onClick={() => handleRateClick(detail.ma_don_hang_chi_tiet, detail.san_pham.ma_san_pham)} className={styles.rateButton}>
+                                                Đánh giá
+                                            </button>
+
+                                        </>
                                     )}
+
                                     {detail.trang_thai?.ma_trang_thai === 13 && (
                                         <button className={styles.returnmoneyButton} onClick={() => confirmTraHang(detail.ma_don_hang_chi_tiet)}>Yêu cầu trả hàng/Hoàn tiền</button>
+                                    )}
+                                    {detail.trang_thai?.ma_trang_thai === 13 && (
+                                        <button className={styles.returnmoneyButton} onClick={() => confirmTraHang(detail.ma_don_hang_chi_tiet)}>Báo cáo</button>
                                     )}
                                 </div>
 
@@ -187,6 +225,14 @@ const DonHang = () => {
                 )}
             </div>
             <FooterUser />
+            {showForm && (
+                <RatingForm
+                    onClose={handleCloseForm}
+                    userId={userId} // Truyền userId
+                    orderDetailId={idOrderDetail} // Truyền orderDetailId
+                    productId={idProduct} // Truyền productId
+                />
+            )}
         </div>
     );
 };
