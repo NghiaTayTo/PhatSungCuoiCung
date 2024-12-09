@@ -25,7 +25,7 @@ class ApexChartTop extends React.Component {
             [new Date('10/09/2024').getTime(), 270], 
             [new Date('10/10/2024').getTime(), 200], 
             [new Date('10/11/2024').getTime(), 60], 
-            [new Date('10/12/2024').getTime(), 370],  
+            [new Date('10/12/2024').getTime(), 370], 
         ];
 
         const book3 = [

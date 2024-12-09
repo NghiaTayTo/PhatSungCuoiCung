@@ -8,6 +8,7 @@ import axios from "axios";
 import styles from "./HomeUser.module.css";
 import { useNavigate } from "react-router-dom";
 import ChatFormUser from "../../chat/ChatFormUser";
+import { faAngleRight, faArrowAltCircleRight, faBook, faFireFlameCurved, faHeart, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import FormDep from "../../chat/ChatFormUser";
 
 
@@ -113,16 +114,38 @@ const StorePage = () => {
             key={index}
             onClick={() => handleProductClick(product.ma_san_pham)}
           >
-            <div className={styles.imageContainer}>
+            {/* <div className={styles.imageContainer}>
               <img
                 className={styles.productImage}
-                src={`/images/${product.anh_san_pham}`}
+                src={product.anh_san_pham}
                 alt={product.ten_san_pham}
               />
             </div>
             <div className={styles.productInfo}>
               <p className={styles.productName}>{product.ten_san_pham}</p>
               <p className={styles.productPrice}>{product.gia.toLocaleString()} VND</p>
+            </div> */}
+            <div className={styles.imageContainer}>
+              <img
+                className={styles.productImage}
+                src={product.anh_san_pham}
+                alt={product.ten_san_pham}
+              />
+            </div>
+
+            <div className={styles.productInfo}>
+              <p className={styles.productName}>{product.ten_san_pham}</p>
+              <p className={styles.tacGia}>{product.tac_gia}</p>
+              <div className={styles.price}>
+                <p className={styles.productPrice}>
+                  {product.gia ? product.gia.toLocaleString('vi-VN') : 0}đ
+                </p>
+                <div className={styles.listCategoryHayItemSol}>
+                  <img src='/images/solana.png' alt='solana icon' />
+                  <p>0.1 SOL</p>
+                </div>
+              </div>
+
             </div>
           </div>
         ))}
