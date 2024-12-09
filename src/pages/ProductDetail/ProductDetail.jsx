@@ -13,12 +13,9 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null); // Chi tiết sản phẩm
     const [reviews, setReviews] = useState([]); // Đánh giá sản phẩm
     const [storeInfo, setStoreInfo] = useState(null); // Thông tin cửa hàng
-
     const [randomProducts, setRandomProducts] = useState([]); // Sản phẩm ngẫu nhiên
     const [quantity, setQuantity] = useState(1); // Số lượng sản phẩm
     const [reportMenuVisible, setReportMenuVisible] = useState(false);
-    const [responseSeller, setResponseSeller] = useState([])
-    const [cc, setCC] = useState(false)
     const navigate = useNavigate();
 
     // phan trang cho danh gia

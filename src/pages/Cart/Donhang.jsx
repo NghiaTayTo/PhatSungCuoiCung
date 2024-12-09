@@ -4,6 +4,7 @@ import FooterUser from '../Component/FooterUser';
 import axios from 'axios';
 import styles from './Donhang.module.css';
 import RatingForm from '../Rating/RatingForm';
+import ReportForm from '../Rating/Report';
 
 const DonHang = () => {
     const [orderDetails, setOrderDetails] = useState([]);
@@ -15,6 +16,7 @@ const DonHang = () => {
     const [userId, setUserID] = useState(null)
     const [idProduct, setIdProduct] = useState(null)
     const [idOrderDetail, setIdOrderdetail] = useState(null)
+    const [idCuaHang, setIdCuaHang] = useState(null)
     
 
 
@@ -22,6 +24,7 @@ const DonHang = () => {
         const fetchAllOrderDetails = async () => {
             try {
                 const userId = JSON.parse(sessionStorage.getItem('user')).id_tai_khoan;
+                setUserID(userId);
                 const response = await axios.get(`http://localhost:8080/api/v1/donhang/taikhoan-${userId}`);
                 setOrderDetails(response.data);
                 setFilteredOrderDetails(response.data); // Hiển thị tất cả đơn hàng ban đầu
@@ -107,6 +110,7 @@ const DonHang = () => {
         }
     };
     const [showForm, setShowForm] = useState(false);
+    const [showFormReport, setShowFormReport] = useState(false);
 
     const handleRateClick = async (orderDetailId, productId) => {
         const userId = JSON.parse(sessionStorage.getItem('user')).id_tai_khoan; // Lấy userId từ sessionStorage
@@ -120,6 +124,16 @@ const DonHang = () => {
     const handleCloseForm = () => {
         setShowForm(false);
     };
+
+    const handleReportClick = async (idCuaHang, idProduct) =>{
+        setIdCuaHang(idCuaHang)
+        setIdProduct(idProduct)
+        setShowFormReport(true)
+        console.log(123)
+    }
+    const handleCloseFormReport = () =>{
+        setShowFormReport(false)
+    }
 
     
 
@@ -166,6 +180,7 @@ const DonHang = () => {
                                     <div>
                                         <h4 style={{ marginBottom: '20px', fontSize: '20px' }}>{detail.san_pham?.ten_san_pham}</h4>
                                         <p style={{ fontSize: '16px' }}>Số lượng: {detail.so_luong}</p>
+                                        <p style={{ fontSize: '16px' }}>Số lượng: {detail.san_pham.ma_cua_hang}</p>
                                     </div>
                                 </div>
                                 <div>
@@ -194,7 +209,7 @@ const DonHang = () => {
                                         <button className={styles.returnmoneyButton} onClick={() => confirmTraHang(detail.ma_don_hang_chi_tiet)}>Yêu cầu trả hàng/Hoàn tiền</button>
                                     )}
                                     {detail.trang_thai?.ma_trang_thai === 13 && (
-                                        <button className={styles.returnmoneyButton} onClick={() => confirmTraHang(detail.ma_don_hang_chi_tiet)}>Báo cáo</button>
+                                        <button className={styles.returnmoneyButton} onClick={() => handleReportClick(detail.san_pham.ma_cua_hang, detail.san_pham.ma_san_pham)}>Báo cáo</button>
                                     )}
                                 </div>
 
@@ -232,6 +247,9 @@ const DonHang = () => {
                     orderDetailId={idOrderDetail} // Truyền orderDetailId
                     productId={idProduct} // Truyền productId
                 />
+            )}
+            {showFormReport && (
+                <ReportForm userId={userId} storeId={idCuaHang} productId={idProduct} onClose={handleCloseFormReport} />
             )}
         </div>
     );
