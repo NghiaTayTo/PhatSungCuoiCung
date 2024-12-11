@@ -360,6 +360,15 @@ export const getAllBook = () => {
             console.error(err)
         })
 }
+export const getAllBookUser = () =>{
+    return axios.get('http://localhost:8080/api/v1/product/user')
+    .then(res => {
+        return res.data;
+    })
+    .catch(err => {
+        console.error(err)
+    })
+}
 
 // * USER - Lấy thông tin chi tiết sản phẩm
 export const getBookByMaSP = async (idProduct) => {

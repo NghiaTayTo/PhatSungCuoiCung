@@ -33,12 +33,12 @@ const CheckOut = () => {
         }
     }, []);
 
-    const totalAmount = checkoutCart.reduce((total, item) => total + item.gia * item.so_luong, 0);
-    const shippingFee = checkoutCart.length > 1 ? totalAmount / 10 / checkoutCart.length : totalAmount / 10; 
-    const grandTotal = totalAmount + shippingFee;
 
     // Tạo đơn hàng
     // Hàm tạo đơn hàng và trừ tiền
+    const totalAmount = checkoutCart.reduce((total, item) => total + item.gia * item.so_luong, 0);
+    const shippingFee = checkoutCart.length > 1 ? totalAmount / 10 / checkoutCart.length : totalAmount / 10;
+    const grandTotal = totalAmount + (shippingFee * checkoutCart.length);
     const createOrder = async () => {
         const userId = JSON.parse(sessionStorage.getItem('user')).id_tai_khoan;
         const addressId = address?.ma_dia_chi;
@@ -52,13 +52,14 @@ const CheckOut = () => {
         const orderDetails = checkoutCart.map(item => ({
             so_luong: item.so_luong,
             gia: item.gia,
-            thanh_tien: item.gia * item.so_luong,
+            thanh_tien: grandTotal,
             san_pham: { ma_san_pham: item.ma_san_pham },
             id_voucher: item.voucher || null,
             ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu
         }));
 
         try {
+            
             // Tạo đơn hàng
             const createOrderResponse = await axios.post(
                 `http://localhost:8080/api/v1/donhang/create/taikhoan-${userId}/diachi-${addressId}`,
@@ -75,6 +76,7 @@ const CheckOut = () => {
             }));
 
             console.log("Order details to be added:", JSON.stringify(orderDetailsWithOrderId, null, 2));
+            console.log(orderDetailsWithOrderId)
 
             // Thêm chi tiết đơn hàng
             const addDetailsResponse = await axios.post(
@@ -89,7 +91,7 @@ const CheckOut = () => {
 
             try {
                 const deductMoneyResponse = await axios.post(
-                    `http://localhost:8080/api/vi/deductMoney`, // Endpoint mới
+                    `http://localhost:8080/api/vi/deductMoney`, // Endpoint mới  
                     null, // Không cần body vì sử dụng query parameters
                     {
                         params: {
@@ -129,6 +131,7 @@ const CheckOut = () => {
         setAddress(selectedAddress);
         sessionStorage.setItem('address', JSON.stringify(selectedAddress));
         setShowAddressSelector(false);
+        console.log(grandTotal)
     };
 
     return (
@@ -205,10 +208,18 @@ const CheckOut = () => {
                             <span>Tổng tiền hàng</span>
                             <span>{totalAmount.toLocaleString('vi-VN')} đ</span>
                         </div>
-                        <div className="summary-item">
+                        {checkoutCart.length == 1 && (
+                            <div className="summary-item">
                             <span>Phí vận chuyển</span>
                             <span>{shippingFee.toLocaleString('vi-VN')} đ</span>
                         </div>
+                        )}
+                        {checkoutCart.length > 1 && (
+                            <div className="summary-item">
+                            <span>Phí vận chuyển mỗi đơn</span>
+                            <span>{shippingFee.toLocaleString('vi-VN')} đ</span>
+                        </div>
+                        )}
                         <div className="summary-item grand-total">
                             <span>Tổng thanh toán</span>
                             <strong>{grandTotal.toLocaleString('vi-VN')} đ</strong>

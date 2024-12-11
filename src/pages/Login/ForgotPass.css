@@ -14,12 +14,12 @@
 }
 
 .reset-password-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 30px;
-    background-color: white;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    margin: 170px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
@@ -52,7 +52,7 @@
 
 .send-code-button {
     /* padding: 12px; */
-    width: 100px;
+    width: 120px;
     height: 50px;
     font-size: 16px;
     background-color: #ddd;
@@ -80,4 +80,25 @@
 
 .reset-button:hover {
     background-color: #d88b1f;
+}
+
+
+.bgSignin {
+    background-image: url(/public/images/bgbook.png);
+    background-size: cover;
+    /* Đảm bảo hình ảnh phủ toàn bộ màn hình */
+    background-position: center;
+    /* Căn hình ảnh vào giữa màn hình */
+    background-repeat: no-repeat;
+    /* Không lặp hình ảnh */
+    background-attachment: fixed;
+    /* Cố định hình nền khi cuộn */
+}
+
+.boxCenter {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

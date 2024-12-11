@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './HomeUserIndex.module.css';
-import { getAllBook } from '../../utils/API/ProductAPI'; // API để lấy sản phẩm
+import { getAllBookUser } from '../../utils/API/ProductAPI'; // API để lấy sản phẩm
 import { useNavigate } from 'react-router-dom';
 import FooterUser from '../Component/FooterUser';
 import HeaderUser from '../Component/HeaderUser';
@@ -10,7 +10,7 @@ import ImageCarousel from './ImageCarousel';
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick-theme.css";  
 import ProductFormSlider from '../../utils/Order/ProductFormSlider';
 
 const HomeUserIndex = () => {
@@ -27,7 +27,7 @@ const HomeUserIndex = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const data = await getAllBook(21); // Lấy toàn bộ sản phẩm từ API
+                const data = await getAllBookUser(); // Lấy toàn bộ sản phẩm từ API
                 setProducts(data);
                 // Lấy ngẫu nhiên sản phẩm cho từng danh mục
                 setFeaturedProducts(data.sort(() => 0.5 - Math.random()).slice(0, 8));
@@ -312,7 +312,6 @@ const HomeUserIndex = () => {
                                             <p>0.1 SOL</p>
                                         </div>
                                     </div>
-
                                 </div>
 
                             </div>

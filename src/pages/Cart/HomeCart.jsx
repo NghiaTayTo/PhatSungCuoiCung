@@ -80,7 +80,9 @@ const ShoppingCart = () => {
                     <p>Giỏ hàng của bạn đang trống.</p>
                 ) : (
                     <>
+                     
                         {cart.map(product => (
+                          
                             <div key={product.ma_san_pham} className="cart-product">
                                 <input
                                     type="checkbox"
