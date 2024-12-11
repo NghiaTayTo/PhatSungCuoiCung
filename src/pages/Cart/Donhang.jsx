@@ -195,11 +195,7 @@ const DonHang = () => {
                                     </div>
                                 </div>
                                 <div>
-<<<<<<< HEAD
-                                    <p style={{ fontSize: '16px' }}>Thành tiền: {(detail.thanh_tien).toLocaleString()} đ</p>
-=======
-                                    <p style={{ fontSize: '16px' }}>Thành tiền: {detail.thanh_tien} đ</p>
->>>>>>> 45d85d6de3c4ae1b70e7c949f86d9de5ade13f34
+                                     <p style={{ fontSize: '16px' }}>Thành tiền: {(detail.thanh_tien).toLocaleString()} đ</p>
                                 </div>
 
                             </div>
