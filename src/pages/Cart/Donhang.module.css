@@ -5,11 +5,33 @@
 }
 
 .orderTabs {
-    display: flex;
-    justify-content: center; /* Canh giữa các nút */
-    gap: 10px; /* Khoảng cách giữa các nút */
     margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #ddd;
 }
+
+.buttonDonHang {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.buttonDonHang:hover {
+    color: #000;
+}
+
+.active {
+    color: red;
+    font-weight: bold;
+    border-bottom: 2px solid red;
+}
+
 
 .buttonDonHang {
     padding: 10px 20px;
@@ -245,4 +267,18 @@ button:hover {
 .orderDetailFooter{
     display: flex;
     justify-content: flex-end;
+}
+
+.confirmCancel {
+    background-color: #ff9800;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.cancel_huy{
+    background-color: #bbb;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
 }

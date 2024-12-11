@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import HeaderUser from "../Component/HeaderUser";
 import FooterUser from "../Component/FooterUser";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMessage } from '@fortawesome/free-regular-svg-icons';
 import axios from "axios";
 import styles from "./HomeUser.module.css";
 import { useNavigate } from "react-router-dom";
 import ChatFormUser from "../../chat/ChatFormUser";
+import { faAngleRight, faArrowAltCircleRight, faBook, faFireFlameCurved, faHeart, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import FormDep from "../../chat/ChatFormUser";
+
 
 const StorePage = () => {
   const { id_cua_hang } = useParams(); // Lấy id cửa hàng từ URL
@@ -69,30 +73,34 @@ const StorePage = () => {
 
   if (!storeInfo) return <p>Loading...</p>;
 
-  
+
 
   return (
     <div className={styles.parent}>
       <HeaderUser />
       <div className={styles.storeHeader}>
+        <div className={styles.bia_overlay}>
+          <img className={styles.bgShop} src={storeInfo.anh_bia} alt="" />
+          <div className={styles.overlay}></div>
+        </div>
         <div className={styles.storeInfo}>
           <img
             src={storeInfo.anh_dai_dien}
             alt={`Ảnh đại diện của ${storeInfo.ten_cua_hang}`}
             className={styles.storeAvatar}
           />
-          <div style={{ fontSize: '16px', fontWeight: '900' }}>
+          <div style={{ fontSize: '16px', fontWeight: '900' }} className={styles.info}>
             <h1 className={styles.storeName}>{storeInfo.ten_cua_hang}</h1>
             <p>Tham gia: {storeInfo.ngay_tao || "01/01/2024"}</p>
             <p>Địa chỉ: {storeInfo.dia_chi_cua_hang}</p>
-            <button onClick={handleChatOpen}>nhắn tin với cửa hàng</button>
+            <button onClick={handleChatOpen}><FontAwesomeIcon icon={faMessage} /> Chat ngay</button>
           </div>
         </div>
       </div>
 
       {
         formChat === true && (
-          <ChatFormUser storeID={id_cua_hang} userID={idUser} onClose={handleChatClose}/>
+          <ChatFormUser storeID={id_cua_hang} userID={idUser} onClose={handleChatClose} />
         )
       }
       {/* <ChatFormUser/> */}
@@ -106,16 +114,37 @@ const StorePage = () => {
             key={index}
             onClick={() => handleProductClick(product.ma_san_pham)}
           >
-            <div className={styles.imageContainer}>
+            {/* <div className={styles.imageContainer}>
               <img
                 className={styles.productImage}
-                src={`/images/${product.anh_san_pham}`}
+                src={product.anh_san_pham}
                 alt={product.ten_san_pham}
               />
             </div>
             <div className={styles.productInfo}>
               <p className={styles.productName}>{product.ten_san_pham}</p>
               <p className={styles.productPrice}>{product.gia.toLocaleString()} VND</p>
+            </div> */}
+            <div className={styles.imageContainer}>
+              <img
+                className={styles.productImage}
+                src={product.anh_san_pham}
+                alt={product.ten_san_pham}
+              />
+            </div>
+
+            <div className={styles.productInfo}>
+              <p className={styles.productName}>{product.ten_san_pham}</p>
+              <p className={styles.tacGia}>{product.tac_gia}</p>
+              <div className={styles.price}>
+                <p className={styles.productPrice}>
+                  {product.gia ? product.gia.toLocaleString('vi-VN') : 0}đ
+                </p>
+                <div className={styles.listCategoryHayItemSol}>
+                  <img src='/images/solana.png' alt='solana icon' />
+                  <p>0.1 SOL</p>
+                </div>
+              </div>
             </div>
           </div>
         ))}
@@ -134,7 +163,7 @@ const StorePage = () => {
         ))}
       </div>
 
-      
+
 
       <FooterUser />
     </div>

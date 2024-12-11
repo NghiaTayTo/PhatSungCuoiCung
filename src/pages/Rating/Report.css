@@ -1,0 +1,124 @@
+.report-form-container {
+    width: 600px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .report-form-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .report-form-subtitle {
+    margin-bottom: 10px;
+    color: #444;
+  }
+  
+  .report-form-radio {
+    margin-bottom: 10px;
+  }
+  
+  .report-form-radio label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .report-form-radio input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  .report-form-custom {
+    margin-top: 10px;
+  }
+  
+  .report-form-textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    font-size: 14px;
+  }
+  
+  .report-form-upload {
+    margin-top: 10px;
+  }
+  
+  .report-form-file {
+    margin-top: 5px;
+  }
+  
+  .report-form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .report-form-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .submit-button {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .submit-button:hover {
+    background-color: #45a049;
+  }
+  
+  .cancel-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .cancel-button:hover {
+    background-color: #e53935;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .report-form-container {
+      padding: 15px;
+    }
+  
+    .report-form-textarea {
+      font-size: 13px;
+    }
+  
+    .report-form-button {
+      width: 100%;
+    }
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}  
+.report-form-radio label {
+    font-size: 16px;
+}
+.imgPre{
+    width: 200px;
+    object-fit: cover;
+    height: 200px;
+}

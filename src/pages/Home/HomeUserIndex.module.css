@@ -1,3 +1,5 @@
+
+
 .parent {
     /* background-color: #f8f9fa; */
     padding-bottom: 20px;
@@ -780,4 +782,10 @@
 .bangXepHangProductInfoText strong{
     font-size: 18px;
     font-family: 'Montserrat', sans-serif;
+}
+.listBookBannerProductItem img{
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    height: auto;
 }
