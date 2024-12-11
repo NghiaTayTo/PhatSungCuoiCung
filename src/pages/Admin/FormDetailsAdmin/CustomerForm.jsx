@@ -45,15 +45,19 @@ const CustomerForm = ({ customerID, status, onClose }) => {
     const handleUpdateTrangThaiTk = async (key) => {
         try {
             let diem = 0;
+            let moKhoa;
             if (key === false) {
                 diem = 0;
+                moKhoa = false;
             } else {
                 diem = customer.tong_diem_vi_pham;
+                moKhoa = false
             }
 
             const dataUpdateTrangThaiTk = {
                 ...customer,
                 trang_thai_tk: key,
+                mo_khoa: moKhoa,
                 tong_diem_vi_pham: diem
             }
             const response = await updateCustomer(dataUpdateTrangThaiTk);

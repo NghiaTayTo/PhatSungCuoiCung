@@ -243,7 +243,7 @@ const SidebarAdmin = () => {
                                     <Link to="/admin/report-comment" className='submenu-item '>
                                         Báo cáo đánh giá
                                     </Link>
-                                    <Link to="/admin/infringing-product" className='submenu-item'>
+                                    {/* <Link to="/admin/infringing-product" className='submenu-item'>
                                         Sản phẩm vi phạm
                                     </Link>
                                     <Link to="/admin/infringing-user" className='submenu-item'>
@@ -251,7 +251,7 @@ const SidebarAdmin = () => {
                                     </Link>
                                     <Link to="/admin/infringing-store" className='submenu-item'>
                                         Cửa hàng vi phạm
-                                    </Link>
+                                    </Link> */}
                                 </div>
                             )}
                         </div>
@@ -288,7 +288,7 @@ const SidebarAdmin = () => {
                 </li>
 
                 <li>
-                    <Link style={{marginBottom: '12px'}} className={openMenu === "statistical" ? 'itemStyle-click btcitemStyle' : 'itemStyle'} onClick={() => handleMenuClick("statistical")}>
+                    <Link style={{marginBottom: '12px'}} className={openMenu === "statistical" ? 'itemStyle-click itemStyle' : 'itemStyle'} onClick={() => handleMenuClick("statistical")}>
                         <FontAwesomeIcon className='mr-5' icon={faChartSimple}></FontAwesomeIcon>
                         Doanh thu
                         <FontAwesomeIcon className='faAngleDown' icon={openMenu === "statistical" ? faAngleUp : faAngleDown}></FontAwesomeIcon>

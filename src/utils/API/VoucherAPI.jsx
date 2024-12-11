@@ -19,7 +19,15 @@ export const getVouchersByCuaHangId = async () => {
         console.error('Error fetching store details:', error);
         throw error; // Xử lý lỗi
     }
-  
+}
+export const getVouchersByCuaHangIdDetailsUser = async (idStore) => {
+    try {
+        const response = await  axios.get(`${hostVoucher}/cuahang-${idStore}`);
+        return response.data; // Trả về kết quả
+    } catch (error) {
+        console.error('Error fetching store details:', error);
+        throw error; // Xử lý lỗi
+    }
 }
 
 // * Hàm lấy thông tin 1 Voucher

@@ -34,7 +34,7 @@ const CheckOut = () => {
     }, []);
 
     const totalAmount = checkoutCart.reduce((total, item) => total + item.gia * item.so_luong, 0);
-    const shippingFee = totalAmount / 5;
+    const shippingFee = checkoutCart.length > 1 ? totalAmount / 10 / checkoutCart.length : totalAmount / 10; 
     const grandTotal = totalAmount + shippingFee;
 
     // Tạo đơn hàng

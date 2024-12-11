@@ -6,7 +6,6 @@ import axios from "axios";
 import styles from "./HomeUser.module.css";
 import { useNavigate } from "react-router-dom";
 import ChatFormUser from "../../chat/ChatFormUser";
-import FormDep from "../../chat/ChatFormUser";
 
 const StorePage = () => {
   const { id_cua_hang } = useParams(); // Lấy id cửa hàng từ URL

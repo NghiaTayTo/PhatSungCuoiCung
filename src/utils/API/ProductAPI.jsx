@@ -29,7 +29,15 @@ export const getSanPhamByCuaHangId = async () => {
         console.error('Error fetching store details:', error);
         throw error; // Xử lý lỗi
     }
-
+};
+export const getProductByIdStore = async (idStore) => {
+    try {
+        const response = await axios.get(`${hostProduct}/cuahang-${idStore}`);
+        return response.data; // Trả về kết quả
+    } catch (error) {
+        console.error('Error fetching store details:', error);
+        throw error; // Xử lý lỗi
+    }
 };
 
 // * Hàm lấy list sản phẩm theo cửa hàng cho ADMIN
@@ -351,7 +359,6 @@ export const getAllBook = () => {
         .catch(err => {
             console.error(err)
         })
-
 }
 
 // * USER - Lấy thông tin chi tiết sản phẩm

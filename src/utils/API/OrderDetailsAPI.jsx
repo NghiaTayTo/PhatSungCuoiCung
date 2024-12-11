@@ -158,3 +158,15 @@ export const getAllOrderDetailsByStatus = (maTrangThai) => {
             throw error;
         });
 }
+
+// * Hàm lấy ra tổng lượt bán của cửa hàng
+export const getSumLuotBanByMaCuaHang = (idStore) => {
+    return axios.get(`${hostProduct}/sum-luot-ban/${idStore}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching order details by status:', error);
+            throw error;
+        });
+}

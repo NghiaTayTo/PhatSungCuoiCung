@@ -16,6 +16,10 @@ import { getCategory, getCategoryByID } from '../../utils/API/CategoryAPI';
 import { handleImageUpload } from '../../utils/Order/UploadImageFileOnCloud';
 import { OverlayTrigger } from 'react-bootstrap';
 import { renderTooltip } from '../Order/ToolTip';
+import { getSOL, getSolanaPrice, getUSD_VND } from '../API/SolanaAPI';
+import { getCuaHangByIdAdmin } from '../API/StoreAPI';
+import SolanaForm from './SolanaForm';
+import { faSquarespace } from '@fortawesome/free-brands-svg-icons';
 
 const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
 
@@ -74,6 +78,23 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
         }
     };
 
+    const [solPrice, setSolPrice] = useState(0);
+    // const [usdToVndRate, setUsdToVndRate] = useState(null);
+
+    const getSol = async (vndAmount) => {
+        try {
+            const sol = await getSOL();
+            const usdToVndRate = await getUSD_VND();
+            const solAmount = (vndAmount / (usdToVndRate * sol)).toFixed(6);
+            setBook(prevBook => ({
+                ...prevBook,
+                gia_sol: solAmount
+            }));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         // Chỉ thay đổi giá trị nếu cần thiết
@@ -81,6 +102,9 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
 
         if (id === 'gia' || id === 'so_trang' || id === 'so_luong_hang') {
             newValue = value.replace(/[^0-9]/g, ''); // Giới hạn chỉ cho phép số
+            if (id === 'gia') {
+                getSol(newValue);
+            }
         }
 
         if (keyForm === 'add-book') {
@@ -395,9 +419,6 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
             if (isDeleted) {
                 window.location.reload();
                 setNotificationStatus('deleteIsSuccess');
-            } else {
-
-                setNotificationStatus('deleteIsFail');
             }
         } catch (error) {
             setNotificationStatus('deleteIsFail');
@@ -428,6 +449,9 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
         setNameBook('');
     }
 
+    const [shop, setShop] = useState({});
+    const [solForm, setSolForm] = useState(false);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -452,16 +476,24 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
     }, [bookID]);
 
 
-    const handleGetTrangThai = (trangThaiInt) => {
-        if (trangThaiInt === 0) {
+    const handleGetTrangThai = (trangThai) => {
+        if (trangThai === 1) {
+            return 'dangyeucau';
+        } else if (trangThai === 2) {
             return 'khoa';
-        } else if (trangThaiInt === 1) {
+        } else if (trangThai === 3) {
             return 'conhang';
-        } else if (trangThaiInt === 2) {
-            return 'hethang';
+        } else if (trangThai === 4) {
+            return 'hethang'
         } else {
-            return 'dangyeucau'
+            return 'yeucaumokhoa'
         }
+    }
+
+    const [showThongKe, setShowThongKe] = useState(false);
+
+    const handleShowThongKe = () => {
+        setShowThongKe(!showThongKe);
     }
 
     // * Hàm đóng xem chi tiết
@@ -476,7 +508,7 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
     return (
         <div>
             <div className="bg_black">
-                <div className="addnewbook">
+                <div className="addnewbook" id='form-width'>
                     <div className="addnewbook-header">
                         {keyForm === 'add-book' && (
                             <h3>Thêm sách mới</h3>
@@ -501,8 +533,20 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                                 <h3>{book.ten_san_pham}</h3>
                             </div>
                         )}
+                        <div>
+                            {
+                                keyForm === 'detail-book' && statusInt !== 1 && (
+                                    <OverlayTrigger
+                                        placement="left"  // top, right, bottom, left)
+                                        overlay={(props) => renderTooltip(props, 'Thống kê sản phẩm', 'custom-tooltip')}
+                                    >
+                                        <FontAwesomeIcon onClick={handleShowThongKe} className="faXmark" icon={faSquarespace}></FontAwesomeIcon>
+                                    </OverlayTrigger>
+                                )
+                            }
+                            <FontAwesomeIcon onClick={handleIconClick} className="faXmark" icon={faXmark}></FontAwesomeIcon>
+                        </div>
 
-                        <FontAwesomeIcon onClick={handleIconClick} style={{ cursor: 'pointer' }} className="faXmark" icon={faXmark}></FontAwesomeIcon>
                     </div>
                     {/* form điền thông tin sách */}
                     <div className="addnewbook-form">
@@ -540,32 +584,8 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                                 </div>
                             )}
 
-                            {
-                                keyForm === 'detail-book' && (
-                                    <div className='ansanpham'>
-                                        {
-                                            book.trang_thai_duyet === true && (
-                                                book.an_san_pham === true ? (
-                                                    <button onClick={() => handleUpdateAnBook('hien')}>
-                                                        <FontAwesomeIcon className='ansanpham_icon' icon={faEye}></FontAwesomeIcon>
-                                                        <p>Hiện sản phẩm</p>
-                                                    </button>
-                                                ) : (
-                                                    <OverlayTrigger
-                                                        placement="left"  // top, right, bottom, left)
-                                                        overlay={(props) => renderTooltip(props, 'Khi ẩn, người dùng sẽ không tìm thấy sản phẩm của bạn', 'custom-tooltip')}
-                                                    >
-                                                        <button onClick={() => handleUpdateAnBook('an')}>
-                                                            <FontAwesomeIcon className='ansanpham_icon' icon={faEyeLowVision}></FontAwesomeIcon>
-                                                            <p>Ẩn sản phẩm</p>
-                                                        </button>
-                                                    </OverlayTrigger>
-                                                )
-                                            )
-                                        }
-                                    </div>
-                                )
-                            }
+                            <div></div>
+
                         </div>
 
                         <div className="addnewbook-form_info">
@@ -675,7 +695,7 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                                 {errors.so_trang && <span>Thông tin không hợp lệ!</span>}
                             </div>
                             <div>
-                                <label for="name">Giá</label>
+                                <label for="name">Giá (VNĐ)</label>
                                 <input
                                     className={errors.gia ? 'btnCheckBorder-fail' : 'btnCheckBorder-default'}
                                     id="gia"
@@ -686,6 +706,18 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                                     disabled={statusInt === 0}
                                 />
                                 {errors.gia && <span>Thông tin không hợp lệ!</span>}
+                            </div>
+                            <div>
+                                <label for="name">Giá (SOlANA - SOL)</label>
+                                <input
+                                    className={errors.gia_sol ? 'btnCheckBorder-fail' : 'btnCheckBorder-default'}
+                                    id="gia_sol"
+                                    type="text"
+                                    // onChange={handleInputChange}
+                                    onBlur={handleInputBlur}
+                                    value={book.gia_sol}
+                                    disabled={true}
+                                />
                             </div>
                             <div>
                                 <label for="name">Ngôn ngữ</label>
@@ -746,16 +778,42 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                         {/* bấm vào nút thêm sản phẩm */}
                         {keyForm === 'add-book' && (
                             <div className="addnewbook-form_btn">
-                                <button onClick={onClose}>Hủy</button>
-                                <button onClick={handleSubmitAdd}>Tạo sản phẩm</button>
+                                <button className='xoasanpham_btn' onClick={onClose}>Hủy</button>
+                                <button className='capnhatsanpham' onClick={handleSubmitAdd}>Tạo sản phẩm</button>
                             </div>
                         )}
+
+                        {keyForm === 'detail-book' && statusInt === 1 && (
+                            <div className="addnewbook-form_btn">
+                                <button onClick={() => handleShowDelBook()} className='xoasanpham_btn'>Hủy Và Xóa Sản Phẩm</button>
+                                <button className='capnhatsanpham' onClick={handleSubmitUpdate}>Cập nhật sản phẩm</button>
+                            </div>
+                        )}
+
                         {/* sản phẩm chờ duyệt */}
-                        {keyForm === 'detail-book' && statusInt !== 2 && statusInt !== 5 && (
+                        {keyForm === 'detail-book' && (statusInt === 3 || statusInt === 4) && (
                             <div className="addnewbook-form_btn">
                                 {
+                                    book.an_san_pham === true ? (
+                                        <button className='btn_an_sp' onClick={() => handleUpdateAnBook('hien')}>
+                                            <FontAwesomeIcon className='ansanpham_icon' icon={faEye}></FontAwesomeIcon>
+                                            <p>Hiện sản phẩm</p>
+                                        </button>
+                                    ) : (
+                                        <OverlayTrigger
+                                            placement="left"  // top, right, bottom, left)
+                                            overlay={(props) => renderTooltip(props, 'Khi ẩn, người dùng sẽ không tìm thấy sản phẩm của bạn', 'custom-tooltip')}
+                                        >
+                                            <button className='btn_an_sp' onClick={() => handleUpdateAnBook('an')}>
+                                                <FontAwesomeIcon className='ansanpham_icon' icon={faEyeLowVision}></FontAwesomeIcon>
+                                                <p>Ẩn sản phẩm</p>
+                                            </button>
+                                        </OverlayTrigger>
+                                    )
+                                }
+                                {
                                     book.da_ban <= 0 && (
-                                        <button onClick={() => handleShowDelBook()}>Xóa Sản Phẩm</button>
+                                        <button className='xoasanpham_btn' onClick={() => handleShowDelBook()}>Xóa Sản Phẩm</button>
                                     )
                                 }
                                 <button className='capnhatsanpham' onClick={handleSubmitUpdate}>Cập nhật sản phẩm</button>
@@ -764,24 +822,24 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                         {/* sản phẩm bị khóa */}
                         {keyForm === 'detail-book' && statusInt === 2 && (
                             <div className="addnewbook-form_btn">
-                                <button onClick={() => handleShowDelBook()}>Xóa Sản Phẩm</button>
-                                <button onClick={handleUpdateYeuCauMoKhoa}>Gửi Yêu Cầu Mở Khóa</button>
+                                <button className='xoasanpham_btn' onClick={() => handleShowDelBook()} >Xóa Sản Phẩm</button>
+                                <button className='yeucaumokhoa_btn' onClick={handleUpdateYeuCauMoKhoa}>Gửi Yêu Cầu Mở Khóa</button>
                             </div>
                         )}
                         {/* sản phẩm bị khóa */}
                         {keyForm === 'detail-book' && statusInt === 5 && (
                             <div className="addnewbook-form_btn">
-                                <button onClick={() => handleShowDelBook()}>Xóa Sản Phẩm</button>
-                                <button onClick={handleUpdateHuyYeuCauMoKhoa}>Hủy yêu cầu mở khóa</button>
+                                {
+                                     book.da_ban <= 0 && (
+                                        <button className='xoasanpham_btn' onClick={() => handleShowDelBook()}>Xóa Sản Phẩm</button>
+                                    )
+                                }
+                                <button className='huyyeucaumokhoa_btn' onClick={handleUpdateHuyYeuCauMoKhoa}>Hủy yêu cầu mở khóa</button>
                             </div>
                         )}
 
 
-
-
-
-
-                        {keyForm === 'admin' && statusInt === 3 && (
+                        {/* {keyForm === 'admin' && statusInt === 3 && (
                             <div className="addnewbook-form_btn">
                                 <button>Hủy duyệt</button>
                                 <button onClick={() => handleSubmitTrangThai('duyet')}>Duyệt sản phẩm</button>
@@ -792,23 +850,47 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                                 <button onClick={() => handleShowDelBook()}>Yêu cầu xóa sản phẩm</button>
                                 <button onClick={handleSubmitUpdate}>Mở khóa sản phẩm</button>
                             </div>
-                        )}
+                        )} */}
 
-
-
-
+                        {/* 
                         {keyForm === 'add-book' && (
                             <div className="addnewbook-form_note">
                                 <p>Lưu ý: Sản phẩm mới cần qua kiểm duyệt của quản lý (1 - 2 ngày)
                                     trước khi đăng bán để đảm bảo chất lượng.</p>
                                 <p>Xin cảm ơn sự thông cảm và hợp tác của bạn!</p>
                             </div>
-                        )}
+                        )} */}
 
-
+                        {
+                            showThongKe && (
+                                <div className='show-thong-ke'>
+                                    <p>Đã bán: <span>20</span></p>
+                                    <p>Còn hàng: <span>20</span></p>
+                                    <ul>
+                                        <p>Lượt đánh giá: <span>21</span></p>
+                                        <li>5 sao: </li>
+                                        <li>4 sao: </li>
+                                        <li>3 sao: </li>
+                                        <li>2 sao: </li>
+                                        <li>1 sao: </li>
+                                    </ul>
+                                    <p>Điểm sản phẩm: <span>5</span> / 5</p>
+                                    <ul>
+                                        <p>Doanh thu theo phương thức thanh toán: </p>
+                                        <li>Thanh toán qua ví: <span>292.000</span>đ</li>
+                                        <li>Thanh toán bằng SOLANA: <span>17.32</span>đ</li>
+                                        <li>Thanh toán online VNPay: <span>542.500</span>đ</li>
+                                    </ul>
+                                    <p>Tổng doanh thu: <span>20.000.000 đ</span> - <span>17.32 SOL</span></p>
+                                </div>
+                            )
+                        }
 
                     </div>
                 </div>
+
+
+
                 {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
                     <div>
                         <NotificationUI
@@ -875,28 +957,7 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                         />
                     </div>
                 )}
-                {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title={textTrangThai}
-                            description={`"Thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'updateIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title={textTrangThai}
-                            description={`"Thất bại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
+
                 {notificationStatus === 'anIsSuccess' && closeNotification === true && (
                     <div>
                         <NotificationUI

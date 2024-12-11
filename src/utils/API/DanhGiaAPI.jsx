@@ -30,7 +30,6 @@ export const getListCommentByBookID = (bookID) => {
 
 // * Hàm đếm tất cả đánh giá theo mã sản phẩm
 export const countCommentByBookID = (bookID) => {
-
     return axios.get(`${hostDanhGia}/tat-ca-danh-gia/ma_san_pham-${bookID}`)
         .then(response => {
             return response.data;
@@ -39,7 +38,18 @@ export const countCommentByBookID = (bookID) => {
             console.error('Error fetching products by store:', error);
             throw error;
         });
+};
 
+// * Hàm tính điểm trung bình theo mã sản phẩm
+export const getDiemTrungBinhByMaSanPham = (bookID) => {
+    return axios.get(`${hostDanhGia}/diem-trung-binh-san-pham-${bookID}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching products by store:', error);
+            throw error;
+        });
 };
 
 // * Hàm tìm kiếm đánh giá theo mã sản phẩm và điểm đánh giá

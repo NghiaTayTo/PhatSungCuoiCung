@@ -95,6 +95,27 @@ const ListP2P = ({ p2pList = [], keySearch, searchName, typeTranSaction }) => {
         }
     }
 
+
+
+    const getTrangThaiCSS = (id) => {
+        if (id === 0) {
+            return 'choduyet';
+        } else if (id === 1) {
+            return 'xong';
+        } else {
+            return 'huy';
+        }
+    }
+    const getTrangThaiText = (id) => {
+        if (id === 0) {
+            return 'Chờ duyệt';
+        } else if (id === 1) {
+            return 'Đã rút tiền';
+        } else {
+            return 'Đã hủy';
+        }
+    }
+
     const tableRowsNap = currentProducts.map((giaoDich, index) => (
         <tr key={index} className={`box-shadow_row`}
         // onClick={() => handleShowDetails(store.trang_thai_tk, store.id_tai_khoan)}
@@ -119,50 +140,38 @@ const ListP2P = ({ p2pList = [], keySearch, searchName, typeTranSaction }) => {
     )
     );
 
-    const getTrangThaiCSS = (id) => {
-        if (id === 0) {
-            return 'choduyet';
-        } else if (id === 1) {
-            return 'xong';
-        } else {
-            return 'huy';
-        }
-    }
-    const getTrangThaiText = (id) => {
-        if (id === 0) {
-            return 'Chờ duyệt';
-        } else if (id === 1) {
-            return 'Đã rút tiền';
-        } else {
-            return 'Đã hủy';
-        }
-    }
+    const tableRowsRut = currentProducts.map((giaodich, index) => (
+        <tr key={index} >
+            <td style={{ width: '20px', textAlign: 'center' }}>
+                <span style={{ marginTop: '3px' }}>{index + 1 + indexOfFirstItem}</span>
+            </td>
+            <td style={{ width: '120px', textAlign: 'center' }}>{giaodich.id_gd}</td>
+            <td style={{ width: '150px', textAlign: 'center' }}>{giaodich.cua_hang?.ten_cua_hang}</td>
+            <td style={{ width: '100px', textAlign: 'center' }}>Rút</td>
+            <td style={{ width: '150px', textAlign: 'center' }}>{giaodich.so_tien?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+            <td style={{ width: '120px', textAlign: 'center' }}>{giaodich.ngay_giao_dich}</td>
+            <td style={{ width: '170px', textAlign: 'center' }}>{giaodich.mo_ta}</td>
 
-    // const tableRowsRut = currentProducts.map((giaodich, index) => (
-    //     <tr key={index} >
-    //         <td style={{ width: '20px', textAlign: 'center' }}>
-    //             <span style={{ marginTop: '3px' }}>{index + 1 + indexOfFirstItem}</span>
-    //         </td>
-    //         <td style={{ width: '120px', textAlign: 'center' }}>{giaodich.id_gd}</td>
-    //         <td style={{ width: '150px', textAlign: 'center' }}>{giaodich.cua_hang?.ten_cua_hang}</td>
-    //         <td style={{ width: '100px', textAlign: 'center' }}>Rút</td>
-    //         <td style={{ width: '150px', textAlign: 'center' }}>{giaodich.so_tien.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
-    //         <td style={{ width: '120px', textAlign: 'center' }}>{giaodich.ngay_giao_dich}</td>
-    //         <td style={{ width: '170px', textAlign: 'center' }}>{giaodich.mo_ta}</td>
+            <td style={{ width: '120px', textAlign: 'center', fontWeight: '500' }} >
+                {
+                    giaodich.trang_thai === 0 ? (
+                        <img src={giaodich.anh_qr} alt="QR Code" />
+                    ) : (
+                        <img src="/images/giaodich.png" alt="QR Code" />
+                    )
+                }
 
-    //         <td style={{ width: '120px', textAlign: 'center', fontWeight: '500' }} >
-    //             <img src="/images/giaodich.png" alt="QR Code" />
-    //         </td>
+            </td>
 
-    //         <td style={{ width: '120px', textAlign: 'center' }} className={getTrangThaiCSS(giaodich.trang_thai)}>{getTrangThaiText(giaodich.trang_thai)}</td>
-    //         <td style={{ width: '60px', textAlign: 'center' }}>
-    //             <button type="button" >
-    //                 <FontAwesomeIcon icon={faEye} />
-    //             </button>
-    //         </td>
-    //     </tr>
-    // )
-    // );
+            <td style={{ width: '120px', textAlign: 'center' }} className={getTrangThaiCSS(giaodich.trang_thai)}>{getTrangThaiText(giaodich.trang_thai)}</td>
+            <td style={{ width: '60px', textAlign: 'center' }}>
+                <button type="button" >
+                    <FontAwesomeIcon icon={faEye} />
+                </button>
+            </td>
+        </tr>
+    )
+    );
 
     // * Hàm xóa sản phẩm
     const [notificationStatus, setNotificationStatus] = useState('');
@@ -259,15 +268,15 @@ const ListP2P = ({ p2pList = [], keySearch, searchName, typeTranSaction }) => {
 
                                     </thead>
                                     <tbody style={{ marginTop: '10px' }}>
-                                        {/* {
+                                        {
                                             typeTranSaction === 'nap' ? (
-                                                { tableRowsNap }
+                                                <>{tableRowsNap}</>
                                             ) : (
-                                                { tableRowsRut }
+                                                <> {tableRowsRut}</>
                                             )
-                                        } */}
+                                        }
 
-{ tableRowsNap }
+                                        {/* { tableRowsNap } */}
 
                                     </tbody>
                                 </table>

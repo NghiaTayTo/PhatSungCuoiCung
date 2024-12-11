@@ -76,7 +76,7 @@ export const getCustomerByTrangThai = (trangThai) => {
 
 // * ADMIN - Hàm lấy ra khách hàng vi phạm
 export const getCustomerviPham = () => {
-    return axios.get(`${hostCustomer}/admin/vi-pham`)
+    return axios.get(`${hostCustomer}/vi-pham`)
         .then(response => {
             return response.data;
         })

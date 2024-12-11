@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getAllBook, getProductByMaSPUser } from '../../utils/API/ProductAPI';
+import { getAllBook, getProductByIdStore, getProductByMaSPUser } from '../../utils/API/ProductAPI';
 import HeaderUser from '../Component/HeaderUser';
 import FooterUser from '../Component/FooterUser';
 import styles from './ProductDetail.css';
 import axios from 'axios';
-import { getPhanHoiDanhGiaByMaDanhGia } from '../../utils/API/PhanHoiDanhGiaAPI';
+import { getPhanHoiDanhGiaByMaDanhGia, getPhanHoiDanhGiaByMaDanhGiaUser } from '../../utils/API/PhanHoiDanhGiaAPI';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartPlus, faComments, faPlus, faStar, faStore, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
+import Loading from '../../utils/Order/Loading';
+import { countCommentByBookID, getDiemTrungBinhByMaSanPham, searchCommentByBookIDAndRating } from '../../utils/API/DanhGiaAPI';
+import { faFacebook, faFacebookMessenger, faPinterest } from '@fortawesome/free-brands-svg-icons';
+import { getSumLuotBanByMaCuaHang } from '../../utils/API/OrderDetailsAPI';
+import { getVouchersByCuaHangIdDetailsUser } from '../../utils/API/VoucherAPI';
+import Pagination from '../../utils/Pagination/Pagination';
+
+import StarRating from '../../utils/Order/StarRating';
 
 const ProductDetail = () => {
     const { id } = useParams(); // Lấy id sản phẩm từ URL
@@ -16,28 +26,42 @@ const ProductDetail = () => {
     const [quantity, setQuantity] = useState(1); // Số lượng sản phẩm
     const [reportMenuVisible, setReportMenuVisible] = useState(false);
     const [responseSeller, setResponseSeller] = useState([])
+    // * Phân trang
+    const [pagination, setPagination] = useState();
+    // * Trang hiện tại
+    // const [currentPage, setCurrentPage] = useState(1);
+    // * Mỗi trang 10 sản phẩm
+    const [selectedValue, setSelectedValue] = useState(5);
     const navigate = useNavigate();
-
     // phan trang cho danh gia
-    const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-    const reviewsPerPage = 5; // Số đánh giá mỗi trang
+    const [currentPage, setCurrentPage] = useState(1);
 
     // Tính toán chỉ số của đánh giá đầu tiên và cuối cùng trên trang hiện tại
-    const indexOfLastReview = currentPage * reviewsPerPage;
-    const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+    // *Trang được chọn
+    const indexOfLastItem = currentPage * selectedValue;
+    const indexOfFirstItem = indexOfLastItem - selectedValue;
 
-    // Lọc ra đánh giá hiển thị trên trang hiện tại
-    const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
-
-    // Tổng số trang
-    const totalPages = Math.ceil(reviews.length / reviewsPerPage);
-
-    // Chuyển trang
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+    const [listVoucher, setListVoucher] = useState([]);
 
     const [feedbacks, setFeedbacks] = useState({});
+    const [countDanhGia, setCountDanhGia] = useState(0);
+    const [diemTrungBinh, setDiemTrungBinh] = useState(0);
+    const [soLuongSanPham, setSoLuongSanPham] = useState(0);
+    const [luotBan, setLuotBan] = useState(0);
+
+    const [lendthReview, setLengthReview] = useState(0);
+
+    const [fiveStar, setFiveStar] = useState(0);
+    const [fourStar, setFourStar] = useState(0);
+    const [threeStar, setThreeStar] = useState(0);
+    const [twoStar, setTwoStar] = useState(0);
+    const [oneStar, setOneStar] = useState(0);
+
+    const [rating, setRating] = useState('')
+
+    const [selectedButton, setSelectedButton] = useState('all');
+
+    const [currentProducts, setCurrentProducts] = useState([]);
 
     // Lấy chi tiết sản phẩm
     useEffect(() => {
@@ -45,18 +69,80 @@ const ProductDetail = () => {
             try {
                 const productData = await getProductByMaSPUser(id); // API lấy chi tiết sản phẩm
                 setProduct(productData);
+                const idStore = productData.ma_cua_hang;
+                
+
+                const count = await countCommentByBookID(id);
+                setCountDanhGia(count);
+
+                const diemTrungBinh = await getDiemTrungBinhByMaSanPham(id);
+                const floorDiem = Math.floor(diemTrungBinh, 2);
+                setDiemTrungBinh(floorDiem);
 
                 // Lấy thông tin cửa hàng từ API
                 const storeResponse = await axios.get(
-                    `http://localhost:8080/api/v1/cuahang/info/${productData.ma_cua_hang}`
+                    `http://localhost:8080/api/v1/cuahang/info/${idStore}`
                 );
                 setStoreInfo(storeResponse.data);
+
+                const sanpham = await getProductByIdStore(idStore);
+                if (sanpham) {
+                    setSoLuongSanPham(sanpham.length);
+                }
+
+                const luotban = await getSumLuotBanByMaCuaHang(idStore);
+                if (luotban) {
+                    setLuotBan(luotban);
+                }
+
+                const vouchers = await getVouchersByCuaHangIdDetailsUser(idStore);
+                setListVoucher(vouchers);
 
                 // Lấy danh sách đánh giá sản phẩm
                 const reviewsResponse = await axios.get(
                     `http://localhost:8080/api/v1/danhgia/ma_san_pham-${id}`
                 );
                 setReviews(reviewsResponse.data);
+                const listComments = reviewsResponse.data;
+
+                const listData = Array.isArray(listComments)
+                ? listComments.slice(indexOfFirstItem, indexOfLastItem)
+                : [];
+                setCurrentProducts(listData);
+
+
+                // * Set số sao
+                const fiveStarData = listComments.filter(comment => comment.diem_danh_gia === 5).length;
+                setFiveStar(fiveStarData);
+
+                const fourStarData = listComments.filter(comment => comment.diem_danh_gia === 4).length;
+                setFourStar(fourStarData);
+
+                const threeStarData = listComments.filter(comment => comment.diem_danh_gia === 3).length;
+                setThreeStar(threeStarData);
+
+                const twoStarData = listComments.filter(comment => comment.diem_danh_gia === 2).length;
+                setTwoStar(twoStarData);
+
+                const oneStarData = listComments.filter(comment => comment.diem_danh_gia === 1).length;
+                setOneStar(oneStarData);
+                // * set số page
+                const totalProducts = listComments.length;
+                setPagination(Math.ceil(totalProducts / selectedValue));
+                setLengthReview(totalProducts);
+                const newFeedbacks = {};
+                for (let comment of listComments) {
+                    try {
+                        const feedback = await getPhanHoiDanhGiaByMaDanhGiaUser(idStore, comment.ma_danh_gia);
+                        if (feedback) {
+                            newFeedbacks[comment.ma_danh_gia] = feedback; // Gắn phản hồi vào `newFeedbacks`
+                        }
+                    } catch (error) {
+                        console.error('Error fetching feedback:', error);
+                    }
+                }
+                setFeedbacks(newFeedbacks);
+
 
                 // Lấy danh sách sản phẩm ngẫu nhiên
                 const allProducts = await getAllBook();
@@ -69,27 +155,10 @@ const ProductDetail = () => {
         fetchProductData();
     }, [id]);
 
-    useEffect(() => {
-        // Hàm lấy phản hồi cho từng đánh giá trong reviews
-        const fetchFeedbacks = async () => {
-            const newFeedbacks = {};
-            for (let comment of reviews) {
-                try {
-                    const feedback = await getPhanHoiDanhGiaByMaDanhGia(comment.ma_danh_gia);
-                    if (feedback) {
-                        newFeedbacks[comment.ma_danh_gia] = feedback; // Gắn phản hồi vào `newFeedbacks`
-                    }
-                } catch (error) {
-                    console.error('Error fetching feedback:', error);
-                }
-            }
-            setFeedbacks(newFeedbacks); // Cập nhật state với tất cả các phản hồi
 
-        };
-
-        fetchFeedbacks();
-
-    }, [reviews]);
+    // const currentProducts = Array.isArray(reviews)
+    //     ? reviews.slice(indexOfFirstItem, indexOfLastItem)
+    //     : [];
 
     // Hàm random sản phẩm
     const getRandomProducts = (arr, num) => {
@@ -152,8 +221,168 @@ const ProductDetail = () => {
         }
     };
 
-    if (!product || !storeInfo) return <p>Loading...</p>;
-    console.log(reviews)
+    const formatMoney = (amount) => {
+        if (amount >= 1000) {
+            return `${(amount / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+        }
+        return amount.toString();
+    };
+
+    const hienthi = currentProducts.map((review, index) => {
+        const feedback = feedbacks[review.ma_danh_gia];
+        return (
+            <>
+                {
+                    feedback && (
+                        <div className='review-border'>
+                            <div className="review" key={index}>
+                                {
+                                    review.anh_dai_dien ? (
+                                        <img src={review.anh_dai_dien} />
+                                    ) : (
+                                        <img src='/images/avt_default.png' />
+                                    )
+                                }
+
+                                <div>
+                                    <p className="review-user">{review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
+                                    <StarRating rating={review.diem_danh_gia} />
+                                    <p className="review-date">{review.ngay_danh_gia} <span>|</span> Số lượng: {review.don_hang_chi_tiet?.so_luong}</p>
+                                    <p className="review-content">{review.noi_dung_danh_gia}</p>
+                                </div>
+
+                            </div>
+                            <div className='review-store-comment'>
+                                {
+                                    feedback.cua_hang?.anh_dai_dien ? (
+                                        <img src={feedback.cua_hang?.anh_dai_dien} />
+                                    ) : (
+                                        <img src='/images/avt_default.png' />
+                                    )
+                                }
+                                <div className='review-store-comment-info'>
+                                    <p className="review-user">{feedback.cua_hang?.ten_cua_hang}</p>
+                                    <p className="review-date">{feedback.ngay_phan_hoi}</p>
+                                    <p className="review-content" style={{ marginBottom: '25px' }}>{feedback.noi_dung_phan_hoi}</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    )
+                }
+
+                {
+                    !feedback && (
+                        <div className='review-border'>
+                            <div className="review" key={index}>
+                                {
+                                    review.anh_dai_dien ? (
+                                        <img src={review.anh_dai_dien} />
+                                    ) : (
+                                        <img src='/images/avt_default.png' />
+                                    )
+                                }
+
+                                <div>
+                                    <p className="review-user">{review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
+                                    <StarRating rating={review.diem_danh_gia} />
+                                    <p className="review-date">{review.ngay_danh_gia} <span>|</span> Số lượng: {review.don_hang_chi_tiet?.so_luong}</p>
+                                    <p className="review-content">{review.noi_dung_danh_gia}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+            </>
+        )
+    })
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber)
+    }
+
+
+    const voucherRows = listVoucher.map((voucher, index) => {
+
+        return (
+            <div key={index} className='list-voucher-item'>
+                <div className='list-voucher-item-info'>
+                    <div className='list-voucher-item-info-info'>
+                        <p>{voucher.ten_voucher}</p>
+                        <p>Giảm {formatMoney(voucher.giam_gia)}</p>
+                        <p>Đơn tối thiểu {formatMoney(voucher.gia_ap_dung)}</p>
+                        <p>Số lần dùng: {voucher.so_lan_dung}</p>
+                        <p>HSD: {voucher.ngay_het_han}</p>
+                    </div>
+                    <div className='list-voucher-item-info-button'>
+                        <button>LƯU</button>
+                        <button>MUA NGAY</button>
+                    </div>
+                </div>
+            </div>
+        )
+    });
+
+    const fetchAllRatingData = async () => {
+        try {
+            const reviewsResponse = await axios.get(
+                `http://localhost:8080/api/v1/danhgia/ma_san_pham-${id}`
+            );
+            const data = reviewsResponse.data;
+            const listData = Array.isArray(data)
+            ? data.slice(indexOfFirstItem, indexOfLastItem)
+            : [];
+            setReviews(data);
+            setCurrentProducts(listData);
+            const totalProducts = data.length;
+            setPagination(Math.ceil(totalProducts / selectedValue));
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    const fetchDataByRating = async (starNumber) => {
+        try {
+            const listComment = await searchCommentByBookIDAndRating(id, starNumber);
+            const listData = Array.isArray(listComment)
+            ? listComment.slice(indexOfFirstItem, indexOfLastItem)
+            : [];
+            setReviews(listComment);
+            setCurrentProducts(listData);
+            const totalProducts = listComment.length;
+            setPagination(Math.ceil(totalProducts / selectedValue));
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    const handleButtonClick = (buttonId) => {
+        setSelectedButton(buttonId); // Cập nhật trạng thái với button được chọn
+
+        if (buttonId === 'all') {
+            fetchAllRatingData();
+            setRating('all')
+        } else if (buttonId === '5star') {
+            fetchDataByRating(5);
+            setRating('5 sao')
+        } else if (buttonId === '4star') {
+            fetchDataByRating(4);
+            setRating('4 sao')
+        } else if (buttonId === '3star') {
+            fetchDataByRating(3);
+            setRating('3 sao')
+        } else if (buttonId === '2star') {
+            fetchDataByRating(2);
+            setRating('2 sao')
+        } else {
+            fetchDataByRating(1);
+            setRating('1 sao')
+        }
+    };
+
+
+    if (!product || !storeInfo) return <Loading />;
 
     return (
         <div className={styles.parent}>
@@ -165,9 +394,24 @@ const ProductDetail = () => {
                     <img src={product.anh_san_pham} alt={product.ten_san_pham} className="product-imageCart" />
                     <div className="product-info">
                         <h1>{product.ten_san_pham}</h1>
+                        <div className='prodcut-abc'>
+                            <div className='prodcut-abc-star'>
+                                <p>{diemTrungBinh}</p>
+                                <FontAwesomeIcon className='star-icon' icon={faStar}></FontAwesomeIcon>
+                            </div>
+                            <div className='prodcut-abc-star'>
+                                <p>{countDanhGia.toLocaleString()}</p>
+                                <span>Đánh giá</span>
+                            </div>
+                            <div className='prodcut-abc-star2'>
+                                <p>{product.da_ban}</p>
+                                <span>Đã bán</span>
+                            </div>
+                        </div>
                         <p className="product-author"><span>Tác giả:</span>{product.tac_gia || "N/A"} </p>
                         <p className="product-categoryy"><span>Thể loại:</span>{product.the_loai?.ten_the_loai || "N/A"} </p>
                         <p className="product-priceD">{product.gia.toLocaleString()} đ</p>
+
                         {
                             product.con_hang > 0 ? (
                                 <p className="product-status">Tình trạng: <span>Còn hàng</span></p>
@@ -184,7 +428,7 @@ const ProductDetail = () => {
                                     className="quantityBtn"
                                     onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
                                 >
-                                    -
+                                    <FontAwesomeIcon className='truhang' icon={faWindowMinimize}></FontAwesomeIcon>
                                 </button>
                                 <input
 
@@ -197,100 +441,170 @@ const ProductDetail = () => {
                                     className="quantityBtn"
                                     onClick={() => setQuantity((prev) => (prev < product.con_hang ? prev + 1 : prev))}
                                 >
-                                    +
+                                    <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
                                 </button>
                                 <p className="product-conhang">{product.con_hang?.toLocaleString()} sản phẩm có sẵn</p>
                             </div>
                         </div>
+
                         <div className="action-buttons">
                             <div style={{ marginTop: '20px' }}>
-                                <button style={{ marginRight: '20px' }} className="add-to-cart-btn" onClick={addToCart}>THÊM VÀO GIỎ HÀNG</button>
+                                <button style={{ marginRight: '20px' }} className="add-to-cart-btn" onClick={addToCart}>
+                                    <FontAwesomeIcon className="add-to-cart-btn-icon" icon={faCartPlus}></FontAwesomeIcon>
+                                    Thêm vào giỏ hàng</button>
                                 <button onClick={buyNow} className="buy-now-btn">MUA NGAY</button>
                             </div>
-                            <div
-                                className={`${styles.reportMenu} ${reportMenuVisible ? styles.visible : ''
-                                    }`}
-                            >
-                                <button onClick={handleReport}>
-                                    Báo cáo sản phẩm
-                                </button>
-                            </div>
+                        </div>
+
+                        <div className='product-share'>
+                            <p>Chia sẻ:</p>
+                            <FontAwesomeIcon className='product-share-icon1 icon-internet' icon={faFacebookMessenger} />
+                            <FontAwesomeIcon className='product-share-icon2 icon-internet' icon={faFacebook} />
+                            <FontAwesomeIcon className='product-share-icon3 icon-internet' icon={faPinterest} />
+                        </div>
+
+                        <div className='product-khuyenmai'>
+                            <strong>Thông tin & Khuyến mãi</strong>
+                            <ul>
+                                <li>Đổi trả hàng trong vòng 7 ngày</li>
+                                <li>Sản phẩm như hình, chất lượng đặt lên hàng đầu</li>
+                                <li>Tư vấn, hỗ trợ khách hàng nhanh chóng</li>
+                                <li>Phí ship toàn quốc chỉ <span>25,000đ</span></li>
+                            </ul>
                         </div>
 
                     </div>
                 </div>
 
-                {/* Thông tin chi tiết */}
-                <div className="product-details-section">
-                    <h3>THÔNG TIN CHI TIẾT</h3>
-                    <table className="product-details-table">
-                        <tbody>
-                            <tr><td>Nhà xuất bản:</td><td>{product.nha_xuat_ban || "N/A"}</td></tr>
-                            <tr><td>Ngày xuất bản:</td><td>{product.ngay_xuat_ban || "N/A"}</td></tr>
-                            <tr><td>Kích thước:</td><td>{product.kich_thuoc || "N/A"}</td></tr>
-                            <tr><td>Số trang:</td><td>{product.so_trang || "N/A"}</td></tr>
-                            <tr><td>Trọng lượng:</td><td>{product.trong_luong || "N/A"} gram</td></tr>
-                        </tbody>
-                    </table>
-                </div>
 
-                <h3 style={{ marginTop: '20px', fontSize: '20px', color: 'blueviolet' }}>Cửa hàng bán sản phẩm</h3>
                 {/* Thông tin cửa hàng */}
                 <div
                     className="store-info"
-                    onClick={() => navigate(`/PageSeller/${storeInfo.ma_cua_hang}`)}
                     style={{ cursor: 'pointer' }} // Thêm hiệu ứng con trỏ
                 >
-                    <div>
+                    <div className="store-info-shop">
                         <img
                             src={storeInfo.anh_dai_dien}
                             alt={`Ảnh đại diện của ${storeInfo.ten_cua_hang}`}
                             className="store-avatar"
-                            style={{ width: '100px', height: '100px', borderRadius: '50%', marginBottom: '10px' }}
                         />
+                        <div className="store-info-shop-chat">
+                            <p className="store-name">{storeInfo.ten_cua_hang}</p>
+                            <p className="store-phone">{storeInfo.so_dien_thoai}</p>
+                            <div className="store-info-shop-chat-button">
+                                <button>
+                                    <FontAwesomeIcon className='store-info-shop-chat-button-icon' icon={faComments} />
+                                    Chat Ngay</button>
+                                <button
+                                    onClick={() => navigate(`/PageSeller/${storeInfo.ma_cua_hang}`)}
+                                ><FontAwesomeIcon className='store-info-shop-chat-button-icon' icon={faStore} />Xem Shop</button>
+                            </div>
+                        </div>
+                        <div className='store-info-shop-info'>
+                            <div className='store-info-shop-info-info'>
+                                <div><p>Điểm cửa hàng: </p><span>{storeInfo.diem_cua_hang}</span></div>
+                                <div><p>Đã bán: </p><span>{luotBan}</span></div>
+                            </div>
+                            <div className='store-info-shop-info-info'>
+                                <div><p>Sản phẩm: </p><span>{soLuongSanPham}</span></div>
+                                <div><p>Tỉ lệ phản hồi: </p><span>100%</span></div>
+                            </div>
+                            <div className='store-info-shop-info-info'>
+                                <div><p>Lượt báo cáo: </p><span>{storeInfo.luot_bao_cao}</span></div>
+                                <div> <p>Thời gian phản hồi: </p><span>trong vài giờ</span></div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <p className="store-name">{storeInfo.ten_cua_hang}</p>
+                    {/* <div>
+
                         <p className="store-address">{storeInfo.dia_chi_cua_hang}</p>
+                    </div> */}
+                </div>
+
+                <div className='info-and-voucher'>
+
+                    {/* Thông tin chi tiết */}
+                    <div className="product-details-section">
+                        <h3>CHI TIẾT SẢN PHẨM</h3>
+                        <table className="product-details-table">
+                            <tbody>
+                                <tr><td>Tác giả:</td><td>{product.tac_gia || "Không xác định"}</td></tr>
+                                <tr><td>Thể loại:</td><td>{product.the_loai?.ten_the_loai || "Không xác định"}</td></tr>
+                                <tr><td>Số sản phẩm còn lại:</td><td>{product.con_hang || "Không xác định"}</td></tr>
+                                <tr><td>Phiên bản:</td><td>{product.phien_ban || "Không xác định"}</td></tr>
+                                <tr><td>Ngày xuất bản:</td><td>{product.ngay_xuat_ban || "Không xác định"}</td></tr>
+                                <tr><td>Mã ISBN:</td><td>{product.ma_isbn || "Không xác định"}</td></tr>
+                                <tr><td>Số trang:</td><td>{product.so_trang || "Không xác định"}</td></tr>
+                                {/* <tr><td>Trọng lượng:</td><td>{product.trong_luong || "Không xác định"} gram</td></tr> */}
+                            </tbody>
+                        </table>
+                        <h3>MÔ TẢ NỘI DUNG SÁCH</h3>
+                        <div className="product-details-mota">
+                            <h4>{product.ten_san_pham}</h4>
+                            <p>{product.mo_ta}</p>
+                        </div>
                     </div>
+
+                    <div className='voucher-store'>
+                        <p className='list-voucher-title'>Mã giảm giá của Shop</p>
+                        <div className="list-voucher">
+                            {
+                                listVoucher.length > 0 ? (
+                                    <>{voucherRows}</>
+                                ) : (
+                                    <p>Cửa hàng chưa có voucher.</p>
+                                )
+                            }
+
+                        </div>
+                    </div>
+
                 </div>
 
 
                 {/* Đánh giá sản phẩm */}
                 <div className="product-reviews">
-                    <h3>ĐÁNH GIÁ SẢN PHẨM</h3>
-                    {reviews.length > 0 ? (
-                        reviews.map((review, index) => {
-                            const feedback = feedbacks[review.ma_danh_gia];
-                            {
-                                feedback && (
-                                    <>
-                                        <div className="review" key={index}>
-                                            <p className="review-user">Người dùng: {review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
-                                            <p className="review-rating">Điểm: {review.diem_danh_gia}/5</p>
-                                            <p className="review-content">{review.noi_dung_danh_gia}</p>
-                                        </div>
-                                        <div>
-                                            <p>{feedback.noi_dung_phan_hoi}</p>
-                                        </div>
-                                    </>
-                                )
-                            }
+                    <div className='product-reviews-box'>
 
-                            {
-                                !feedback && (
-                                    <div className="review" key={index}>
-                                        <p className="review-user">Người dùng: {review.tai_khoan_danh_gia?.ho_ten || 'Ẩn danh'}</p>
-                                        <p className="review-rating">Điểm: {review.diem_danh_gia}/5</p>
-                                        <p className="review-content">{review.noi_dung_danh_gia}</p>
-                                    </div>
-                                )
-                            }
-
-                        })
-                    ) : (
-                        <p style={{ fontSize: '16px' }}>Chưa có đánh giá nào.</p>
-                    )}
+                        <div className='product-reviews-list'>
+                            <p className="product-reviews-title">ĐÁNH GIÁ SẢN PHẨM ({lendthReview})</p>
+                            {reviews.length > 0 ? (
+                                <>
+                                    {hienthi}
+                                    < Pagination totalPages={pagination} onPageChange={handlePageChange}></Pagination>
+                                </>
+                            ) : (
+                                <p style={{ fontSize: '16px' }}>Sản phẩm chưa có đánh giá.</p>
+                            )}
+                        </div>
+                        <div className='product-reviews-list2'>
+                            <p>4.9 <span>trên 5</span></p>
+                            <button
+                                id={selectedButton === 'all' ? 'search-comment-choose' : undefined}
+                                onClick={() => handleButtonClick('all')}
+                            >Tất cả ({lendthReview})</button>
+                            <button
+                                id={selectedButton === '5star' ? 'search-comment-choose' : undefined}
+                                onClick={() => handleButtonClick('5star')}
+                            >5 Sao ({fiveStar})</button>
+                            <button
+                                id={selectedButton === '4star' ? 'search-comment-choose' : undefined}
+                                onClick={() => handleButtonClick('4star')}
+                            >4 Sao ({fourStar})</button>
+                            <button
+                                id={selectedButton === '3star' ? 'search-comment-choose' : undefined}
+                                onClick={() => handleButtonClick('3star')}
+                            >3 Sao ({threeStar})</button>
+                            <button
+                                id={selectedButton === '2star' ? 'search-comment-choose' : undefined}
+                                onClick={() => handleButtonClick('2star')}
+                            >2 Sao ({twoStar})</button>
+                            <button
+                                id={selectedButton === '1star' ? 'search-comment-choose' : undefined}
+                                onClick={() => handleButtonClick('1star')}
+                            >1 Sao ({oneStar})</button>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Sản phẩm liên quan */}

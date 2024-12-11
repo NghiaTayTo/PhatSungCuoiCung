@@ -4,6 +4,9 @@ import { getBookByMaSP, getSanPhamById, updateSanPham } from '../../../utils/API
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NotificationUI from '../../../utils/Notification/NotificationUI';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { OverlayTrigger } from 'react-bootstrap';
+import { renderTooltip } from '../../../utils/Order/ToolTip';
+import { faSquarespace } from '@fortawesome/free-brands-svg-icons';
 
 const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }) => {
 
@@ -27,6 +30,12 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
     const [load, setLoad] = useState(false);
 
     const [textTrangThai, setTextTrangThai] = useState('')
+
+    const [showThongKe, setShowThongKe] = useState(false);
+
+    const handleShowThongKe = () => {
+        setShowThongKe(!showThongKe);
+    }
 
     // *Hàm close notification
     const handleCloseNotification = () => {
@@ -65,15 +74,17 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
     }, [bookID]);
 
 
-    const handleGetTrangThai = (trangThaiInt) => {
-        if (trangThaiInt === 0) {
+    const handleGetTrangThai = (trangThai) => {
+        if (trangThai === 1) {
+            return 'dangyeucau';
+        } else if (trangThai === 2) {
             return 'khoa';
-        } else if (trangThaiInt === 1) {
+        } else if (trangThai === 3) {
             return 'conhang';
-        } else if (trangThaiInt === 2) {
-            return 'hethang';
+        } else if (trangThai === 4) {
+            return 'hethang'
         } else {
-            return 'dangyeucau'
+            return 'yeucaumokhoa'
         }
     }
 
@@ -131,7 +142,8 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
             const sanPham = {
                 ...book,
                 trang_thai_duyet: true,
-                trang_thai_khoa: false
+                trang_thai_khoa: false,
+                diem_trung_binh: 0
             }
             const code = 'Mở khóa';
             const isUpdated = await updateSanPham(sanPham);
@@ -154,13 +166,25 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
     return (
         <div>
             <div className="bg_black">
-                <div className="addnewbook">
+                <div className="addnewbook" id='form-width'>
                     <div className="addnewbook-header">
                         <div>
                             <h3>{book.ten_san_pham}</h3>
                             <span className={handleGetTrangThai(statusInt)}>{statusText}</span>
                         </div>
-                        <FontAwesomeIcon onClick={handleIconClick} style={{ cursor: 'pointer' }} className="faXmark" icon={faXmark}></FontAwesomeIcon>
+                        <div>
+                            {
+                                statusInt !== 1 && (
+                                    <OverlayTrigger
+                                        placement="left"  // top, right, bottom, left)
+                                        overlay={(props) => renderTooltip(props, 'Thống kê sản phẩm', 'custom-tooltip')}
+                                    >
+                                        <FontAwesomeIcon onClick={handleShowThongKe} className="faXmark" icon={faSquarespace}></FontAwesomeIcon>
+                                    </OverlayTrigger>
+                                )
+                            }
+                            <FontAwesomeIcon onClick={handleIconClick} className="faXmark" icon={faXmark}></FontAwesomeIcon>
+                        </div>
                     </div>
                     {/* form điền thông tin sách */}
                     <div className="addnewbook-form">
@@ -259,6 +283,16 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
                                 />
                             </div>
                             <div>
+                                <label for="name">Giá (SOlANA - SOL)</label>
+                                <input
+                                    className={errors.gia_sol ? 'btnCheckBorder-fail' : 'btnCheckBorder-default'}
+                                    id="gia_sol"
+                                    type="text"
+                                    value={book.gia_sol}
+                                    disabled
+                                />
+                            </div>
+                            <div>
                                 <label for="name">Ngôn ngữ</label>
                                 <input
                                     className='btnCheckBorder-default'
@@ -305,35 +339,59 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
                         {/* bấm vào nút thêm sản phẩm */}
                         {trangThaiSach === 'new_book' && (
                             <div className="addnewbook-form_btn">
-                                <button onClick={onClose}>Hủy yêu cầu</button>
-                                <button onClick={() => handleSubmitTrangThai('duyet')}>Duyệt sản phẩm</button>
+                                <button className='xoasanpham_btn' onClick={onClose}>Hủy yêu cầu</button>
+                                <button className='yeucaumokhoa_btn' onClick={() => handleSubmitTrangThai('duyet')}>Duyệt sản phẩm</button>
                             </div>
                         )}
                         {trangThaiSach === 'vipham' && (
                             <div className="addnewbook-form_btn">
-                                <button onClick={onClose}>Thoát</button>
-                                <button onClick={() => handleSubmitTrangThai('khoa')}>Khóa sản phẩm</button>
+                                <button className='btn_an_sp' onClick={onClose}>Thoát</button>
+                                <button className='xoasanpham_btn' onClick={() => handleSubmitTrangThai('khoa')}>Khóa sản phẩm</button>
                             </div>
                         )}
                         {/* xem chi tiết sản phẩm */}
                         {trangThaiSach === 'book_disabled' && (
                             <div className="addnewbook-form_btn">
-                                <button onClick={() => handleShowDelBook()}>Thoát</button>
-                                <button onClick={() => handleSubmitTrangThai('mokhoa')}>Mở khóa sách</button>
+                                <button className='btn_an_sp' onClick={onClose}>Thoát</button>
+                                <button className='capnhatsanpham' onClick={() => handleSubmitTrangThai('mokhoa')}>Mở khóa sách</button>
                             </div>
                         )}
                         {trangThaiSach === 'yeucaumokhoa' && (
                             <div className="addnewbook-form_btn">
-                                <button onClick={() => handleSubmitTrangThai('huyyeucaumokhoa')}>Hủy yêu cầu</button>
-                                <button onClick={handleXacNhanYeuCauMoKhoa}>Xác nhận yêu cầu</button>
+                                <button className='xoasanpham_btn' onClick={() => handleSubmitTrangThai('huyyeucaumokhoa')}>Hủy yêu cầu</button>
+                                <button className='capnhatsanpham' onClick={handleXacNhanYeuCauMoKhoa}>Xác nhận yêu cầu</button>
                             </div>
                         )}
                         
                         {trangThaiSach === 'for_sale' && (
                             <div className="addnewbook-form_btn">
-                                <button style={{marginLeft: '295px'}} onClick={onClose}>Thoát</button>
+                                <button className='btn_an_sp' style={{marginLeft: '295px'}} onClick={onClose}>Thoát</button>
                             </div>
                         )}
+                        {
+                            showThongKe && (
+                                <div className='show-thong-ke'>
+                                    <p>Đã bán: <span>20</span></p>
+                                    <p>Còn hàng: <span>20</span></p>
+                                    <ul>
+                                        <p>Lượt đánh giá: <span>21</span></p>
+                                        <li>5 sao: </li>
+                                        <li>4 sao: </li>
+                                        <li>3 sao: </li>
+                                        <li>2 sao: </li>
+                                        <li>1 sao: </li>    
+                                    </ul>
+                                    <p>Điểm sản phẩm: <span>5</span> / 5</p>
+                                    <ul>
+                                        <p>Doanh thu theo phương thức thanh toán: </p>
+                                        <li>Thanh toán qua ví: <span>292.000</span>đ</li>
+                                        <li>Thanh toán bằng SOLANA: <span>17.32</span>đ</li>
+                                        <li>Thanh toán online VNPay: <span>542.500</span>đ</li>  
+                                    </ul>
+                                    <p>Tổng doanh thu: <span>20.000.000 đ</span> - <span>17.32 SOL</span></p>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
                 {notificationStatus === 'updateIsSuccess' && closeNotification === true && (

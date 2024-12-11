@@ -23,6 +23,8 @@ import {
     getNumberOfBookByBrowse,
     searchBookByStatus
 } from "../../utils/API/ProductAPI";
+import { getCuaHangById } from "../../utils/API/StoreAPI";
+import SolanaForm from "../../utils/FormVisible/SolanaForm";
 
 const ManageProduct = () => {
 
@@ -43,12 +45,18 @@ const ManageProduct = () => {
     // * Search By Name
     const [searchName, setSearchName] = useState("");
 
+    const [solForm, setSolForm] = useState(false);
+
     const handleVisibleForm = () => {
-        setAddBookVisible(true);
+        store.dia_chi_vi_sol === null ? setSolForm(true) : setAddBookVisible(true);
     }
 
     const handleHiddenForm = () => {
         setAddBookVisible(false);
+    }
+
+    const handleCloseSOLForm = () => {
+        setSolForm(false)
     }
 
     //* Tìm kiếm sản phẩm theo thể loại
@@ -138,10 +146,15 @@ const ManageProduct = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const [store, setStore] = useState({})
+
     useEffect(() => {
         setIsLoading(true);
         const fetchData = async () => {
             try {
+                const store = await getCuaHangById();
+                setStore(store);
+
                 const productsAll = await getSanPhamByCuaHangId();
                 setProducts(productsAll);
 
@@ -288,6 +301,14 @@ const ManageProduct = () => {
                             {
                                 isAddBookVisible && (
                                     <BookForm keyForm={'add-book'} onClose={handleHiddenForm} />
+                                )
+                            }
+                            {
+                                solForm && (
+                                    <SolanaForm
+                                        store={store}
+                                        onClose={handleCloseSOLForm}
+                                    />
                                 )
                             }
                         </>

@@ -595,6 +595,7 @@ notstore.page {
 
 .reply input:focus {
     border: 2px solid #ed4d2d;
+    margin-left: -3px !important;
 }
 
 .reply button {

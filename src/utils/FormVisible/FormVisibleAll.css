@@ -1,25 +1,27 @@
 /** Thêm sản phẩm mới  */
 .bg_black {
     background-color: #00000088;
-    width: 240vh;
+    width: 340vh;
     height: 100vh;
     display: flex;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 99999999;
+    z-index: 999;
 }
-
+#form-width{
+    width: 1500px !important;
+}
 /* khung thêm sản phẩm */
 .addnewbook {
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border-radius: 10px;
     padding: 20px;
+    /* width: 1000px; */
     height: 700px;
     margin-top: 10px;
     margin-left: 50%;
-    width: 1000px;
-    transform: translate(-63%);
+    transform: translate(-88%);
     animation: identifier .5s ease-in-out forwards;
 }
 
@@ -78,6 +80,11 @@
 .faXmark {
     font-size: 2rem;
     margin-top: 3px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.faXmark:hover{
+    color: black;
 }
 
 /* * form */
@@ -88,13 +95,15 @@
 }
 
 .addnewbook-form_img {
-    width: 32%;
+    width: 23%;
     height: 390px;
     object-fit: cover;
     border: 1.5px solid #ccc;
 
 }
-
+.addnewbook-form_img span{
+    display: block;
+}
 .addnewbook-form_img img {
     width: 100%;
     height: 100%;
@@ -170,7 +179,7 @@
 
 /* thẻ input */
 .addnewbook-form_info {
-    width: 32%;
+    width: 24%;
 }
 
 .addnewbook-form_info div {
@@ -192,6 +201,10 @@
     display: block;
     font-size: 1.5rem;
     font-weight: 500;
+}
+.addnewbook-form_info input:focus{
+    outline: 1px solid #f3452e;
+    color: #3e3e3e;
 }
 
 .addnewbook-form_info input,
@@ -224,12 +237,11 @@
 
 .addnewbook-form_longinp2 textarea {
     border-radius: 4px;
-    width: 538px;
-    height: 100px;
-    margin-top: 3px;
-    color: #757B82;
+    width: 100%;
+    height: 570px;
+    color: #000000;
     outline: none;
-    padding-left: 12px;
+    padding: 12px;
     font-size: 1.6rem;
 }
 
@@ -244,16 +256,9 @@
     font-weight: 400;
 }
 
-.addnewbook-form_longinp1,
 .addnewbook-form_longinp2 {
-    position: absolute;
-    bottom: 155px;
-    left: 304px;
-}
-
-.addnewbook-form_longinp2 {
-    bottom: 78px;
-    ;
+    width: 27%;
+    margin-top: 0 !important;
 }
 
 .addnewbook-form_longinp1 input,
@@ -264,37 +269,56 @@
 .addnewbook-form_btn {
     position: absolute;
     bottom: 15px;
-    left: 304px;
-    width: 540px;
+    left: 20px;
+    width: 69%;
     display: flex;
-    justify-content: space-between;
 }
 
 .addnewbook-form_btn button {
-    width: 45%;
+    width: 240px;
     font-size: 1.7rem;
     font-weight: 500;
     border-radius: 10px;
     height: 40px;
+    margin-right: 20px;
     transition: all .2s ease-in-out;
 }
-
-.addnewbook-form_btn button:nth-child(1) {
+.btn_an_sp{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #5c768f;
+    color: #fff;
+}
+.btn_an_sp p{
+    color: #fff !important;
+}
+/* .addnewbook-form_btn button:nth-child(1) {
     background-color: #c4c4c947;
     color: #757B82;
     border: 1.5px solid #757B82 !important;
 }
-
-.addnewbook-form_btn button:nth-child(2) {
+ */
+.yeucaumokhoa_btn {
     background-color: #5065F6;
     color: #fff;
     border: 1.5px solid #5065F6 !important;
 }
+.huyyeucaumokhoa_btn {
+    background-color: #ff701d;
+    color: #fff;
+    border: 1.5px solid #ff701d !important;
+}
 
 .capnhatsanpham{
-    background-color: #5065F6 !important;
+    background-color: #01b866 !important;
     color: #fff !important;
-    border: 1.5px solid #5065F6 !important;
+    border: 1.5px solid #01b866 !important;
+}
+.xoasanpham_btn{
+    background-color: #cc2121 !important;
+    color: #fff !important;
+    border: 1.5px solid #cc2121 !important;
 }
 
 .addnewbook-form_btn button:hover {
@@ -336,7 +360,7 @@
     max-height: 700px;
     /* Chiều cao tối đa */
     margin-top: 10px;
-    margin-left: 50%;
+    margin-left: 35%;
     width: 800px;
     transform: translate(-63%);
     animation: identifier 0.5s ease-in-out forwards;
@@ -449,7 +473,7 @@
     max-height: 700px;
     /* Chiều cao tối đa */
     margin-top: 10px;
-    margin-left: 50%;
+    margin-left: 35%;
     width: 400px;
     transform: translate(-75%);
     animation: identifier 0.5s ease-in-out forwards;
@@ -549,6 +573,10 @@
 .print-bill_info--title>div>div p {
     line-height: 44px;
 }
+.print-bill_info--title > div:nth-child(1) > p{
+    color: #fff;
+    margin-bottom: 4px;
+}
 
 .print-bill_total {
     display: flex;
@@ -608,7 +636,7 @@
     /* background-color: black; */
     border-radius: 10px;
     margin-top: 10px;
-    margin-left: 50%;
+    margin-left: 35%;
     width: 700px;
     height: 700px;
     transform: translate(-63%);
@@ -642,6 +670,10 @@
     margin-left: 20px;
     z-index: 1000;
     text-transform: uppercase;
+}
+.voucher-form_info--date{
+    color: #fff;
+    margin: 0 0 0 20px;
 }
 
 .voucher-form_info--date {
@@ -887,7 +919,12 @@
 .store-form .addnewbook-header {
     border: none !important;
 }
-
+.addnewbook-header h3{
+    color: #000000;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'ABeeZee', sans-serif;
+}
 .store-form-img {
     position: relative;
 }
@@ -1069,6 +1106,8 @@
     width: 550px;
     height: 420px;
     margin-top: 160px !important;
+    margin-left: 40%;
+    /* transform: translate(-88%); */
 }
 .category-form-input{
     display: inline-block;
@@ -1155,6 +1194,7 @@
 }
 .ansanpham_icon{
     font-size: 1.7rem;
+    margin-right: 12px;
 }
 .ansach{
     background-color: #5c768f;
@@ -1163,4 +1203,60 @@
 }
 .ansanpham button p{
     margin-left: 10px;
+}
+
+.show-thong-ke{
+    width: 322px;
+    height: auto;
+    border-radius: 3px;
+    background-color: #ffeee7;
+    box-shadow: 0 0 10px solid black !important;
+    border: 1px solid #ff701d !important;
+    color: #ff701d;
+    display: block;
+    z-index: 1000;
+    position: absolute;
+    top: 70px;
+    right: 21px;
+    padding: 20px;
+}
+.show-thong-ke::after {  
+    position: absolute;
+    top: -17px;
+    right: 25px;
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 17px solid transparent; /* Cạnh trái */
+    border-right: 17px solid transparent; /* Cạnh phải */
+    border-bottom: 17px solid #ffeee7; /* Màu của mũi tên */
+}
+
+.show-thong-ke p{
+    font-size: 16px;
+}
+.show-thong-ke span{
+    font-family: 'Mali', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #ff701d;
+    position: relative;
+}
+.show-thong-ke p span::after{
+    content: '';
+    width: auto;
+    height: 1px;
+    color: #ff701d;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.show-thong-ke ul{
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+}
+.show-thong-ke ul li{
+    margin-left: 20px;
+    font-size: 16px;
 }

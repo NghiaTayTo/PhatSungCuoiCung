@@ -28,6 +28,16 @@ export const getPhanHoiDanhGiaByMaDanhGia = async (maDanhGia) => {
     }
   
 }   
+export const getPhanHoiDanhGiaByMaDanhGiaUser = async (idStore, maDanhGia) => {
+    try {
+        const response =await axios.get(`${hostPhanHoiDanhGia}/cuahang-${idStore}/ma_danh_gia-${maDanhGia}`);
+        return response.data; // Trả về kết quả
+    } catch (error) {
+        console.error('Error fetching store details:', error);
+        throw error; // Xử lý lỗi
+    }
+  
+}   
 
 // * Hàm insert phản hồi đánh giá mới
 export const insertPhanHoiDanhGia = (phanHoiDanhGia) => {
