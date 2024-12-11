@@ -94,7 +94,7 @@ const ListBaoCaoDefault = ({ listBaoCaos = [], keySearch, status, title, keyForm
     //* const tableRows = currentItems.map((book, index) => ());
     const tableRows = currentProducts.map((baocao, index) => (
         <tr key={index} className='box-shadow_row'
-        onClick={() => handleShowDetailBaoCao(baocao.id_bao_cao)}
+        onClick={() => handleShowDetailBaoCao(baocao.id_bao_cao , baocao.trang_thai_bao_cao?.id_trang_thai_bao_cao)}
         >
             <td>
                 <span className='stt'>{index + 1 + indexOfFirstItem}</span>
@@ -107,7 +107,7 @@ const ListBaoCaoDefault = ({ listBaoCaos = [], keySearch, status, title, keyForm
             <td style={{ width: '110px', textAlign: 'center' }}>{baocao.ngay_bao_cao}</td>
             <td style={{ width: '180px', textAlign: 'center' }}>{baocao.tai_khoan_bi_bao_cao?.ho_ten}</td>
             <td style={{ width: '340px', textAlign: 'center' }}>{baocao.danh_gia?.noi_dung_danh_gia}</td>
-            <td style={{ width: '340px', textAlign: 'center' }}>{baocao.noi_dung_vi_phạm !== null ? baocao.noi_dung_vi_phạm : baocao.vi_pham?.ten_vi_pham}</td>
+            <td style={{ width: '340px', textAlign: 'center' }}>{baocao.noi_dung_vi_pham !== null ? baocao.noi_dung_vi_pham : baocao.vi_pham?.ten_vi_pham}</td>
             <td style={{ width: '100px', textAlign: 'center' }} className={getTrangThaiCSS(baocao.trang_thai_bao_cao?.id_trang_thai_bao_cao)}>
                 {
                     baocao.trang_thai_bao_cao?.id_trang_thai_bao_cao !== 1 && baocao.trang_thai_bao_cao?.id_trang_thai_bao_cao !== 3 ? (

@@ -52,7 +52,7 @@ const CheckOut = () => {
         const orderDetails = checkoutCart.map(item => ({
             so_luong: item.so_luong,
             gia: item.gia,
-            thanh_tien: grandTotal,
+            thanh_tien: item.gia * item.so_luong + shippingFee,
             san_pham: { ma_san_pham: item.ma_san_pham },
             id_voucher: item.voucher || null,
             ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu

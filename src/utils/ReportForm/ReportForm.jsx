@@ -85,7 +85,7 @@ const ReportForm = ({ IDComment, taiKhoanBiBaoCao = {}, cuaHangBaoCao = {}, onCl
                         cua_hang_bao_cao: cuaHangBaoCao,
                         tai_khoan_bi_bao_cao: taiKhoanBiBaoCao,
                         vi_pham: viPhamKhac,
-                        noi_dung_vi_phạm: otherText,
+                        noi_dung_vi_pham: otherText,
                         danh_gia: comment,
                         trang_thai_bao_cao: trangThaiBaoCao
                     });

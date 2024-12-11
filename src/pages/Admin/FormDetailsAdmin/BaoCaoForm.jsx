@@ -38,7 +38,8 @@ const BaoCaoForm = ({ baoCaoID, onClose, trangThaiBaoCao }) => {
                     }
                 };
             }
-
+            console.log('báo cáo');
+            
             const response = await updateBaoCaoCuaHang(dataUpdate);
             if (response) {
                 window.location.reload();
@@ -119,7 +120,7 @@ const BaoCaoForm = ({ baoCaoID, onClose, trangThaiBaoCao }) => {
                         <div className='baocao_text'>
                             <label>Nội dung báo cáo của cửa hàng:</label>
                             <textarea
-                                value={baoCao.noi_dung_vi_phạm ? baoCao.noi_dung_vi_phạm : baoCao.vi_pham?.ten_vi_pham}
+                                value={baoCao.noi_dung_vi_pham ? baoCao.noi_dung_vi_pham : baoCao.vi_pham?.ten_vi_pham}
                                 disabled={true}></textarea>
                         </div>
 
