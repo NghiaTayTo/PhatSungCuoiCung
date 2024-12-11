@@ -180,11 +180,10 @@ const DonHang = () => {
                                     <div>
                                         <h4 style={{ marginBottom: '20px', fontSize: '20px' }}>{detail.san_pham?.ten_san_pham}</h4>
                                         <p style={{ fontSize: '16px' }}>Số lượng: {detail.so_luong}</p>
-                                        <p style={{ fontSize: '16px' }}>Số lượng: {detail.san_pham.ma_cua_hang}</p>
                                     </div>
                                 </div>
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>Thành tiền: {(detail.gia * detail.so_luong).toLocaleString()} đ</p>
+                                    <p style={{ fontSize: '16px' }}>Thành tiền: {(detail.thanh_tien).toLocaleString()} đ</p>
                                 </div>
 
                             </div>
