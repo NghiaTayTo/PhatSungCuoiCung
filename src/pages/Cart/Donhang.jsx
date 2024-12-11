@@ -140,7 +140,7 @@ const DonHang = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <p style={{ fontSize: '16px' }}>Thành tiền: {(detail.gia * detail.so_luong).toLocaleString()} đ</p>
+                                    <p style={{ fontSize: '16px' }}>Thành tiền: {detail.thanh_tien} đ</p>
                                 </div>
 
                             </div>

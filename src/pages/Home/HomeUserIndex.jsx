@@ -10,7 +10,7 @@ import ImageCarousel from './ImageCarousel';
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick-theme.css";  
 import ProductFormSlider from '../../utils/Order/ProductFormSlider';
 
 const HomeUserIndex = () => {
