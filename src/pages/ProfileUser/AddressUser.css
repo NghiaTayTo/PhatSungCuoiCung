@@ -1,8 +1,9 @@
 .address-page {
-    padding: 20px;
+    /* padding: 20px; */
     font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
+    /* max-width: 900px; */
+    width: 100%;
+    /* margin: 0 auto; */
 }
 
 .address-header {
@@ -11,7 +12,6 @@
     align-items: center;
     margin-bottom: 20px;
 }
-
 .address-header h2 {
     font-size: 24px;
     color: #333;
@@ -72,9 +72,9 @@
 
 .new-address-form {
     background-color: #f9f9f9;
-    padding: 20px;
+    /* padding: 20px; */
     border-radius: 4px;
-    max-width: 600px;
+    max-width: 600px;   
     margin: 0 auto;
 }
 

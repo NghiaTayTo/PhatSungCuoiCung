@@ -1,6 +1,6 @@
 .login-container {
     width: 500px;
-    margin: 0 auto;
+    margin: 200px auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -129,8 +129,30 @@
 .login-register-link a:hover {
     text-decoration: underline;
 }
-.error-message{
+
+.error-message {
     margin-top: 10px;
     font-size: 16px;
     color: red;
-    }
+}
+
+
+.bgSignin {
+    background-image: url(/public/images/bgbook.png);
+    background-size: cover;
+    /* Đảm bảo hình ảnh phủ toàn bộ màn hình */
+    background-position: center;
+    /* Căn hình ảnh vào giữa màn hình */
+    background-repeat: no-repeat;
+    /* Không lặp hình ảnh */
+    background-attachment: fixed;
+    /* Cố định hình nền khi cuộn */
+}
+
+.boxCenter {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

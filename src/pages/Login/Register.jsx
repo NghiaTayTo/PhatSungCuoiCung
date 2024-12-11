@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import styles from '../Home/HomeUser.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import HeaderUser from '../Component/HeaderUser';
+// import HeaderUser from '../Component/HeaderUser';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
-import FooterUser from '../Component/FooterUser';
+// import FooterUser from '../Component/FooterUser';
 import './Register.css';
+
 
 const Register = () => {
     const [code, setCode] = useState(''); // Mã OTP người dùng nhập
@@ -94,81 +95,84 @@ const Register = () => {
     };
 
     return (
-        <div className={styles.parent}>
-            <HeaderUser />
-            <section>
-                <div className="register-container">
-                    <h2 className="register-title">Đăng ký</h2>
-                    <form
-                        className="register-form"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleRegister();
-                        }}
-                    >
-                        <input
-                            type="text"
-                            name="hoTen"
-                            placeholder="Họ và tên"
-                            className="register-input"
-                            value={userInfo.hoTen}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Email"
-                            className="register-input"
-                            value={userInfo.email}
-                            onChange={handleInputChange}
-                        />
-                        <div className="input-code-container">
+
+
+        <div>
+
+            <section className="bgSignup">
+                <div className="boxCenter">
+                    <div className="register-container">
+                        <h2 className="register-title">Đăng ký</h2>
+                        <form
+                            className="register-form"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleRegister();
+                            }}
+                        >
                             <input
                                 type="text"
-                                placeholder="Nhập mã OTP"
-                                value={code}
-                                onChange={(e) => setCode(e.target.value)}
-                                className="register-input otp-input"
-                                disabled={loading}
+                                name="hoTen"
+                                placeholder="Họ và tên"
+                                className="register-input"
+                                value={userInfo.hoTen}
+                                onChange={handleInputChange}
                             />
-                            <button
-                                onClick={handleSendCode}
-                                className="send-code-button"
-                                disabled={loading}
-                                style={{width: '200px'}}
-                            >
-                                {loading ? 'Đang gửi...' : 'Gửi mã'}
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                className="register-input"
+                                value={userInfo.email}
+                                onChange={handleInputChange}
+                            />
+                            <div className="input-code-container">
+                                <input
+                                    type="text"
+                                    placeholder="Nhập mã OTP"
+                                    value={code}
+                                    onChange={(e) => setCode(e.target.value)}
+                                    className="register-input otp-input"
+                                    disabled={loading}
+                                />
+                                <button
+                                    onClick={handleSendCode}
+                                    className="send-code-button"
+                                    disabled={loading}
+                                    style={{ width: '200px' }}
+                                >
+                                    {loading ? 'Đang gửi...' : 'Gửi mã'}
+                                </button>
+                            </div>
+                            <input
+                                type="password"
+                                name="matKhau"
+                                placeholder="Mật khẩu"
+                                className="register-input"
+                                value={userInfo.matKhau}
+                                onChange={handleInputChange}
+                            />
+                            <input
+                                type="password"
+                                name="confirmMatKhau"
+                                placeholder="Nhập lại mật khẩu"
+                                className="register-input"
+                                value={userInfo.confirmMatKhau}
+                                onChange={handleInputChange}
+                            />
+
+                            {successMessage && <p className="success-message">{successMessage}</p>}
+                            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+                            <button type="submit" className="register-button">
+                                Đăng ký
                             </button>
+                        </form>
+
+                        <div className="register-or">
+                            <span>hoặc</span>
                         </div>
-                        <input
-                            type="password"
-                            name="matKhau"
-                            placeholder="Mật khẩu"
-                            className="register-input"
-                            value={userInfo.matKhau}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            type="password"
-                            name="confirmMatKhau"
-                            placeholder="Nhập lại mật khẩu"
-                            className="register-input"
-                            value={userInfo.confirmMatKhau}
-                            onChange={handleInputChange}
-                        />
-
-                        {successMessage && <p className="success-message">{successMessage}</p>}
-                        {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-                        <button type="submit" className="register-button">
-                            Đăng ký
-                        </button>
-                    </form>
-
-                    <div className="register-or">
-                        <span>hoặc</span>
-                    </div>
-                    <div className="register-social">
+                        {/* <div className="register-social">
                         <button className="social-button facebook-button">
                             <FaFacebook style={{ marginRight: '8px' }} /> Facebook
                         </button>
@@ -181,13 +185,14 @@ const Register = () => {
                         >
                             <FaGoogle style={{ marginRight: '8px' }} /> Đăng nhập bằng Google
                         </button>
-                    </div>
-                    <div className="register-login-link">
-                        Đã có tài khoản? <Link to="/login">Đăng nhập tại đây</Link>
+                    </div> */}
+                        <div className="register-login-link">
+                            Đã có tài khoản? <Link to="/login">Đăng nhập tại đây</Link>
+                        </div>
                     </div>
                 </div>
             </section>
-            <FooterUser />
+            {/* <FooterUser /> */}
         </div>
     );
 };

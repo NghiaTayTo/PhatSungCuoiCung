@@ -33,7 +33,11 @@ const CheckOut = () => {
         }
     }, []);
 
+
     
+
+
+
     // Tạo đơn hàng
     // Hàm tạo đơn hàng và trừ tiền
     const totalAmount = checkoutCart.reduce((total, item) => total + item.gia * item.so_luong, 0);
@@ -52,13 +56,14 @@ const CheckOut = () => {
         const orderDetails = checkoutCart.map(item => ({
             so_luong: item.so_luong,
             gia: item.gia,
-            thanh_tien: item.gia * item.so_luong + shippingFee,
+            thanh_tien: grandTotal,
             san_pham: { ma_san_pham: item.ma_san_pham },
             id_voucher: item.voucher || null,
             ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu
         }));
 
         try {
+            
             // Tạo đơn hàng
             const createOrderResponse = await axios.post(
                 `http://localhost:8080/api/v1/donhang/create/taikhoan-${userId}/diachi-${addressId}`,

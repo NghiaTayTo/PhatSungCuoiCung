@@ -1,10 +1,9 @@
 .change-password-page {
-    max-width: 500px;
+    width: 100%;
     margin: 0 auto;
-    padding: 20px;
     background-color: white;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; */
     font-family: Arial, sans-serif;
 }
 
@@ -55,7 +54,7 @@
     color: #888;
 }
 
-.submit-button {
+.submit-buttonn {
     width: 100%;
     padding: 12px;
     font-size: 16px;
@@ -67,6 +66,6 @@
     transition: background-color 0.3s;
 }
 
-.submit-button:hover {
-    background-color: #d88b1f;
+.submit-buttonn:hover {
+    background-color: #d79333;
 }

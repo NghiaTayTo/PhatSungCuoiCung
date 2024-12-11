@@ -8,6 +8,7 @@ import styles from '../Home/HomeUser.module.css';
 import logo from '../Home/logoBooker.png';
 import { useCart } from '../../context/cartContext';
 import { useNavigate } from 'react-router-dom';
+import RechargeForm from '../Wallet/wallet';  // Import RechargeForm
 
 const HeaderUser = ({ logout, onSearchResults }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -20,6 +21,7 @@ const HeaderUser = ({ logout, onSearchResults }) => {
     const { cartItems } = useCart();
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [sortOption, setSortOption] = useState(""); // Thêm state để lưu lựa chọn sắp xếp
+    const [showRechargeForm, setShowRechargeForm] = useState(false);  // State để hiển thị form nạp tiền
     const navigate = useNavigate();
 
     // Lấy thông tin người dùng từ sessionStorage khi component được mount
@@ -116,7 +118,10 @@ const HeaderUser = ({ logout, onSearchResults }) => {
         navigate(`/HomeUser?ma_the_loai=${categoryId}`);
     };
 
-
+    // Mở/đóng form nạp tiền
+    const toggleRechargeForm = () => {
+        setShowRechargeForm(true);
+    };
 
 
     return (
@@ -167,7 +172,7 @@ const HeaderUser = ({ logout, onSearchResults }) => {
                                         {isDropdownOpen && (
                                             <div className={styles.dropdownMenu}>
                                                 <Link to="/profile-user">Quản lý tài khoản</Link>
-                                                <Link to="/wallet">Nạp tiền</Link>
+                                                <span onClick={toggleRechargeForm}>Nạp tiền</span> {/* Nút Nạp Tiền */}
                                                 <Link to="/shopping">Giỏ hàng</Link>
                                                 {user.vai_tro.ma_vai_tro === 2 ? (
                                                     <Link to="/seller">Cửa hàng của tôi</Link>
@@ -318,6 +323,9 @@ const HeaderUser = ({ logout, onSearchResults }) => {
                     <div className={styles.sale}>Sale Sốc Xả Kho</div>
                 </nav>
             </header>
+
+            {/* Modal cho Form Nạp Tiền */}
+            {showRechargeForm  && <RechargeForm  onClose={()=>setShowRechargeForm(false)}/> }
         </div>
     );
 };
