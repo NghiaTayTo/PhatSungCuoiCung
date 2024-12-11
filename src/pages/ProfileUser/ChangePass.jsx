@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './ChangePass.css';
 import HeaderUser from '../Component/HeaderUser';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import FooterUser from '../Component/FooterUser';
 
 const ChangePassword = () => {
@@ -59,50 +60,65 @@ const ChangePassword = () => {
     return (
         <div>
             <HeaderUser />
-            <div className="change-password-page">
-                <h2>Đổi mật khẩu</h2>
-                <p>Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác</p>
-                {message && <p className="message">{message}</p>} {/* Hiển thị thông báo */}
-                <form className="change-password-form" onSubmit={handleSubmit}>
-                    <div className="password-field">
-                        <label>Mật khẩu cũ</label>
-                        <input
-                            type={showOldPassword ? 'text' : 'password'}
-                            value={oldPassword}
-                            onChange={(e) => setOldPassword(e.target.value)}
-                            className="input-field"
-                        />
-                        <span className="toggle-password" onClick={toggleShowOldPassword}>
-                            <i className="fas fa-eye"></i>
-                        </span>
+
+            <section className="profile-section">
+                <div className="profile-container">
+                    <div className="profile-sidebar">
+                        <h3>Tài khoản của tôi</h3>
+                        <ul>
+                            <li><Link to="/address" className="sidebar-link">Địa chỉ</Link></li>
+                            <li><Link to="/change-pass" className="sidebar-link">Đổi mật khẩu</Link></li>
+                            <li><Link to="/donhang" className="sidebar-link">Đơn mua</Link></li>
+                        </ul>
                     </div>
-                    <div className="password-field">
-                        <label>Mật khẩu mới</label>
-                        <input
-                            type={showNewPassword ? 'text' : 'password'}
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            className="input-field"
-                        />
-                        <span className="toggle-password" onClick={toggleShowNewPassword}>
-                            <i className="fas fa-eye"></i>
-                        </span>
+                    <div className="change-password-page">
+                        <h2>Đổi mật khẩu</h2>
+                        <p>Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác</p>
+                        {message && <p className="message">{message}</p>} {/* Hiển thị thông báo */}
+                        <form className="change-password-form" onSubmit={handleSubmit}>
+                            <div className="password-field">
+                                <label>Mật khẩu cũ</label>
+                                <input
+                                    type={showOldPassword ? 'text' : 'password'}
+                                    value={oldPassword}
+                                    onChange={(e) => setOldPassword(e.target.value)}
+                                    className="input-field"
+                                />
+                                <span className="toggle-password" onClick={toggleShowOldPassword}>
+                                    <i className="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div className="password-field">
+                                <label>Mật khẩu mới</label>
+                                <input
+                                    type={showNewPassword ? 'text' : 'password'}
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    className="input-field"
+                                />
+                                <span className="toggle-password" onClick={toggleShowNewPassword}>
+                                    <i className="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <div className="password-field">
+                                <label>Nhập lại mật khẩu</label>
+                                <input
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="input-field"
+                                />
+                                <span className="toggle-password" onClick={toggleShowConfirmPassword}>
+                                    <i className="fas fa-eye"></i>
+                                </span>
+                            </div>
+                            <button type="submit" className="submit-buttonn">Xác nhận</button>
+                        </form>
                     </div>
-                    <div className="password-field">
-                        <label>Nhập lại mật khẩu</label>
-                        <input
-                            type={showConfirmPassword ? 'text' : 'password'}
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="input-field"
-                        />
-                        <span className="toggle-password" onClick={toggleShowConfirmPassword}>
-                            <i className="fas fa-eye"></i>
-                        </span>
-                    </div>
-                    <button type="submit" className="submit-button">Xác nhận</button>
-                </form>
-            </div>
+                </div>
+
+            </section>
+
             <FooterUser />
         </div>
     );

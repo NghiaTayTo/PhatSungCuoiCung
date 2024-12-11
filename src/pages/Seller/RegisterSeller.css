@@ -1,6 +1,6 @@
 .register-seller-container {
-    max-width: 600px;
-    margin: 0 auto;
+    width: 600px;
+    margin: 70px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
@@ -128,4 +128,26 @@
 .complete-button {
     background-color: #ff6600;
     color: white;
+}
+
+
+
+.bgRegisterSeller {
+    background-image: url(/public/images/bgbook.png);
+    background-size: cover;
+    /* Đảm bảo hình ảnh phủ toàn bộ màn hình */
+    background-position: center;
+    /* Căn hình ảnh vào giữa màn hình */
+    background-repeat: no-repeat;
+    /* Không lặp hình ảnh */
+    background-attachment: fixed;
+    /* Cố định hình nền khi cuộn */
+}
+
+.boxCenter {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

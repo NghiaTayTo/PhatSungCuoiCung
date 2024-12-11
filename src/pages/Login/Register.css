@@ -1,6 +1,6 @@
 .register-container {
     width: 500px;
-    margin: 0 auto;
+    margin: 100px auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -103,7 +103,6 @@
     margin-top: 20px;
     font-size: 14px;
     color: #888;
-    margin-bottom: 100px;
 }
 
 .register-login-link a {
@@ -114,13 +113,15 @@
 .register-login-link a:hover {
     text-decoration: underline;
 }
+
 .input-code-container {
     display: flex;
     align-items: center;
     /* border: 1px solid #ccc; */
     /* border-radius: 8px; */
     overflow: hidden;
-    width: 100%; /* Chiều rộng container */
+    width: 100%;
+    /* Chiều rộng container */
     background-color: #fff;
     justify-content: space-between;
 }
@@ -131,7 +132,8 @@
     border: none;
     outline: none;
     font-size: 16px;
-    background-color: #fff; /* Đồng bộ với nền container */
+    background-color: #fff;
+    /* Đồng bộ với nền container */
 }
 
 .send-code-button {
@@ -141,17 +143,34 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
-    border-left: 1px solid #ccc; /* Đường viền giữa ô nhập và nút */
+    border-left: 1px solid #ccc;
+    /* Đường viền giữa ô nhập và nút */
     transition: background-color 0.3s;
 }
 
 .send-code-button:hover {
-    background-color: #d6d6d6; /* Hiệu ứng khi hover */
+    background-color: #d6d6d6;
+    /* Hiệu ứng khi hover */
 }
+
 .success-message {
     color: green;
     font-size: 14px;
     margin-top: 10px;
 }
 
+.bgSignup {
+    background-image: url(/public/images/bgbook.png);
+    background-size: cover; /* Đảm bảo hình ảnh phủ toàn bộ màn hình */
+    background-position: center; /* Căn hình ảnh vào giữa màn hình */
+    background-repeat: no-repeat; /* Không lặp hình ảnh */
+    background-attachment: fixed; /* Cố định hình nền khi cuộn */
+}
 
+.boxCenter{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

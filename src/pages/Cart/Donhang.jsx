@@ -17,7 +17,7 @@ const DonHang = () => {
     const [idProduct, setIdProduct] = useState(null)
     const [idOrderDetail, setIdOrderdetail] = useState(null)
     const [idCuaHang, setIdCuaHang] = useState(null)
-    
+
 
 
     useEffect(() => {
@@ -125,17 +125,17 @@ const DonHang = () => {
         setShowForm(false);
     };
 
-    const handleReportClick = async (idCuaHang, idProduct) =>{
+    const handleReportClick = async (idCuaHang, idProduct) => {
         setIdCuaHang(idCuaHang)
         setIdProduct(idProduct)
         setShowFormReport(true)
         console.log(123)
     }
-    const handleCloseFormReport = () =>{
+    const handleCloseFormReport = () => {
         setShowFormReport(false)
     }
 
-    
+
 
 
 
@@ -146,8 +146,19 @@ const DonHang = () => {
         <div className={styles.parent}>
             <HeaderUser />
             <div className={styles.orderContainer}>
-                <h2 style={{ fontSize: '25px', marginTop: '20px', textAlign: 'center' }} className={styles.orderTitle}>Chi Tiết Đơn Hàng Của Tôi</h2>
+                {/* <h2 style={{ fontSize: '25px', marginTop: '20px', textAlign: 'center' }} className={styles.orderTitle}>Chi Tiết Đơn Hàng Của Tôi</h2> */}
 
+                {/* <div className={styles.orderTabs}>
+                    {["Tất cả", "Đang xử lý", "Đang vận chuyển", "Đã giao hàng", "Khách hàng hủy", "Yêu cầu Trả hàng / Hoàn tiền"].map(status => (
+                        <button
+                            key={status}
+                            className={`${styles.buttonDonHang} ${activeStatus === status ? styles.active : ''}`}
+                            onClick={() => filterOrderDetails(status)}
+                        >
+                            {status}
+                        </button>
+                    ))}
+                </div> */}
                 <div className={styles.orderTabs}>
                     {["Tất cả", "Đang xử lý", "Đang vận chuyển", "Đã giao hàng", "Khách hàng hủy", "Yêu cầu Trả hàng / Hoàn tiền"].map(status => (
                         <button
@@ -159,6 +170,7 @@ const DonHang = () => {
                         </button>
                     ))}
                 </div>
+
 
                 <div className={styles.orderList}>
                     {filteredOrderDetails.map((detail, index) => (
@@ -232,8 +244,8 @@ const DonHang = () => {
                                 <label><input type="radio" name="reason" value="Không lý do phù hợp" onChange={(e) => setSelectedReason(e.target.value)} /> Tôi không tìm thấy lý do hủy phù hợp</label>
                             </div>
                             <div className={styles.modalActions}>
-                                <button onClick={confirmCancelOrderDetail}>Xác nhận hủy</button>
-                                <button onClick={() => setShowCancelModal(false)}>Hủy bỏ</button>
+                                <button className={styles.confirmCancel} onClick={confirmCancelOrderDetail}>Xác nhận hủy</button>
+                                <button className={styles.cancel_huy} onClick={() => setShowCancelModal(false)}>Hủy bỏ</button>
                             </div>
                         </div>
                     </div>

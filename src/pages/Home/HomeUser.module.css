@@ -577,17 +577,20 @@ span {
   color: white;
 }
 
-.info p{
+.info p {
   color: white;
 }
-.info button{
+
+.info button {
   padding: 5px 10px;
   font-size: 13px;
   font-weight: 700;
   color: #fff;
-  background-color: #f26e0a; /* Màu nền button */
+  background-color: #f26e0a;
+  /* Màu nền button */
   border: none;
-  border-radius: 50px; /* Tạo góc tròn */
+  border-radius: 50px;
+  /* Tạo góc tròn */
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -596,8 +599,10 @@ span {
 }
 
 .info button:hover {
-  background-color: #f26e0a; /* Màu nền khi hover */
-  transform: scale(1.05); /* Tăng kích thước khi hover */
+  background-color: #f26e0a;
+  /* Màu nền khi hover */
+  transform: scale(1.05);
+  /* Tăng kích thước khi hover */
 }
 
 .overlay {
@@ -655,19 +660,21 @@ span {
 .listCategoryHayItemSol p {
   font-size: 16px;
 }
+
 .productPrice {
-    font-size: 16px;
-    color: #f25821;
-    font-weight: bold;
-    display: inline-block;
-    text-align: left;
+  font-size: 16px;
+  color: #f25821;
+  font-weight: bold;
+  display: inline-block;
+  text-align: left;
 }
 
-.tacGia, .tacGiaXepHang {
+.tacGia,
+.tacGiaXepHang {
   color: #20ad7c;
   font-size: 13px;
   margin: 0;
-  left: 0;
+  /* left: 0 !important; */
 }
 
 .tacGia:hover {

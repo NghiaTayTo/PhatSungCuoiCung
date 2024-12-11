@@ -3,12 +3,12 @@ import axios from "axios";
 import "./RegisterSeller.css";
 import HeaderUser from "../Component/HeaderUser";
 import FooterUser from "../Component/FooterUser";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AddressSelector from "../Cart/AddressSelector";
 import defaultAvatar from './default_avatar.png';
 import defaultCover from './default_cover.png';
-import {handleImageUpload} from '../../utils/Order/UploadImageFileOnCloud'
-import {createFileFromUrl} from '../../utils/Order/UploadImageFileOnCloud'
+import { handleImageUpload } from '../../utils/Order/UploadImageFileOnCloud'
+import { createFileFromUrl } from '../../utils/Order/UploadImageFileOnCloud'
 
 const RegisterSeller = () => {
     const [user, setUser] = useState(null);
@@ -57,15 +57,15 @@ const RegisterSeller = () => {
                 console.error("Error fetching user or address data:", error);
             }
             const savedAddress = JSON.parse(sessionStorage.getItem('address'));
-        if (savedAddress) {
-            setAddress(savedAddress);
-        }
+            if (savedAddress) {
+                setAddress(savedAddress);
+            }
         };
 
         fetchData();
     }, []);
 
- 
+
 
     // Handle address form changes
 
@@ -82,13 +82,13 @@ const RegisterSeller = () => {
     // Submit registration form
     const handleRegisterSeller = async () => {
         const user = JSON.parse(sessionStorage.getItem("user"));
-    
+
         try {
             // Tạo File object từ URL của ảnh mặc định
             const avatarFile = await createFileFromUrl(defaultAvatar, "default_avatar.png");
             const coverFile = await createFileFromUrl(defaultCover, "default_cover.png");
             console.log(avatarFile)
-    
+
             // Upload avatar và cover lên Cloudinary
             const avatarUrl = await handleImageUpload(avatarFile);
             const coverUrl = await handleImageUpload(coverFile);
@@ -106,12 +106,12 @@ const RegisterSeller = () => {
                 tong_luot_ban: 0,
                 doanh_thu: 0.00,
                 tong_diem_vi_pham: 0,
-                trang_thai_cua_hang: { ma_trang_thai_cua_hang: 11}
+                trang_thai_cua_hang: { ma_trang_thai_cua_hang: 11 }
             };
 
             // console.log(payload);
-            
-    
+
+
             const response = await axios.post(
                 `http://localhost:8080/api/v1/cuahang/add-${user.id_tai_khoan}`,
                 payload
@@ -120,12 +120,12 @@ const RegisterSeller = () => {
             const taikhoan = await axios.get(
                 `http://localhost:8080/api/taikhoan/${user.id_tai_khoan}`
             );
-            
-            if(taikhoan){
+
+            if (taikhoan) {
                 sessionStorage.setItem('user', JSON.stringify(taikhoan.data.result));
                 sessionStorage.setItem('id_tai_khoan', taikhoan.data.result.id_tai_khoan);
             }
-    
+
             alert("Đăng ký thành công!");
             navigate('/HomeUserIndex');
             console.log("Seller registered:", response.data);
@@ -134,65 +134,70 @@ const RegisterSeller = () => {
             alert("Đăng ký thất bại!");
         }
     };
-    
-    
-    
-    
+
+
+
+
 
     return (
         <div>
-            <HeaderUser />
-            <div className="register-seller-container">
-                <h2 className="register-seller-title">Đăng ký trở thành Người bán</h2>
-                <div className="shop-info">
-                    <h3>Thông tin Shop</h3>
-                    <div className="form-group">
-                        <label>Tên shop</label>
-                        <input
-                            type="text"
-                            value={shopName}
-                            onChange={(e) => setShopName(e.target.value)}
-                            placeholder="Nhập tên shop của bạn"
-                            style={{fontSize: '16px'}}
-                        />
+            {/* <HeaderUser /> */}
+
+            <section className="bgRegisterSeller">
+                <div className="boxCenter">
+                    <div className="register-seller-container">
+                        <h2 className="register-seller-title">Đăng ký trở thành Người bán</h2>
+                        <div className="shop-info">
+                            <h3>Thông tin Shop</h3>
+                            <div className="form-group">
+                                <label>Tên shop</label>
+                                <input
+                                    type="text"
+                                    value={shopName}
+                                    onChange={(e) => setShopName(e.target.value)}
+                                    placeholder="Nhập tên shop của bạn"
+                                    style={{ fontSize: '16px' }}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Địa chỉ lấy hàng</label>
+                                <p style={{ fontSize: '16px' }}>
+                                    {pickupAddress.ten_dia_chi
+                                        ? `${pickupAddress.ten_dia_chi}`
+                                        : "Chưa có địa chỉ lấy hàng"}
+                                </p>
+                                <button className="edit-button" onClick={() => setShowAddressSelector(true)}>
+                                    Chỉnh sửa
+                                </button>
+                            </div>
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    readOnly
+                                    style={{ fontSize: '16px' }}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Số điện thoại</label>
+                                <input
+                                    type="text"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    readOnly
+                                    style={{ fontSize: '16px' }}
+                                />
+                            </div>
+                            <button className="register-button" onClick={handleRegisterSeller}>
+                                Đăng ký
+                            </button>
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label>Địa chỉ lấy hàng</label>
-                        <p style={{fontSize: '16px'}}>
-                            {pickupAddress.ten_dia_chi
-                                ? `${pickupAddress.ten_dia_chi}`
-                                : "Chưa có địa chỉ lấy hàng"}
-                        </p>
-                        <button className="edit-button" onClick={() => setShowAddressSelector(true)}>
-                            Chỉnh sửa
-                        </button>
-                    </div>
-                    <div className="form-group">
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            readOnly
-                            style={{fontSize: '16px'}}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Số điện thoại</label>
-                        <input
-                            type="text"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            readOnly
-                            style={{fontSize: '16px'}}
-                        />
-                    </div>
-                    <button className="register-button" onClick={handleRegisterSeller}>
-                        Đăng ký
-                    </button>
                 </div>
-            </div>
-            <FooterUser />
+            </section>
+            {/* <FooterUser /> */}
             {showAddressSelector && (
                 <AddressSelector
                     onSelectAddress={handleSelectAddress}
@@ -200,6 +205,7 @@ const RegisterSeller = () => {
                 />
             )}
         </div>
+
     );
 };
 
