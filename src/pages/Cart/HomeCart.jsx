@@ -81,7 +81,7 @@ const ShoppingCart = () => {
                 {cart.length === 0 ? (
                     <div className="cart-content_no_product">
                         <p>Giỏ hàng của bạn đang trống.</p>
-                        <button>Quay lại trang chủ</button>
+                        <button onClick={() => navigate('/HomeUserIndex')}>Quay lại trang chủ</button>
                     </div>
 
                 ) : (
@@ -178,7 +178,7 @@ const ShoppingCart = () => {
                             </div>
                         ))}
                         <div className="cart-summary">
-                            <p>Tổng thanh tooán (7 sản phẩm): <span>₫{totalAmount.toLocaleString('vi-VN')}</span></p>
+                            <p>Tổng thanh toán: <span>₫{totalAmount.toLocaleString('vi-VN')}</span></p>
                             <button
                                 style={{ fontSize: '16px'}}
                                 onClick={handleCheckout}

@@ -122,6 +122,10 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
     const toggleRechargeForm = () => {
         setShowRechargeForm(true);
     };
+    const handleClickAdd = (key) => {
+        navigate('/profile-user', { state: { key } });
+    }
+    
 
 
     return (
@@ -154,11 +158,11 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
                             <span>
                                 <FontAwesomeIcon icon={faGift} style={{ marginRight: '4px' }} /> Ưu đãi & tiện ích
                             </span>
-                            <Link to='/donhang'>
-                                <span>
+                            
+                                <span onClick={()=> handleClickAdd(4)}>
                                     <FontAwesomeIcon icon={faBox} style={{ marginRight: '4px' }} /> Kiểm tra đơn hàng
                                 </span>
-                            </Link>
+                           
                             <div>
                                 {user ? (
                                     <div

@@ -13,6 +13,7 @@ import { countCommentByBookID, getDiemTrungBinhByMaSanPham, searchCommentByBookI
 import { faFacebook, faFacebookMessenger, faPinterest } from '@fortawesome/free-brands-svg-icons';
 import { getSumLuotBanByMaCuaHang } from '../../utils/API/OrderDetailsAPI';
 import { getVouchersByCuaHangIdDetailsUser } from '../../utils/API/VoucherAPI';
+
 import Pagination from '../../utils/Pagination/Pagination';
 
 import StarRating from '../../utils/Order/StarRating';
@@ -26,6 +27,7 @@ const ProductDetail = () => {
     const [quantity, setQuantity] = useState(1); // Số lượng sản phẩm
     const [reportMenuVisible, setReportMenuVisible] = useState(false);
     const [responseSeller, setResponseSeller] = useState([])
+    const [user, setUser] = useState(null);
     // * Phân trang
     const [pagination, setPagination] = useState();
     // * Trang hiện tại
@@ -149,6 +151,10 @@ const ProductDetail = () => {
                 setRandomProducts(getRandomProducts(allProducts, 5));
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
+            }
+            const storedUser = JSON.parse(sessionStorage.getItem('user'));
+            if (storedUser) {
+                setUser(storedUser);
             }
         };
 

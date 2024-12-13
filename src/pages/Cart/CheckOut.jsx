@@ -8,12 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faComments, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import VoucherList from './VoucherList';
 
 const CheckOut = () => {
     const [checkoutCart, setCheckoutCart] = useState([]);
     const [address, setAddress] = useState(null);
     const [showAddressSelector, setShowAddressSelector] = useState(false); // Điều khiển hiển thị AddressSelector
     const [buyNowProduct, setBuyNowProduct] = useState(null); // Lưu sản phẩm "Mua Ngay"
+    const [user, setUser] = useState(null);
+    const [selectedDiscount, setSelectedDiscount] = useState([]);
+    // const [idCuaHang, setIdCuaHang] = useState(null);
     const navigate = useNavigate();
 
     // Load giỏ hàng từ localStorage hoặc sản phẩm "Mua Ngay" từ sessionStorage
@@ -32,6 +36,10 @@ const CheckOut = () => {
         const savedAddress = JSON.parse(sessionStorage.getItem('address'));
         if (savedAddress) {
             setAddress(savedAddress);
+        }
+        const storedUser = JSON.parse(sessionStorage.getItem('user'));
+        if (storedUser) {
+            setUser(storedUser);
         }
     }, []);
 
@@ -133,7 +141,7 @@ const CheckOut = () => {
         setAddress(selectedAddress);
         sessionStorage.setItem('address', JSON.stringify(selectedAddress));
         setShowAddressSelector(false);
-        console.log(grandTotal)
+
     };
 
     const [visibleFormIndex, setVisibleFormIndex] = useState(null);
@@ -141,10 +149,15 @@ const CheckOut = () => {
     const toggleForm = (index) => {
         setVisibleFormIndex(visibleFormIndex === index ? null : index);
     };
+    const handleVoucherSelect = (discount, index) => {
+        setSelectedDiscount( discount);
+        setVisibleFormIndex(null); // Đóng form sau khi chọn
+    };
+    
 
     return (
         <div className={styles.parent}>
-            <HeaderUser fixed={false}/>
+            <HeaderUser fixed={false} />
 
             <div className="checkout-container">
                 <div className="shipping-info">
@@ -154,7 +167,7 @@ const CheckOut = () => {
                     </div>
                     {address ? (
                         <div className="shipping-info-location">
-                            <span>Trọng Nghĩa - 0972376536</span>
+                            <span>{user.ho_ten} - {user.so_dt}</span>
                             <p>{address.ten_dia_chi}</p>
                         </div>
 
@@ -216,7 +229,7 @@ const CheckOut = () => {
                                             </div>
                                             <div className="additional-vouchers-choose">
                                                 <div className="additional-vouchers-choose-box">
-                                                    <p>-<span>₫</span>10k</p>
+                                                    <p>-<span>₫</span>{selectedDiscount}</p> {/* Hiển thị giảm giá */}
                                                 </div>
                                                 <p onClick={() => toggleForm(index)}>Chọn Voucher khác</p>
                                             </div>
@@ -247,46 +260,13 @@ const CheckOut = () => {
                                     </div>
 
                                     {visibleFormIndex === index && (
-                                        <div className='form_voucher_choose'>
-                                            <h3>ZUTEE</h3>
-                                            <div className='form_voucher_choose_list'>
-                                                <div className='form_voucher_choose_item ticket'>
-                                                    <img src='/images/zutee.jpg' />
-                                                    <div className='form_voucher_choose_item_info'>
-                                                        <p>Giảm ₫25k</p>
-                                                        <p>Đơn tối thiểu ₫225k</p>
-                                                        <p>Số lần sử dụng: 6</p>
-                                                        <p>HSD: 21/12/2024</p>
-                                                    </div>
-                                                </div>
-                                                <div className='form_voucher_choose_item ticket'>
-                                                    <img src='/images/zutee.jpg' />
-                                                    <div className='form_voucher_choose_item_info'>
-                                                        <p>Giảm ₫25k</p>
-                                                        <p>Đơn tối thiểu ₫225k</p>
-                                                        <p>Số lần sử dụng: 6</p>
-                                                        <p>HSD: 21/12/2024</p>
-                                                    </div>
-                                                </div>
-                                                <div className='form_voucher_choose_item ticket'>
-                                                    <img src='/images/zutee.jpg' />
-                                                    <div className='form_voucher_choose_item_info'>
-                                                        <p>Giảm ₫25k</p>
-                                                        <p>Đơn tối thiểu ₫225k</p>
-                                                        <p>Số lần sử dụng: 6</p>
-                                                        <p>HSD: 21/12/2024</p>
-                                                    </div>
-                                                </div>
-                                                <div className='form_voucher_choose_item ticket'>
-                                                    <img src='/images/zutee.jpg' />
-                                                    <div className='form_voucher_choose_item_info'>
-                                                        <p>Giảm ₫25k</p>
-                                                        <p>Đơn tối thiểu ₫225k</p>
-                                                        <p>Số lần sử dụng: 6</p>
-                                                        <p>HSD: 21/12/2024</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div className=''>
+                                            <VoucherList
+                                                visibleFormIndex={visibleFormIndex}
+                                                index={index}
+                                                idCuaHang={product.cua_hang.ma_cua_hang || 21}
+                                                onVoucherSelect={handleVoucherSelect} // Truyền callback xuống
+                                            />
                                         </div>
                                     )}
 
@@ -335,7 +315,7 @@ const CheckOut = () => {
 
                             <div className="summary-item">
                                 <span>Tổng cộng Voucher giảm giá</span>
-                                <span>₫{shippingFee.toLocaleString('vi-VN')}</span>
+                                <span>₫{selectedDiscount}</span>
                             </div>
                             <div className="summary-item grand-total">
                                 <span>Tổng thanh toán</span>

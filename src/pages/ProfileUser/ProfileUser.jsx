@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HeaderUser from '../Component/HeaderUser';
 import FooterUser from '../Component/FooterUser';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './ProfileUser.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +13,8 @@ import KhoVoucher from './KhoVoucher';
 import DonHang from '../Cart/Donhang';
 
 const ProfileUser = () => {
+    const location = useLocation();
+    const keyForm = location.state?.key;
     const [userData, setUserData] = useState({
         id_tai_khoan: '',    // ID tài khoản
         ho_ten: '',          // Họ và tên
@@ -25,6 +27,9 @@ const ProfileUser = () => {
 
     // Hàm lấy dữ liệu người dùng từ API
     useEffect(() => {
+        if(keyForm === 4){
+            setKey(keyForm)
+        }
         const fetchUserData = async () => {
             try {
                 const id_tai_khoan = sessionStorage.getItem('id_tai_khoan'); // Lấy ID tài khoản từ session storage
