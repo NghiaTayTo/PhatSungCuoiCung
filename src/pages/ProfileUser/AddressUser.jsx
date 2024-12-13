@@ -163,152 +163,140 @@ const AddressUser = () => {
 
     return (
         <div>
-            <HeaderUser />
-            <section className="profile-section">
-                <div className="profile-container">
-                    <div className="profile-sidebar">
-                        <h3>Tài khoản của tôi</h3>
-                        <ul>
-                            <li><Link to="/address" className="sidebar-link">Địa chỉ</Link></li>
-                            <li><Link to="/change-pass" className="sidebar-link">Đổi mật khẩu</Link></li>
-                            <li><Link to="/donhang" className="sidebar-link">Đơn mua</Link></li>
-                        </ul>
-                    </div>
-                    <div className="address-page">
-                        {showAddAddressForm ? (
-                            <div className="new-address-form">
-                                <h2>{currentAddress ? "Cập nhập địa chỉ" : "Thêm địa chỉ"}</h2>
-                                <form onSubmit={(e) => handleSubmit(e)}>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        placeholder="Name"
-                                        className="input-field"
-                                        value={formData.name}
-                                        readOnly
-                                    />
-                                    <input
-                                        type="text"
-                                        name="phone"
-                                        placeholder="Phone"
-                                        className="input-field"
-                                        value={formData.phone}
-                                        readOnly
-                                    />
-                                    <select
-                                        name="city"
-                                        className="input-field"
-                                        value={formData.city}
-                                        onChange={handleCityChange}
-                                    >
-                                        <option value="">Chọn Tỉnh</option>
-                                        {cities.map((city) => (
-                                            <option key={city.code} value={city.name}>
-                                                {city.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <select
-                                        name="district"
-                                        className="input-field"
-                                        value={formData.district}
-                                        onChange={handleDistrictChange}
-                                        disabled={!formData.city}
-                                    >
-                                        <option value="">Chọn Quận/Huyện</option>
-                                        {districts.map((district) => (
-                                            <option key={district.code} value={district.name}>
-                                                {district.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <select
-                                        name="ward"
-                                        className="input-field"
-                                        value={formData.ward}
-                                        onChange={handleInputChange}
-                                        disabled={!formData.district}
-                                    >
-                                        <option value="">Chọn Phường/Xã</option>
-                                        {wards.map((ward) => (
-                                            <option key={ward.code} value={ward.name}>
-                                                {ward.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <textarea
-                                        name="specificAddress"
-                                        placeholder="Specific Address"
-                                        className="input-field"
-                                        rows="3"
-                                        value={formData.specificAddress}
-                                        onChange={handleInputChange}
-                                    ></textarea>
-                                    <label className="default-checkbox">
-                                        <input
-                                            type="checkbox"
-                                            checked={isDefault}
-                                            onChange={(e) => setIsDefault(e.target.checked)}
-                                        />
-                                        Đặt làm địa chỉ mặc định
-                                    </label>
-                                    <div className="form-buttons">
-                                        <button
-                                            type="button"
-                                            className="back-button"
-                                            onClick={() => setShowAddAddressForm(false)}
-                                        >
-                                            Back
-                                        </button>
-                                        <button type="submit" className="submit-button">
-                                            Hoàn thành
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        ) : (
-                            <div className="address-list">
-                                <div className="address-header">
-                                    <h2>Địa chỉ của tôi</h2>
-                                    
-                                    <button
-                                        className="add-address-button"
-                                        onClick={() => handleAddOrUpdateAddress()}
-                                    >
-                                        + Thêm địa chỉ mới
-                                    </button>
-                                </div>
-                                <hr/>
-                                <div style={{ fontSize: '16px', marginLeft: '10px', marginTop: '30px' }} className="user-info">
-                                    <p>
-                                        <strong style={{ marginRight: '30px' }}>{formData.name}</strong> {formData.phone}
-                                    </p>
-                                </div>
-                                {addresses.map((address) => (
-                                    <div key={address.ma_dia_chi} className="address-item">
-                                        <p>{address.ten_dia_chi}</p>
-                                        <div className="address-actions">
-                                            <span
-                                                className="update-action"
-                                                onClick={() => handleAddOrUpdateAddress(address)}
-                                            >
-                                                Chỉnh sửa
-                                            </span>
-                                            <span
-                                                className="delete-action"
-                                                onClick={() => handleDeleteAddress(address.ma_dia_chi)}
-                                            >
-                                                Xóa
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
 
-            </section>
+            <div className="address-page">
+                {showAddAddressForm ? (
+                    <div className="new-address-form">
+                        <h2>{currentAddress ? "Cập nhập địa chỉ" : "Thêm địa chỉ"}</h2>
+                        <form onSubmit={(e) => handleSubmit(e)}>
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Name"
+                                className="input-field"
+                                value={formData.name}
+                                readOnly
+                            />
+                            <input
+                                type="text"
+                                name="phone"
+                                placeholder="Phone"
+                                className="input-field"
+                                value={formData.phone}
+                                readOnly
+                            />
+                            <select
+                                name="city"
+                                className="input-field"
+                                value={formData.city}
+                                onChange={handleCityChange}
+                            >
+                                <option value="">Chọn Tỉnh</option>
+                                {cities.map((city) => (
+                                    <option key={city.code} value={city.name}>
+                                        {city.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <select
+                                name="district"
+                                className="input-field"
+                                value={formData.district}
+                                onChange={handleDistrictChange}
+                                disabled={!formData.city}
+                            >
+                                <option value="">Chọn Quận/Huyện</option>
+                                {districts.map((district) => (
+                                    <option key={district.code} value={district.name}>
+                                        {district.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <select
+                                name="ward"
+                                className="input-field"
+                                value={formData.ward}
+                                onChange={handleInputChange}
+                                disabled={!formData.district}
+                            >
+                                <option value="">Chọn Phường/Xã</option>
+                                {wards.map((ward) => (
+                                    <option key={ward.code} value={ward.name}>
+                                        {ward.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <textarea
+                                name="specificAddress"
+                                placeholder="Địa chỉ cụ thể"
+                                className="input-field"
+                                rows="3"
+                                value={formData.specificAddress}
+                                onChange={handleInputChange}
+                            ></textarea>
+                            <label className="default-checkbox">
+                                <input
+                                    type="checkbox"
+                                    checked={isDefault}
+                                    onChange={(e) => setIsDefault(e.target.checked)}
+                                />
+                                Đặt làm địa chỉ mặc định
+                            </label>
+                            <div className="form-buttons">
+                                <button
+                                    type="button"
+                                    className="back-button"
+                                    onClick={() => setShowAddAddressForm(false)}
+                                >
+                                    Quay lại
+                                </button>
+                                <button type="submit" className="submit-button">
+                                    Hoàn thành
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                ) : (
+                    <div className="address-list">
+                        <div className="address-header">
+                            <h2 className="profile-title">Địa chỉ của tôi</h2>
+
+                            <button
+                                className="add-address-button"
+                                onClick={() => handleAddOrUpdateAddress()}
+                            >
+                                + Thêm địa chỉ mới
+                            </button>
+                        </div>
+                        <hr />
+                        <div className="user-info">
+                            <p>
+                                <strong style={{ marginRight: '30px' }}>{formData.name}</strong> {formData.phone}
+                            </p>
+                        </div>
+                        {addresses.map((address) => (
+                            <div key={address.ma_dia_chi} className="address-item">
+                                <p>{address.ten_dia_chi}</p>
+                                <div className="address-actions">
+                                    <span
+                                        className="update-action"
+                                        onClick={() => handleAddOrUpdateAddress(address)}
+                                    >
+                                        Chỉnh sửa
+                                    </span>
+                                    <span
+                                        className="delete-action"
+                                        onClick={() => handleDeleteAddress(address.ma_dia_chi)}
+                                    >
+                                        Xóa
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
         </div>
     );
 };

@@ -1,60 +1,32 @@
-/* Định dạng phần Tabs (Các trạng thái đơn hàng) */
-.parent{
-    width: 1200px;
-    margin: 0 auto;
+.orderContainer{
+    position: relative;
 }
 
 .orderTabs {
-    margin-top: 20px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 2px solid #ddd;
+    margin: -10px;
 }
 
 .buttonDonHang {
     width: 100%;
     background: none;
-    border: none;
+    border-bottom: 2px solid #ededed !important;
     padding: 10px 15px;
     font-size: 14px;
     color: #666;
     cursor: pointer;
-    transition: all 0.3s ease;
+    font-size: 16px;
 }
 
 .buttonDonHang:hover {
-    color: #000;
+    color: #d64831;
 }
 
 .active {
-    color: red;
-    font-weight: bold;
-    border-bottom: 2px solid red;
+    color: #d64831;
+    border-bottom: 2px solid #d64831 !important;
 }
-
-
-.buttonDonHang {
-    padding: 10px 20px;
-    font-size: 14px;
-    color: #333;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: white;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out; /* Hiệu ứng mượt */
-}
-
-.buttonDonHang:hover {
-    background-color: #f0f0f0;
-    border-color: #bbb;
-}
-
-.buttonDonHang.active {
-    background-color: #ff9800;
-    color: white;
-    border-color: #ff9800;
-}
-
 
 /* Định dạng cho danh sách đơn hàng */
 .orderList {
@@ -62,25 +34,35 @@
 }
 
 .orderDetailItem {
-
-    padding:  15px;
+    /* padding:  15px; */
     margin-bottom: 15px;
     background-color: #fff;
-    border-radius: 5px;
     border: 1px solid #f0f0f0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     width: 100%;
     height: auto;
 }
 
 .productImage {
-    width: 120px;
-    height: 120px;
+    width: 60px;
+    height: 80px;
     object-fit: cover;
-    margin-right: 15px;
 }
-
-
+.orderDetailBodyInfo p {
+    color: #949494;
+}
+.orderDetailBodyGiaSoLuong{
+    display: flex;
+    align-items: center;
+}
+.orderDetailBodyGiaSoLuong p{
+    color: #e0503a;
+}
+.orderDetailBodyGiaSoLuong del{
+    color: #c1c1c1;
+    font-size: 15px;
+    margin-right: 5px;
+}
 /* 
 h4 {
     font-size: 16px;
@@ -98,6 +80,10 @@ p {
     justify-content: space-between;
     align-items: center;
 }
+.orderDetailStatus p{
+    color: #ed4d2d;
+    text-transform: uppercase;
+}
 
 .cancelButton {
     background-color: #cc2020;
@@ -107,7 +93,6 @@ p {
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
-    transition: all 0.3s ease;
 }
 
 .cancelButton:hover {
@@ -121,7 +106,6 @@ p {
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
-    transition: all 0.3s ease;
 }
 .confirmOrderButton :hover{
     background-color: #333dc9;
@@ -134,7 +118,6 @@ p {
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
-    transition: all 0.3s ease;
     margin-left: 20px;
 }
 .returnmoneyButton :hover{
@@ -148,7 +131,6 @@ p {
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
-    transition: all 0.3s ease;
 }
 .rateButton :hover{
     background-color: #e65c00;
@@ -203,7 +185,6 @@ p {
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    transition: all 0.3s ease;
 }
 
 button:hover {
@@ -250,22 +231,31 @@ button:hover {
     align-items: center;
 }
 .orderDetailHeaderM{
-    margin-bottom: 20px;
+    padding:  15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e8e8e8;
 }
 .orderDetailHeader  a{
     font-size: 16px;
 }
 .orderDetailBodyM{
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
+    margin-top: 12px;
+    padding:  15px;
 }
 .orderDetailBody{
     display: flex;
+    width: 80%;
 }
 .orderDetailFooter{
     display: flex;
     justify-content: flex-end;
+}
+.orderDetailFooter button{
+    margin-top: 15px;
 }
 
 .confirmCancel {
@@ -280,4 +270,104 @@ button:hover {
     padding: 5px 10px;
     border-radius: 5px;
     color: white;
+}
+
+.donhang_search{
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    margin-top: 30px;
+    position: relative;
+}
+.donhang_search_icon{
+    font-size: 18px;
+    color: #333;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.donhang_search_input{
+    width: 100%;
+    height: 100%;
+    background-color: #ececec;
+    color: #000000;
+    font-size: 16px;
+    padding: 0 20px 0 40px;
+    outline: none;
+}
+.orderDetailHeaderShop{
+    display: flex;
+    align-items: center;
+}
+.orderDetailHeaderShop p{
+    font-size: 17px;
+    margin-right: 22px;
+}
+.orderDetailHeaderShop span{
+    padding: 0 12px;
+    height: 26px;
+    line-height: 2.2;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.orderDetailHeaderShop span:nth-child(2){
+    background-color: #ed4d2d;
+    color: #fff;
+    border: 1px solid #ed4d2d !important;
+    margin-right: 12px;
+}
+.orderDetailHeaderShop span:nth-child(3){
+    background-color: #fff;
+    color: #777;
+    border: 1px solid #e0e0e0 !important;
+}
+.orderDetailHeaderShop span:hover{
+    filter: brightness(0.9);
+}
+.iconShop{
+    margin-right: 4px;
+}
+
+.orderDetailFooterM{
+    border-top: 1px dashed #ccc;
+    background-color: #fffefa;
+    text-align: right;
+    padding:  15px;
+    margin-top: 15px;
+    /* padding-top: 20px; */
+
+}
+
+.orderDetailFooterMMoney span{
+    color: #ed4d2d;
+    font-size: 25px;
+}
+
+.orderDetailFooter button{
+    font-size: 15px;
+}
+
+.orderDetailFooter button:nth-child(1){
+    background-color: #ed4d2d;
+    color: #fff;
+    border: 1px solid #cc2020;
+    padding: 10px 50px;
+}
+.orderDetailFooter button:nth-child(1):hover{
+    background-color: #dd2f0c;
+}
+.orderDetailFooter button:nth-child(2),
+.orderDetailFooter button:nth-child(3),
+.orderDetailFooter button:nth-child(4){
+    background-color: #fff;
+    color: #777f86;
+    border: 1px solid #e5e5e5 !important;
+    padding: 10px 20px;
+}
+.orderDetailFooter button:nth-child(2):hover,
+.orderDetailFooter button:nth-child(3):hover,
+.orderDetailFooter button:nth-child(4):hover{
+    background-color: #f1f1f17c;
+    color: #3a3a3a;
 }

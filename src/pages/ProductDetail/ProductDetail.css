@@ -3,6 +3,7 @@
 .product-detail {
     width: 1200px;
     margin: 20px auto;
+    margin-top: 20px !important;
     font-family: Arial, sans-serif;
 }
 
@@ -30,7 +31,7 @@
 }
 
 .product-info h1 {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: bold;
     color: #333;
     font-family: 'Montserrat', sans-serif;
@@ -839,4 +840,27 @@ td {
     border-radius: 3px;
     font-size: 15px;
     margin-right: 20px;
+}
+.product-sol-img{
+    display: flex;
+    align-items: center;
+}
+.product-sol-img img{
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    margin-right: 10px
+}
+.product-sol-img p{
+    /* color: #f3452e; */
+    font-size: 32px;
+    /* font-weight: 600; */
+    color: #ff7538;
+}
+.product-sol-img span{
+    width: 17px;
+    height: 3px;
+    border-radius: 3px;
+    margin: 0 10px; 
+    background-color: #d28d59;
 }

@@ -10,6 +10,7 @@
   border-top: 1px solid #ccc;
 }
 
+
 .footerContainer {
   display: flex;
   justify-content: space-between;
@@ -48,6 +49,9 @@
 .header {
   font-family: Arial, sans-serif;
   width: 1200px;
+  /* background-color: #007bff; */
+  height: 100px;
+  line-height: 30px;
   margin: 0 auto;
 }
 
@@ -59,21 +63,20 @@ span {
 /* Top bar */
 .toppp {
   width: 100%;
-  background-color: #f5f5f5;
+  /* background-color: #e7e7e7; */
+  background: linear-gradient(to bottom, #f5402d, #fe6033);
 }
 
 .marginHandle {
-
   width: 1200px;
   margin: 0 auto;
-  height: 20px;
-  padding: 10px 20px;
-  padding-bottom: 24px !important;
+  padding: 10px 0;
+  /* padding-bottom: 24px !important; */
   display: flex;
-  justify-content: space-between;
-  padding: 10px 20px;
-  font-size: 12px;
   align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+
 }
 
 /* .topBar {} */
@@ -86,7 +89,7 @@ span {
 .help span,
 .userOptions span {
   /* margin-right: 20px; */
-  color: #777;
+  color: #fff;
   font-size: 14px !important;
   padding: 5px 14px !important;
 }
@@ -117,8 +120,8 @@ span {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
-  background-color: #f8f8f8;
+  /* padding: 10px 20px; */
+  /* background-color: #f5402d; */
   /* border-bottom: 1px solid #ddd; */
   border-top: 2px solid #fff;
 }
@@ -143,10 +146,12 @@ span {
   height: 45px;
   max-width: 500px;
   font-size: 14px !important;
+  background-color: #ffffff;
+  border: 2px solid #f25821;
 }
 
 .searchButton {
-  background-color: #fff;
+  background-color: transparent;
   border: none;
   padding: 7px;
   cursor: pointer;
@@ -156,7 +161,7 @@ span {
 }
 
 .css_button {
-  color: #fbc2af;
+  color: #f87144;
   font-size: 18px;
 }
 
@@ -472,14 +477,36 @@ span {
 }
 
 .wallet {
-  border: 1px solid #77777784;
+  border: 1px solid #fff;
   padding: 5px 15px;
   border-radius: 5px;
   font-size: 14px;
+  color: #fff;
 }
-
+.header_fixed{
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: auto;
+  background-color: #ffffff;
+  box-shadow: 0 0 3px #646464;
+  z-index: 99999999999;
+}
+.header_no_fixed{
+  position: relative;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: auto;
+  background-color: #ffffff;
+  box-shadow: 0 0 3px #646464;
+  z-index: 99999999999;
+}
 .parent {
-  margin-top: 20px;
+  width: 100%;
 }
 
 .pagination {
@@ -523,9 +550,11 @@ span {
   padding: 11px 5px;
   width: auto;
   height: 45px;
-  background-color: #ffffff !important;
+  background-color: #f25821 !important;
   margin-right: 3px;
   outline: none;
+  color: #eaeaea;
+  border-radius: 3px;
 }
 
 .floatL {

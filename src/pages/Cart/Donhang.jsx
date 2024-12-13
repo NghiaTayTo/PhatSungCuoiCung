@@ -5,6 +5,8 @@ import axios from 'axios';
 import styles from './Donhang.module.css';
 import RatingForm from '../Rating/RatingForm';
 import ReportForm from '../Rating/Report';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCommentDots, faSearch, faStore } from '@fortawesome/free-solid-svg-icons';
 
 const DonHang = () => {
     const [orderDetails, setOrderDetails] = useState([]);
@@ -135,30 +137,12 @@ const DonHang = () => {
         setShowFormReport(false)
     }
 
-
-
-
-
-
-
-
     return (
-        <div className={styles.parent}>
-            <HeaderUser />
-            <div className={styles.orderContainer}>
-                {/* <h2 style={{ fontSize: '25px', marginTop: '20px', textAlign: 'center' }} className={styles.orderTitle}>Chi Tiết Đơn Hàng Của Tôi</h2> */}
+        <div>
+            {/* <HeaderUser/> */}
 
-                {/* <div className={styles.orderTabs}>
-                    {["Tất cả", "Đang xử lý", "Đang vận chuyển", "Đã giao hàng", "Khách hàng hủy", "Yêu cầu Trả hàng / Hoàn tiền"].map(status => (
-                        <button
-                            key={status}
-                            className={`${styles.buttonDonHang} ${activeStatus === status ? styles.active : ''}`}
-                            onClick={() => filterOrderDetails(status)}
-                        >
-                            {status}
-                        </button>
-                    ))}
-                </div> */}
+            <div className={styles.orderContainer}>
+
                 <div className={styles.orderTabs}>
                     {["Tất cả", "Đang xử lý", "Đang vận chuyển", "Đã giao hàng", "Khách hàng hủy", "Yêu cầu Trả hàng / Hoàn tiền"].map(status => (
                         <button
@@ -171,17 +155,31 @@ const DonHang = () => {
                     ))}
                 </div>
 
+                <div className={styles.donhang_search}>
+                    <FontAwesomeIcon className={styles.donhang_search_icon} icon={faSearch}></FontAwesomeIcon>
+                    <input
+                        className={styles.donhang_search_input}
+                        placeholder='Bạn có thể tìm kiếm theo tên Shop, ID đơn hàng hoặc Tên Sản Phẩm'
+                    />
+                </div>
+
 
                 <div className={styles.orderList}>
                     {filteredOrderDetails.map((detail, index) => (
                         <div key={detail.ma_don_hang_chi_tiet} className={styles.orderDetailItem}>
                             <div className={styles.orderDetailHeaderM}>
                                 <div className={styles.orderDetailHeader}>
-                                    <div>
-                                        <a href='#'>Liên hệ với cửa hàng</a>
+                                    <div className={styles.orderDetailHeaderShop}>
+                                        <p>ZUTEE</p>
+                                        <span>
+                                            <FontAwesomeIcon className={styles.iconShop} icon={faCommentDots}></FontAwesomeIcon>
+                                            Chat</span>
+                                        <span>
+                                            <FontAwesomeIcon className={styles.iconShop} icon={faStore}></FontAwesomeIcon>
+                                            Xem Shop</span>
                                     </div>
                                     <div className={styles.orderDetailStatus}>
-                                        <p style={{ fontSize: '16px' }}>Trạng thái: {detail.trang_thai?.ten_trang_thai || "Không xác định"}</p>
+                                        <p style={{ fontSize: '16px' }}>{detail.trang_thai?.ten_trang_thai || "Không xác định"}</p>
                                     </div>
                                 </div>
 
@@ -189,17 +187,22 @@ const DonHang = () => {
                             <div className={styles.orderDetailBodyM}>
                                 <div className={styles.orderDetailBody}>
                                     <div style={{ marginRight: '20px' }}><img src={detail.san_pham?.anh_san_pham} alt={detail.san_pham?.ten_san_pham} className={styles.productImage} /></div>
-                                    <div>
-                                        <h4 style={{ marginBottom: '20px', fontSize: '20px' }}>{detail.san_pham?.ten_san_pham}</h4>
-                                        <p style={{ fontSize: '16px' }}>Số lượng: {detail.so_luong}</p>
+                                    <div className={styles.orderDetailBodyInfo}>
+                                        <h4 style={{ marginBottom: '10px', fontSize: '17px' }}>{detail.san_pham?.ten_san_pham}</h4>
+                                        <p style={{ fontSize: '16px' }}>x{detail.so_luong}</p>
                                     </div>
                                 </div>
-                                <div>
-                                     <p style={{ fontSize: '16px' }}>Thành tiền: {(detail.thanh_tien).toLocaleString()} đ</p>
+                                <div className={styles.orderDetailBodyGiaSoLuong}>
+                                    {/* <p style={{ fontSize: '16px' }}>₫{(detail.thanh_tien).toLocaleString()}</p> */}
+                                    <del>₫{(detail.gia * detail.so_luong).toLocaleString()}</del>
+                                    <p style={{ fontSize: '15px' }}>₫{(detail.gia * detail.so_luong).toLocaleString()}</p>
                                 </div>
 
                             </div>
                             <div className={styles.orderDetailFooterM}>
+                                <div className={styles.orderDetailFooterMMoney}>
+                                    <p style={{ fontSize: '16px' }}>Thành tiền: <span>₫{(detail.thanh_tien).toLocaleString()}</span></p>
+                                </div>
                                 <div className={styles.orderDetailFooter}>
                                     {detail.trang_thai?.ma_trang_thai === 11 && (
                                         <button className={styles.cancelButton} onClick={() => handleCancelOrderDetail(detail.ma_don_hang_chi_tiet)}>Huỷ đơn hàng</button>
@@ -212,7 +215,6 @@ const DonHang = () => {
                                             <button onClick={() => handleRateClick(detail.ma_don_hang_chi_tiet, detail.san_pham.ma_san_pham)} className={styles.rateButton}>
                                                 Đánh giá
                                             </button>
-
                                         </>
                                     )}
 
@@ -250,7 +252,6 @@ const DonHang = () => {
                     </div>
                 )}
             </div>
-            <FooterUser />
             {showForm && (
                 <RatingForm
                     onClose={handleCloseForm}

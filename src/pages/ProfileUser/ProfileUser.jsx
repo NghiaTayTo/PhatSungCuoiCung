@@ -4,6 +4,13 @@ import FooterUser from '../Component/FooterUser';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './ProfileUser.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileInvoiceDollar, faLocationDot, faLockOpen, faPen, faTicket, faUnlock, faUser } from '@fortawesome/free-solid-svg-icons';
+import MyInformation from './MyInformation';
+import AddressUser from './AddressUser';
+import ChangePassword from './ChangePass';
+import KhoVoucher from './KhoVoucher';
+import DonHang from '../Cart/Donhang';
 
 const ProfileUser = () => {
     const [userData, setUserData] = useState({
@@ -13,6 +20,7 @@ const ProfileUser = () => {
         so_dt: '',           // Số điện thoại
         ngay_sinh: '',       // Ngày sinh
     });
+    const [key, setKey] = useState(1);
     const [selectedImage, setSelectedImage] = useState(null);
 
     // Hàm lấy dữ liệu người dùng từ API
@@ -29,106 +37,59 @@ const ProfileUser = () => {
         fetchUserData();
     }, []);
 
-    // Hàm xử lý thay đổi dữ liệu trong form
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setUserData({
-            ...userData,
-            [name]: value,
-        });
-    };
-
-    // Hàm xử lý thay đổi ảnh đại diện
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setSelectedImage(URL.createObjectURL(file));
-        }
-    };
-
-    // Hàm xử lý cập nhật hồ sơ
-    const handleSaveProfile = async (e) => {
-        e.preventDefault();
-        try {
-            const id_tai_khoan = sessionStorage.getItem('id_tai_khoan'); // Lấy ID tài khoản từ session storage
-            await axios.put(`http://localhost:8080/api/taikhoan/profile/${id_tai_khoan}`, userData);
-            alert("Cập nhật hồ sơ thành công!");
-        } catch (error) {
-            console.error("Lỗi khi cập nhật hồ sơ:", error);
-            alert("Đã xảy ra lỗi khi cập nhật hồ sơ.");
-        }
+    const handleClickOption = (key) => {
+            setKey(key);
     };
 
     return (
-        <div className="profile-page">
+        <div className="profile-page" >
             {/* Sử dụng HeaderUser */}
             <HeaderUser />
 
-            <section className="profile-section">
+            <section className="profile-section" >
                 <div className="profile-container">
                     <div className="profile-sidebar">
-                        <h3>Tài khoản của tôi</h3>
+                        <div className="profile-sidebar-user">
+                            <img src='/images/avtadmin.jpg' />
+                            <div className="profile-sidebar-user-text">
+                                <strong>Phan Trong Nghiax đẹp trai</strong>
+                                <div>
+                                    <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
+                                    <p>Sửa hồ sơ</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <ul>
-                            <li><Link to="/address" className="sidebar-link">Địa chỉ</Link></li>
-                            <li><Link to="/change-pass" className="sidebar-link">Đổi mật khẩu</Link></li>
-                            <li><Link to="/shopping" className="sidebar-link">Đơn mua</Link></li>
+                            <li onClick={() => handleClickOption(1)} className={key === 1 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faUser}></FontAwesomeIcon>Tài khoản của tôi</li>
+                            <li onClick={() => handleClickOption(2)} className={key === 2 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faLocationDot}></FontAwesomeIcon>Địa chỉ</li>
+                            <li onClick={() => handleClickOption(3)} className={key === 3 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faUnlock}></FontAwesomeIcon>Đổi mật khẩu</li>
+                            <li onClick={() => handleClickOption(4)} className={key === 4 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faFileInvoiceDollar}></FontAwesomeIcon>Đơn mua</li>
+                            <li onClick={() => handleClickOption(5)} className={key === 5 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faTicket}></FontAwesomeIcon>Kho Voucher</li>
+                            {/* <li><Link to="/address" className="sidebar-link"><FontAwesomeIcon icon={faLocationDot}></FontAwesomeIcon>Địa chỉ</Link></li>
+                            <li><Link to="/change-pass" className="sidebar-link"><FontAwesomeIcon icon={faLockOpen}></FontAwesomeIcon>Đổi mật khẩu</Link></li>
+                            <li><Link to="/shopping" className="sidebar-link"><FontAwesomeIcon icon={faFileInvoiceDollar}></FontAwesomeIcon>Đơn mua</Link></li> */}
                         </ul>
                     </div>
                     <div className="profile-content">
-                        <h2 className="profile-title">Hồ sơ của tôi</h2>
-                        <p className="profile-subtitle">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
-                        <form className="profile-form" onSubmit={handleSaveProfile}>
-                            <div className="profile-form-group">
-                        
-                            </div>
-                            <div className="profile-form-group">
-                                <label>Họ và tên</label>
-                                <input
-                                    type="text"
-                                    name="ho_ten"
-                                    value={userData.ho_ten}
-                                    onChange={handleInputChange}
-                                    className="profile-input"
-                                />
-                            </div>
-                            <div className="profile-form-group">
-                                <label>Email</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={userData.email}
-                                    readOnly
-                                    className="profile-input"
-                                />
-                            </div>
-                            <div className="profile-form-group">
-                                <label>Số điện thoại</label>
-                                <input
-                                    type="text"
-                                    name="so_dt"
-                                    value={userData.so_dt}
-                                    onChange={handleInputChange}
-                                    className="profile-input"
-                                />
-                            </div>
-                            <div className="profile-form-group">
-                               
-                            </div>
-                            <div className="profile-form-group">
-                                <label>Ngày sinh</label>
-                                <input
-                                    type="date"
-                                    name="ngay_sinh"
-                                    value={userData.ngay_sinh}
-                                    onChange={handleInputChange}
-                                    className="profile-input"
-                                />
-                            </div>
-                            <button type="submit" className="save-button">Lưu</button>
-                        </form>
+                        {
+                            key === 1 && <><MyInformation /></>
+                        }
+                        {
+                            key === 2 && <><AddressUser/></>
+                        }
+                        {
+                            key === 3 && <><ChangePassword/></>
+                        }
+                        {
+                            key === 4 && <><DonHang/></>
+                        }
+                        {
+                            key === 5 && <><KhoVoucher/></>
+                        }
                     </div>
                 </div>
-                        
+
             </section>
 
             <FooterUser />

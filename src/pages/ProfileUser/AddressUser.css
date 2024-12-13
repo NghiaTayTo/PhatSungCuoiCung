@@ -18,7 +18,7 @@
 }
 
 .add-address-button {
-    background-color: #e89922;
+    background-color: #ed4d2d;
     color: white;
     border: none;
     padding: 8px 12px;
@@ -28,21 +28,22 @@
 }
 
 .add-address-button:hover {
-    background-color: #d88b1f;
+    background-color: #ff6b6b;
 }
 
 .address-list .address-item {
-    background-color: #f9f9f9;
+    background-color: #ffeee79d;
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 4px;
     position: relative;
-}
+    border: 1px solid #f47157d0;
+    font-size: 17px;
+}   
 
 .address-item p {
     margin: 5px 0;
-    color: #333;
-    font-size: 14px;
+    color: #ed4d2d;
 }
 
 .default-button {
@@ -71,7 +72,6 @@
 }
 
 .new-address-form {
-    background-color: #f9f9f9;
     /* padding: 20px; */
     border-radius: 4px;
     max-width: 600px;   
@@ -122,7 +122,7 @@
 }
 
 .submit-button {
-    background-color: #e89922;
+    background-color: #ed4d2d !important;
     color: white;
     padding: 8px 12px;
     font-size: 14px;
@@ -133,4 +133,8 @@
 
 .submit-button:hover {
     background-color: #d88b1f;
+}
+.user-info{
+    font-size: 18px;
+    margin-bottom: 20px;
 }

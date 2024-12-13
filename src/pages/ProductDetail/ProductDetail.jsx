@@ -70,7 +70,7 @@ const ProductDetail = () => {
                 const productData = await getProductByMaSPUser(id); // API lấy chi tiết sản phẩm
                 setProduct(productData);
                 const idStore = productData.ma_cua_hang;
-                
+
 
                 const count = await countCommentByBookID(id);
                 setCountDanhGia(count);
@@ -106,8 +106,8 @@ const ProductDetail = () => {
                 const listComments = reviewsResponse.data;
 
                 const listData = Array.isArray(listComments)
-                ? listComments.slice(indexOfFirstItem, indexOfLastItem)
-                : [];
+                    ? listComments.slice(indexOfFirstItem, indexOfLastItem)
+                    : [];
                 setCurrentProducts(listData);
 
 
@@ -302,26 +302,26 @@ const ProductDetail = () => {
     }
 
 
-    const voucherRows = listVoucher.map((voucher, index) => {
+    // const voucherRows = listVoucher.map((voucher, index) => {
 
-        return (
-            <div key={index} className='list-voucher-item'>
-                <div className='list-voucher-item-info'>
-                    <div className='list-voucher-item-info-info'>
-                        <p>{voucher.ten_voucher}</p>
-                        <p>Giảm {formatMoney(voucher.giam_gia)}</p>
-                        <p>Đơn tối thiểu {formatMoney(voucher.gia_ap_dung)}</p>
-                        <p>Số lần dùng: {voucher.so_lan_dung}</p>
-                        <p>HSD: {voucher.ngay_het_han}</p>
-                    </div>
-                    <div className='list-voucher-item-info-button'>
-                        <button>LƯU</button>
-                        <button>MUA NGAY</button>
-                    </div>
-                </div>
-            </div>
-        )
-    });
+    //     return (
+    //         <div key={index} className='list-voucher-item'>
+    //             <div className='list-voucher-item-info'>
+    //                 <div className='list-voucher-item-info-info'>
+    //                     <p>{voucher.ten_voucher}</p>
+    //                     <p>Giảm {formatMoney(voucher.giam_gia)}</p>
+    //                     <p>Đơn tối thiểu {formatMoney(voucher.gia_ap_dung)}</p>
+    //                     <p>Số lần dùng: {voucher.so_lan_dung}</p>
+    //                     <p>HSD: {voucher.ngay_het_han}</p>
+    //                 </div>
+    //                 <div className='list-voucher-item-info-button'>
+    //                     <button>LƯU</button>
+    //                     <button>MUA NGAY</button>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     )
+    // });
 
     const fetchAllRatingData = async () => {
         try {
@@ -330,8 +330,8 @@ const ProductDetail = () => {
             );
             const data = reviewsResponse.data;
             const listData = Array.isArray(data)
-            ? data.slice(indexOfFirstItem, indexOfLastItem)
-            : [];
+                ? data.slice(indexOfFirstItem, indexOfLastItem)
+                : [];
             setReviews(data);
             setCurrentProducts(listData);
             const totalProducts = data.length;
@@ -346,8 +346,8 @@ const ProductDetail = () => {
         try {
             const listComment = await searchCommentByBookIDAndRating(id, starNumber);
             const listData = Array.isArray(listComment)
-            ? listComment.slice(indexOfFirstItem, indexOfLastItem)
-            : [];
+                ? listComment.slice(indexOfFirstItem, indexOfLastItem)
+                : [];
             setReviews(listComment);
             setCurrentProducts(listData);
             const totalProducts = listComment.length;
@@ -381,12 +381,53 @@ const ProductDetail = () => {
         }
     };
 
+    const handleSaveVoucher = async (voucher) => {
+        try {
+            const payload = {
+                id_voucher: voucher.id_voucher, // ID của voucher
+                id_tai_khoan: user.id_tai_khoan, // ID tài khoản người dùng, thay bằng giá trị thực tế
+            };
+    
+            const response = await axios.post('http://localhost:8080/api/v1/save-voucher', payload, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            console.log('Voucher saved successfully:', response.data);
+            alert('Lưu voucher thành công!');
+        } catch (error) {
+            console.error('Error saving voucher:', error);
+            alert('Lưu voucher thất bại!');
+        }
+    };
+    
+    const voucherRows = listVoucher.map((voucher, index) => {
+        return (
+            <div key={index} className="list-voucher-item">
+                <div className="list-voucher-item-info">
+                    <div className="list-voucher-item-info-info">
+                        <p>{voucher.ten_voucher}</p>
+                        <p>Giảm {formatMoney(voucher.giam_gia)}</p>
+                        <p>Đơn tối thiểu {formatMoney(voucher.gia_ap_dung)}</p>
+                        <p>Số lần dùng: {voucher.so_lan_dung}</p>
+                        <p>HSD: {voucher.ngay_het_han}</p>
+                    </div>
+                    <div className="list-voucher-item-info-button">
+                        <button onClick={() => handleSaveVoucher(voucher)}>LƯU</button>
+                        <button>MUA NGAY</button>
+                    </div>
+                </div>
+            </div>
+        );
+    })
+
 
     if (!product || !storeInfo) return <Loading />;
 
     return (
         <div className={styles.parent}>
-            <HeaderUser />
+            <HeaderUser fixed={false}/>
 
             <section className="product-detail">
                 {/* Thông tin chính của sản phẩm */}
@@ -410,7 +451,13 @@ const ProductDetail = () => {
                         </div>
                         <p className="product-author"><span>Tác giả:</span>{product.tac_gia || "N/A"} </p>
                         <p className="product-categoryy"><span>Thể loại:</span>{product.the_loai?.ten_the_loai || "N/A"} </p>
-                        <p className="product-priceD">{product.gia.toLocaleString()} đ</p>
+
+                        <div className='product-sol-img'>
+                            <p className="product-priceD">{product.gia.toLocaleString()} đ</p>
+                            <span></span>
+                            <img src='/images/solana.png' alt='solana icon' />
+                            <p>{product.gia_sol || 0} SOL</p>
+                        </div>
 
                         {
                             product.con_hang > 0 ? (

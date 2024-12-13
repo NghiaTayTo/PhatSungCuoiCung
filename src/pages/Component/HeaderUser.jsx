@@ -10,7 +10,7 @@ import { useCart } from '../../context/cartContext';
 import { useNavigate } from 'react-router-dom';
 import RechargeForm from '../Wallet/wallet';  // Import RechargeForm
 
-const HeaderUser = ({ logout, onSearchResults }) => {
+const HeaderUser = ({ logout, onSearchResults, fixed }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isDropdownOpen1, setIsDropdownOpen1] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
@@ -125,7 +125,7 @@ const HeaderUser = ({ logout, onSearchResults }) => {
 
 
     return (
-        <div className={styles.parent}>
+        <div className={fixed === true ? styles.header_fixed : styles.header_no_fixed}>
             <div className={styles.toppp}>
                 <div className={styles.w100}>
                     <div className={styles.marginHandle}>
@@ -276,7 +276,7 @@ const HeaderUser = ({ logout, onSearchResults }) => {
                 </div>
 
                 {/* Navigation Bar */}
-                <nav className={styles.navBar}>
+                {/* <nav className={styles.navBar}>
                     <div
                         className={styles.navItem}
                         onMouseEnter={() => setShowCategories(true)}
@@ -321,7 +321,7 @@ const HeaderUser = ({ logout, onSearchResults }) => {
                         Chương trình khuyến mãi
                     </div>
                     <div className={styles.sale}>Sale Sốc Xả Kho</div>
-                </nav>
+                </nav> */}
             </header>
 
             {/* Modal cho Form Nạp Tiền */}

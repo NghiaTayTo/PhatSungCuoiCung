@@ -12,6 +12,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";  
 import ProductFormSlider from '../../utils/Order/ProductFormSlider';
+import { TRUE } from 'sass';
 
 const HomeUserIndex = () => {
     const [products, setProducts] = useState([]); // Toàn bộ sản phẩm
@@ -151,11 +152,18 @@ const HomeUserIndex = () => {
     };
 
 
+    const [hoveredProduct, setHoveredProduct] = useState(null);
+
+    const handleMouseEnter = (product) => {
+        setHoveredProduct(product);
+    };
+
 
     return (
         <div className={styles.parent}>
             <HeaderUser
                 onSearchResults={handleSearchResults} // Truyền callback xử lý kết quả tìm kiếm
+                fixed={true}
             />
 
             {/* Banner */}
@@ -208,7 +216,7 @@ const HomeUserIndex = () => {
                     <img className={styles.bannerImg} src="/images/banner_3.jpg" alt="Banner" />
                 </div>
 
-                <div className={styles.listCategoryHay}>
+                {/* <div className={styles.listCategoryHay}>
                     <div className={styles.listCategoryHayItem}>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <h3>Sách bán chạy</h3>
@@ -220,7 +228,7 @@ const HomeUserIndex = () => {
                         <strong>350,000đ</strong>
                         <div className={styles.listCategoryHayItemSol}>
                             <img src='./images/solana.png' alt='solana icon' />
-                            <p>0.1 SOL</p>
+                            <p>{product.gia_sol || 0} SOL</p>
                         </div>
                     </div>
                     <div className={styles.listCategoryHayItem}>
@@ -265,7 +273,7 @@ const HomeUserIndex = () => {
                             <p>0.1 SOL</p>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className={styles.listBook}>
                     <div className={styles.listBookHeader}>
@@ -309,7 +317,7 @@ const HomeUserIndex = () => {
                                         </p>
                                         <div className={styles.listCategoryHayItemSol}>
                                             <img src='./images/solana.png' alt='solana icon' />
-                                            <p>0.1 SOL</p>
+                                            <p>{product.gia_sol || 0} SOL</p>
                                         </div>
                                     </div>
                                 </div>
@@ -346,7 +354,7 @@ const HomeUserIndex = () => {
                                         </p>
                                         <div className={styles.listCategoryHayItemSol}>
                                             <img src='./images/solana.png' alt='solana icon' />
-                                            <p>0.1 SOL</p>
+                                            <p>{product.gia_sol || 0} SOL</p>
                                         </div>
                                     </div>
 
@@ -363,7 +371,7 @@ const HomeUserIndex = () => {
                                                     </p>
                                                     <div className={styles.listCategoryHayItemSol}>
                                                         <img src='./images/solana.png' alt='solana icon' />
-                                                        <p>0.1 SOL</p>
+                                                        <p>{product.gia_sol || 0} SOL</p>
                                                     </div>
                                                 </div>
                                                 <button className={styles.addCart}>THÊM VÀO GIỎ HÀNG</button>
@@ -396,7 +404,10 @@ const HomeUserIndex = () => {
                     <div className={styles.bangXepHangContent}>
                         <div className={styles.bangXepHangProduct}>
                             {currentProducts.slice(0, 5).map((product, index) => (
-                                <div key={index} className={styles.bangXepHangProductItem}>
+                                <div key={index} 
+                                className={styles.bangXepHangProductItem}
+                                onMouseEnter={() => handleMouseEnter(product)}
+                                >
                                     <h3 className={styles.xepHang}>0{index + 1}</h3>
                                     <img src={product.anh_san_pham}
                                         alt={product.ten_san_pham} />
@@ -409,7 +420,7 @@ const HomeUserIndex = () => {
                                             </p>
                                             <div className={styles.listCategoryHayItemSol}>
                                                 <img src='./images/solana.png' alt='solana icon' />
-                                                <p>0.1 SOL</p>
+                                                <p>{product.gia_sol || 0} SOL</p>
                                             </div>
                                         </div>
                                     </div>
@@ -468,7 +479,7 @@ const HomeUserIndex = () => {
                                         </p>
                                         <div className={styles.listCategoryHayItemSol}>
                                             <img src='./images/solana.png' alt='solana icon' />
-                                            <p>0.1 SOL</p>
+                                            <p>{product.gia_sol || 0} SOL</p>
                                         </div>
                                     </div>
 
@@ -485,7 +496,7 @@ const HomeUserIndex = () => {
                                                     </p>
                                                     <div className={styles.listCategoryHayItemSol}>
                                                         <img src='./images/solana.png' alt='solana icon' />
-                                                        <p>0.1 SOL</p>
+                                                        <p>{product.gia_sol || 0} SOL</p>
                                                     </div>
                                                 </div>
                                                 <button className={styles.addCart}>THÊM VÀO GIỎ HÀNG</button>
@@ -523,7 +534,7 @@ const HomeUserIndex = () => {
                                         </p>
                                         <div className={styles.listCategoryHayItemSol}>
                                             <img src='./images/solana.png' alt='solana icon' />
-                                            <p>0.1 SOL</p>
+                                            <p>{product.gia_sol || 0} SOL</p>
                                         </div>
                                     </div>
 
@@ -540,7 +551,7 @@ const HomeUserIndex = () => {
                                                     </p>
                                                     <div className={styles.listCategoryHayItemSol}>
                                                         <img src='./images/solana.png' alt='solana icon' />
-                                                        <p>0.1 SOL</p>
+                                                        <p>{product.gia_sol || 0} SOL</p>
                                                     </div>
                                                 </div>
                                                 <button className={styles.addCart}>THÊM VÀO GIỎ HÀNG</button>
