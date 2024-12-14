@@ -420,8 +420,7 @@ const ProductDetail = () => {
                         <p>HSD: {voucher.ngay_het_han}</p>
                     </div>
                     <div className="list-voucher-item-info-button">
-                        <button onClick={() => handleSaveVoucher(voucher)}>LƯU</button>
-                        <button>MUA NGAY</button>
+                        <button style={{marginTop: '35px'}} onClick={() => handleSaveVoucher(voucher)}>LƯU</button>
                     </div>
                 </div>
             </div>

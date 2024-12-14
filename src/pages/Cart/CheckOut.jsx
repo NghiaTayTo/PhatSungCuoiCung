@@ -16,8 +16,9 @@ const CheckOut = () => {
     const [showAddressSelector, setShowAddressSelector] = useState(false); // Điều khiển hiển thị AddressSelector
     const [buyNowProduct, setBuyNowProduct] = useState(null); // Lưu sản phẩm "Mua Ngay"
     const [user, setUser] = useState(null);
-    const [selectedDiscount, setSelectedDiscount] = useState([]);
-    // const [idCuaHang, setIdCuaHang] = useState(null);
+    const [listVoucher, setListVoucher] = useState([])
+    const [voucherSelected, setVoucherSelected] = useState({});
+    const [totalDiscount, setTotalDiscount] = useState(0);
     const navigate = useNavigate();
 
     // Load giỏ hàng từ localStorage hoặc sản phẩm "Mua Ngay" từ sessionStorage
@@ -48,7 +49,9 @@ const CheckOut = () => {
     // Hàm tạo đơn hàng và trừ tiền
     const totalAmount = checkoutCart.reduce((total, item) => total + item.gia * item.so_luong, 0);
     const shippingFee = checkoutCart.length > 1 ? totalAmount / 10 / checkoutCart.length : totalAmount / 10;
-    const grandTotal = totalAmount + (shippingFee * checkoutCart.length);
+    const grandTotal = totalAmount + (shippingFee * checkoutCart.length) - totalDiscount;
+   
+
     const createOrder = async () => {
         const userId = JSON.parse(sessionStorage.getItem('user')).id_tai_khoan;
         const addressId = address?.ma_dia_chi;
@@ -62,7 +65,7 @@ const CheckOut = () => {
         const orderDetails = checkoutCart.map(item => ({
             so_luong: item.so_luong,
             gia: item.gia,
-            thanh_tien: item.gia * item.so_luong + shippingFee,
+            thanh_tien: (item.gia * item.so_luong + shippingFee) - totalDiscount,
             san_pham: { ma_san_pham: item.ma_san_pham },
             id_voucher: item.voucher || null,
             ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu
@@ -141,17 +144,32 @@ const CheckOut = () => {
         setAddress(selectedAddress);
         sessionStorage.setItem('address', JSON.stringify(selectedAddress));
         setShowAddressSelector(false);
-
+        console.log(grandTotal)
+        
     };
 
     const [visibleFormIndex, setVisibleFormIndex] = useState(null);
 
-    const toggleForm = (index) => {
+    const toggleForm = async (index, idCuaHang) => {
+        const response = await axios.get(`http://localhost:8080/api/v1/save-voucher/${idCuaHang}`);
+        setListVoucher(response.data)
+        console.log(listVoucher)
         setVisibleFormIndex(visibleFormIndex === index ? null : index);
     };
-    const handleVoucherSelect = (discount, index) => {
-        setSelectedDiscount( discount);
-        setVisibleFormIndex(null); // Đóng form sau khi chọn
+    const onVoucherSelect = (discountValue, orderIndex) => {
+        setVoucherSelected((prev) => {
+            const updatedVouchers = {
+                ...prev,
+                [orderIndex]: discountValue // Chuyển giá trị giảm giá thành số
+            };
+            
+            // Tính tổng giảm giá
+            const total = Object.values(updatedVouchers).reduce((acc, value) => acc + value, 0);
+            setTotalDiscount(total);
+            setVisibleFormIndex(null)
+
+            return updatedVouchers;
+        });
     };
     
 
@@ -229,9 +247,9 @@ const CheckOut = () => {
                                             </div>
                                             <div className="additional-vouchers-choose">
                                                 <div className="additional-vouchers-choose-box">
-                                                    <p>-<span>₫</span>{selectedDiscount}</p> {/* Hiển thị giảm giá */}
+                                                    <p>-đ {voucherSelected[index]}</p>
                                                 </div>
-                                                <p onClick={() => toggleForm(index)}>Chọn Voucher khác</p>
+                                                <p onClick={() => toggleForm(index, product.cua_hang.ma_cua_hang)}>Chọn Voucher khác</p>
                                             </div>
                                         </div>
                                     </div>
@@ -260,14 +278,31 @@ const CheckOut = () => {
                                     </div>
 
                                     {visibleFormIndex === index && (
-                                        <div className=''>
-                                            <VoucherList
-                                                visibleFormIndex={visibleFormIndex}
-                                                index={index}
-                                                idCuaHang={product.cua_hang.ma_cua_hang || 21}
-                                                onVoucherSelect={handleVoucherSelect} // Truyền callback xuống
-                                            />
-                                        </div>
+                                       <div className="form_voucher_choose">
+                                       <h3>ZUTEE</h3>
+                                       <div className="form_voucher_choose_list">
+                                           {listVoucher.length > 0 ? (
+                                               listVoucher.map((voucher, i) => (
+                                                   <div
+                                                       key={i}
+                                                       className="form_voucher_choose_item ticket"
+                                                       onClick={() => onVoucherSelect(voucher.voucher.giam_gia,index)} // Gửi giá trị giảm giá lên cha
+                                                       style={{ cursor: 'pointer' }}
+                                                   >
+                                                       <img src={voucher.imageUrl || '/images/zutee.jpg'} alt="Voucher" />
+                                                       <div className="form_voucher_choose_item_info">
+                                                           <p>Giảm {voucher.voucher.giam_gia || '₫25k'}</p>
+                                                           <p>Đơn tối thiểu {voucher.voucher.gia_ap_dung || '₫225k'}</p>
+                                                           <p>Số lần sử dụng: {voucher.voucher.so_lan_dung || '6'}</p>
+                                                           <p>HSD: {voucher.voucher.ngay_het_han || '21/12/2024'}</p>
+                                                       </div>
+                                                   </div>
+                                               ))
+                                           ) : (
+                                               <p>Đang tải voucher...</p>
+                                           )}
+                                       </div>
+                                   </div>
                                     )}
 
 
@@ -315,7 +350,7 @@ const CheckOut = () => {
 
                             <div className="summary-item">
                                 <span>Tổng cộng Voucher giảm giá</span>
-                                <span>₫{selectedDiscount}</span>
+                                <span>₫{totalDiscount}</span>
                             </div>
                             <div className="summary-item grand-total">
                                 <span>Tổng thanh toán</span>

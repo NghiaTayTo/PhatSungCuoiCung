@@ -28,7 +28,7 @@ const VoucherList = ({ visibleFormIndex, index, idCuaHang, onVoucherSelect }) =>
                                 <div
                                     key={i}
                                     className="form_voucher_choose_item ticket"
-                                    onClick={() => onVoucherSelect(voucher.voucher.giam_gia)} // Gửi giá trị giảm giá lên cha
+                                    onClick={() => onVoucherSelect(voucher.voucher.giam_gia,index)} // Gửi giá trị giảm giá lên cha
                                     style={{ cursor: 'pointer' }}
                                 >
                                     <img src={voucher.imageUrl || '/images/zutee.jpg'} alt="Voucher" />
