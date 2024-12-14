@@ -1,33 +1,35 @@
-
-
-/* Wrapper - tạo vùng chứa cho modal */
 .wrapper {
-    position: relative;
-    z-index: 1;  /* Đảm bảo các phần tử bên ngoài không bị che khuất */
+  position: fixed; /* Chuyển từ absolute sang fixed để cố định trên màn hình */
+  z-index: 9999; /* Đảm bảo vùng chứa modal nằm trên cùng */
+  width: 100vw; /* Chiếm toàn bộ chiều rộng của màn hình */
+  height: 100vh; /* Chiếm toàn bộ chiều cao của màn hình */
+  top: 0; /* Đảm bảo bắt đầu từ mép trên */
+  left: 0; /* Đảm bảo bắt đầu từ mép trái */
 }
 
 /* Modal chính */
 .modal {
-    position: fixed; /* Đặt modal ở vị trí cố định */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Nền mờ tối */
-    z-index: 1000;  /* Đảm bảo modal hiển thị trên các phần tử khác */
+  position: fixed; /* Giữ nguyên fixed */
+  top: 0; /* Đặt modal từ mép trên */
+  left: 0; /* Đặt modal từ mép trái */
+  width: 100vw; /* Chiều rộng toàn màn hình */
+  height: 100vh; /* Chiều cao toàn màn hình */
+  display: flex; /* Đảm bảo căn giữa nội dung */
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.59); /* Nền mờ tối */
+  z-index: 10000; /* Giữ modal hiển thị trên các phần tử khác */
 }
+
 /* Modal nội dung */
 .modal1 {
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    width: 350px;
-    max-width: 90%;
-    position: relative;
-    text-align: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  width: 350px;
+  max-width: 90%; /* Giới hạn chiều rộng modal nội dung */
+  position: relative;
+  text-align: center;
 }
 
 
@@ -114,33 +116,34 @@
     min-width: 100px;
     min-height:500px;
 }
-
 /* Lớp phủ hóa đơn */
 .invoiceOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.459); /* Lớp phủ tối để làm nổi bật QR */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1100; /* Đảm bảo lớp phủ nằm trên modal */
+  position: fixed; /* Cố định trên màn hình */
+  top: 0; /* Bắt đầu từ mép trên */
+  left: 0; /* Bắt đầu từ mép trái */
+  width: 100vw; /* Chiếm toàn bộ chiều rộng màn hình */
+  height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
+  background-color: rgba(0, 0, 0, 0.45); /* Lớp phủ tối nhẹ */
+  display: flex; /* Đảm bảo căn giữa nội dung */
+  justify-content: center; /* Canh giữa theo chiều ngang */
+  align-items: center; /* Canh giữa theo chiều dọc */
+  z-index: 11001; /* Đảm bảo lớp phủ nằm trên modal hoặc các phần tử khác */
 }
+
+/* Container hình ảnh hóa đơn */
 .invoiceImageContainer {
-    width: 600px;
-    height: 500px;
-    margin: 20px auto;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: white; /* Màu nền hộp */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    
-   
-    display: flex;
+  width: 600px; /* Đặt chiều rộng cố định */
+  height: 500px; /* Đặt chiều cao cố định */
+  margin: 0; /* Loại bỏ khoảng cách bên ngoài */
+  border: 1px solid #ddd; /* Đường viền nhạt */
+  border-radius: 6px; /* Bo tròn góc hộp */
+  font-family: Arial, Helvetica, sans-serif; /* Font chữ */
+  background-color: white; /* Màu nền trắng */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+  overflow: hidden; /* Ẩn nội dung thừa */
+  display: flex; /* Thiết lập flexbox */
+  justify-content: center; /* Căn giữa nội dung bên trong */
+  align-items: center; /* Căn giữa nội dung theo chiều dọc */
 }
 .content {
   display: flex;

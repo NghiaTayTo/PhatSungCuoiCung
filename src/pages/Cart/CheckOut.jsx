@@ -8,9 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faComments, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import VoucherList from './VoucherList';
+import { getPTThanhToan } from '../../utils/API/PTThanhToanAPI';
+import { getSOL, getUSD_VND } from '../../utils/API/SolanaAPI';
+import QrCodeSolana from '../Wallet/QrCodeSolana';
 
 const CheckOut = () => {
+    const API_BASE_URL = "http://localhost:5000";
     const [checkoutCart, setCheckoutCart] = useState([]);
     const [address, setAddress] = useState(null);
     const [showAddressSelector, setShowAddressSelector] = useState(false); // Điều khiển hiển thị AddressSelector
@@ -19,29 +22,84 @@ const CheckOut = () => {
     const [listVoucher, setListVoucher] = useState([])
     const [voucherSelected, setVoucherSelected] = useState({});
     const [totalDiscount, setTotalDiscount] = useState(0);
+    const [thanhToans, setThanhToans] = useState([]);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [feeSolAmount, setFeeSolAmount] = useState(0);
+
+    const [phuongThuc, setPhuongThuc] = useState(1);
+    const [tongTienHangSol, setTongTienHangSol] = useState(0);
+    const [feeSol, setFeeSol] = useState(0);
+    const [totalSol, setTotalSol] = useState(0);
+
+    // const [user, setUser] = useState(null);
+
+    const [showQrCodeSolana, setShowQrCodeSolana] = useState(false);
+
     const navigate = useNavigate();
 
     // Load giỏ hàng từ localStorage hoặc sản phẩm "Mua Ngay" từ sessionStorage
     useEffect(() => {
         // Kiểm tra nếu có sản phẩm "Mua Ngay" trong sessionStorage
         const singleProduct = JSON.parse(sessionStorage.getItem('checkoutItem'));
+
+        let cartArray = null;
+        let totalAmountSOL = null;
+        let shippingFeeSOL = null;
+        let grandTotalSOL = null;
+
         if (singleProduct) {
             setBuyNowProduct(singleProduct); // Nếu có sản phẩm "Mua Ngay", lưu vào state
             setCheckoutCart([singleProduct]); // Đặt sản phẩm "Mua Ngay" làm giỏ hàng tạm thời
+            cartArray = singleProduct;
+            console.log('singleProduct: ', cartArray);
+
+            // * giá sol
+            totalAmountSOL = cartArray.gia_sol * cartArray.so_luong;
+            shippingFeeSOL = totalAmountSOL / 10;
+            grandTotalSOL = shippingFeeSOL + totalAmountSOL;
         } else {
             const savedCart = JSON.parse(localStorage.getItem('checkoutCart')) || [];
             setCheckoutCart(savedCart); // Nếu không có "Mua Ngay", sử dụng giỏ hàng
+            cartArray = savedCart;
+            console.log('savedCart: ', cartArray);
+            // * giá sol
+            totalAmountSOL = cartArray.reduce((total, item) => total + item.gia_sol * item.so_luong, 0);
+            shippingFeeSOL = totalAmountSOL / 10 / cartArray.length;
+            grandTotalSOL = shippingFeeSOL * cartArray.length + totalAmountSOL;
         }
+
+        setTongTienHangSol(totalAmountSOL.toFixed(6));
+        setFeeSol(shippingFeeSOL.toFixed(6));
+        setTotalSol(grandTotalSOL.toFixed(6));
 
         // Tải địa chỉ mặc định nếu có trong sessionStorage
         const savedAddress = JSON.parse(sessionStorage.getItem('address'));
         if (savedAddress) {
             setAddress(savedAddress);
         }
+
+        // * Đối tượng người dùng
         const storedUser = JSON.parse(sessionStorage.getItem('user'));
         if (storedUser) {
             setUser(storedUser);
         }
+
+        const fetchData = async () => {
+            try {
+                const data = await getPTThanhToan();
+                setThanhToans(data);
+
+
+                const result = await setSol(shippingFee);
+                setFeeSolAmount(result);
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        fetchData();
+
     }, []);
 
 
@@ -50,10 +108,115 @@ const CheckOut = () => {
     const totalAmount = checkoutCart.reduce((total, item) => total + item.gia * item.so_luong, 0);
     const shippingFee = checkoutCart.length > 1 ? totalAmount / 10 / checkoutCart.length : totalAmount / 10;
     const grandTotal = totalAmount + (shippingFee * checkoutCart.length) - totalDiscount;
-   
+
+
+    // const grandTotalSOL = totalAmountSOL + ()
+
+    const setSol = async (fee) => {
+        try {
+            const sol = await getSOL();
+            const usdToVndRate = await getUSD_VND();
+            const FeeSolAmount = (fee / (usdToVndRate * sol)).toFixed(6);
+            return FeeSolAmount;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const handleCloseQrCode = () => {
+        setShowQrCodeSolana(false);
+    }
+
+    const [qrCodeData, setQrCodeData] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const generateQRCode = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/generate-qr?amount=${totalSol}&orderId=${user.id_tai_khoan}`);
+            if (!response.ok) {
+                throw new Error("Không thể tạo mã QR.");
+            }
+            const data = await response.json();
+
+            if (data.success) {
+                setQrCodeData(data.qrCodeData); // Lưu mã QR vào state
+                setErrorMessage('');
+                check(); // Gọi kiểm tra giao dịch sau khi tạo QR thành công
+                setShowQrCodeSolana(true); // Hiển thị QR Code
+            } else {
+                setErrorMessage("Có lỗi xảy ra: " + data.message);
+            }
+        } catch (error) {
+            setErrorMessage("Lỗi: " + error.message);
+        }
+    };
+
+    // let intervalId;
+    let isTransactionChecked = false; // Biến trạng thái ban đầu là false
+    let isFetching = false; // Kiểm soát việc gọi fetch để tránh chồng lặp
+
+    const check = () => {
+        const checkTransaction = () => {
+            if (isFetching) return; // Nếu đang fetch thì không gọi API nữa
+            isFetching = true;
+            // setIsFetching(true);
+
+            fetch(`${API_BASE_URL}/check-transaction?amount=${totalSol}&orderId=${user.id_tai_khoan}`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Không thể kiểm tra giao dịch.");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.success) {
+                        // console.log(data) 
+                        if (!isTransactionChecked) {
+                            alert('Thanh toán thành công!');
+                            setShowQrCodeSolana(false);
+                            isTransactionChecked = true; // Cập nhật trạng thái
+                            clearInterval(intervalId); // Dừng vòng lặp ngay lập tức
+                            // setTransactionResult(data);
+                            // setIsTransactionChecked(true);
+                        }
+                        clearInterval(intervalId); // Dừng vòng lặp ngay lập tức
+                    } else {
+                        console.log('Lỗi: ' + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Lỗi: " + error.message);
+                })
+                .finally(() => {
+                    // setIsFetching(false);
+                    isFetching = false;
+                });
+        };
+
+        // Bắt đầu vòng lặp mỗi 1 giây
+        // intervalId = setInterval(() => {
+        //     if (!isTransactionChecked) {
+        //         checkTransaction();
+        //     }
+        // }, 1000);
+
+        const intervalId = setInterval(() => {
+            if (!isTransactionChecked) {
+                checkTransaction(); // Gọi hàm kiểm tra giao dịch
+            }
+        }, 1000);
+
+        // Hủy vòng lặp khi component bị unmount
+        // return () => {
+        //     clearInterval(intervalId);
+        // };
+    };
+
+    const handleClickAdd = (key) => {
+        navigate('/profile-user', { state: { key } });
+    }
 
     const createOrder = async () => {
-        const userId = JSON.parse(sessionStorage.getItem('user')).id_tai_khoan;
         const addressId = address?.ma_dia_chi;
 
         if (!addressId) {
@@ -61,15 +224,38 @@ const CheckOut = () => {
             return;
         }
 
+        console.log(voucherSelected);
+
+
+        if (phuongThuc === 3) {
+            generateQRCode(); // Chỉ gọi generateQRCode, setShowQrCodeSolana sẽ được gọi bên trong generateQRCode
+        } else {
+            createBookerPay();
+        }
+    };
+
+
+    const createBookerPay = async () => {
+        const userId = JSON.parse(sessionStorage.getItem('user')).id_tai_khoan;
+        const addressId = address?.ma_dia_chi;
+
+        // if (!addressId) {
+        //     alert("Vui lòng chọn địa chỉ giao hàng.");
+        //     return;
+        // }
+
         // Chi tiết sản phẩm từ giỏ hàng hoặc sản phẩm "Mua Ngay"
-        const orderDetails = checkoutCart.map(item => ({
-            so_luong: item.so_luong,
-            gia: item.gia,
-            thanh_tien: (item.gia * item.so_luong + shippingFee) - totalDiscount,
-            san_pham: { ma_san_pham: item.ma_san_pham },
-            id_voucher: item.voucher || null,
-            ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu
-        }));
+        const orderDetails = checkoutCart.map((item, index) => {
+            const discountProduct = voucherSelected[index] || 0;
+            return {
+                so_luong: item.so_luong,
+                gia: item.gia,
+                thanh_tien: (item.gia * item.so_luong + shippingFee) - discountProduct,
+                san_pham: { ma_san_pham: item.ma_san_pham },
+                id_voucher: item.voucher || null,
+                ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu
+            }
+        });
 
         try {
 
@@ -120,10 +306,7 @@ const CheckOut = () => {
                 alert("Vui lòng kiểm tra số dư!");
             }
 
-
-
             // Điều hướng tới trang đơn hàng
-
 
             // Xóa sản phẩm khỏi giỏ hàng hoặc sessionStorage
             if (buyNowProduct) {
@@ -132,11 +315,14 @@ const CheckOut = () => {
                 localStorage.removeItem(`cart_${userId}`); // Xóa giỏ hàng sau khi đặt hàng thành công
             }
 
+            
+
         } catch (error) {
             console.error('Lỗi khi tạo đơn hàng hoặc thêm chi tiết đơn hàng:', error);
             alert("Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.");
         }
-    };
+        handleClickAdd(4);
+    }
 
 
     // Xử lý khi chọn địa chỉ
@@ -145,7 +331,7 @@ const CheckOut = () => {
         sessionStorage.setItem('address', JSON.stringify(selectedAddress));
         setShowAddressSelector(false);
         console.log(grandTotal)
-        
+
     };
 
     const [visibleFormIndex, setVisibleFormIndex] = useState(null);
@@ -156,13 +342,29 @@ const CheckOut = () => {
         console.log(listVoucher)
         setVisibleFormIndex(visibleFormIndex === index ? null : index);
     };
+
+    const handleClickPhuongThuc = (index) => {
+        setSelectedIndex(index)
+        setPhuongThuc(index + 1);
+    }
+
+    const thanhToanRows = thanhToans.map((thanhToan, index) => {
+        return (
+            <div key={index}
+                className={index === selectedIndex ? 'payment-methodC-thanhtoan-method-active' : ''}
+                onClick={() => handleClickPhuongThuc(index)}>
+                {thanhToan.ten_phuong_thuc}
+            </div>
+        )
+    });
+
     const onVoucherSelect = (discountValue, orderIndex) => {
         setVoucherSelected((prev) => {
             const updatedVouchers = {
                 ...prev,
                 [orderIndex]: discountValue // Chuyển giá trị giảm giá thành số
             };
-            
+
             // Tính tổng giảm giá
             const total = Object.values(updatedVouchers).reduce((acc, value) => acc + value, 0);
             setTotalDiscount(total);
@@ -171,7 +373,7 @@ const CheckOut = () => {
             return updatedVouchers;
         });
     };
-    
+
 
     return (
         <div className={styles.parent}>
@@ -223,8 +425,7 @@ const CheckOut = () => {
                                         <div className="product-price">
                                             <p>{product.gia.toLocaleString('vi-VN')} đ</p>
                                             <span>
-
-                                                {product.gia_sol || 0}
+                                                {(product.gia_sol).toFixed(6) || 0}
                                                 <img src='/images/solana.png' alt='solana icon' /></span>
                                         </div>
                                         <div className="product-quantityC">
@@ -233,7 +434,7 @@ const CheckOut = () => {
                                         <div className="product-total">
                                             <p>{(product.gia * product.so_luong).toLocaleString('vi-VN')} đ</p>
                                             <span>
-                                                {product.gia_sol > 0 ? (product.gia_sol * product.so_luong) : 0}
+                                                {product.gia_sol > 0 ? (product.gia_sol * product.so_luong).toFixed(6) : 0}
                                                 <img src='/images/solana.png' alt='solana icon' /> </span>
                                         </div>
                                     </div>
@@ -267,6 +468,9 @@ const CheckOut = () => {
                                                         <span>Nhanh</span>
                                                     </div>
                                                     <span>{shippingFee.toLocaleString('vi-VN')} đ</span>
+                                                    <span>
+                                                        {feeSol}
+                                                        <img src='/images/solana.png' alt='solana icon' /></span>
                                                 </div>
                                                 <p>Ước tính nhận hàng trong 3 ngày kể từ ngày đặt hàng</p>
 
@@ -278,31 +482,31 @@ const CheckOut = () => {
                                     </div>
 
                                     {visibleFormIndex === index && (
-                                       <div className="form_voucher_choose">
-                                       <h3>ZUTEE</h3>
-                                       <div className="form_voucher_choose_list">
-                                           {listVoucher.length > 0 ? (
-                                               listVoucher.map((voucher, i) => (
-                                                   <div
-                                                       key={i}
-                                                       className="form_voucher_choose_item ticket"
-                                                       onClick={() => onVoucherSelect(voucher.voucher.giam_gia,index)} // Gửi giá trị giảm giá lên cha
-                                                       style={{ cursor: 'pointer' }}
-                                                   >
-                                                       <img src={voucher.imageUrl || '/images/zutee.jpg'} alt="Voucher" />
-                                                       <div className="form_voucher_choose_item_info">
-                                                           <p>Giảm {voucher.voucher.giam_gia || '₫25k'}</p>
-                                                           <p>Đơn tối thiểu {voucher.voucher.gia_ap_dung || '₫225k'}</p>
-                                                           <p>Số lần sử dụng: {voucher.voucher.so_lan_dung || '6'}</p>
-                                                           <p>HSD: {voucher.voucher.ngay_het_han || '21/12/2024'}</p>
-                                                       </div>
-                                                   </div>
-                                               ))
-                                           ) : (
-                                               <p>Đang tải voucher...</p>
-                                           )}
-                                       </div>
-                                   </div>
+                                        <div className="form_voucher_choose">
+                                            <h3>ZUTEE</h3>
+                                            <div className="form_voucher_choose_list">
+                                                {listVoucher.length > 0 ? (
+                                                    listVoucher.map((voucher, i) => (
+                                                        <div
+                                                            key={i}
+                                                            className="form_voucher_choose_item ticket"
+                                                            onClick={() => onVoucherSelect(voucher.voucher.giam_gia, index)} // Gửi giá trị giảm giá lên cha
+                                                            style={{ cursor: 'pointer' }}
+                                                        >
+                                                            <img src={voucher.imageUrl || '/images/zutee.jpg'} alt="Voucher" />
+                                                            <div className="form_voucher_choose_item_info">
+                                                                <p>Giảm {voucher.voucher.giam_gia || '₫25k'}</p>
+                                                                <p>Đơn tối thiểu {voucher.voucher.gia_ap_dung || '₫225k'}</p>
+                                                                <p>Số lần sử dụng: {voucher.voucher.so_lan_dung || '6'}</p>
+                                                                <p>HSD: {voucher.voucher.ngay_het_han || '21/12/2024'}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <p>Đang tải voucher...</p>
+                                                )}
+                                            </div>
+                                        </div>
                                     )}
 
 
@@ -311,17 +515,17 @@ const CheckOut = () => {
                             ))}
                         </div>
                     </div>
-
-
                 </div>
 
                 <div className="payment-methodC">
                     <div className="payment-methodC-thanhtoan">
                         <h3>Phương thức thanh toán</h3>
                         <div className="payment-methodC-thanhtoan-method">
-                            <div className='payment-methodC-thanhtoan-method-active'>Ví BookerPay</div>
+
+                            {/* <div className='payment-methodC-thanhtoan-method-active'>Ví BookerPay</div>
                             <div>Thanh toán VNPay</div>
-                            <div>SOLANA - SOL</div>
+                            <div>SOLANA - SOL</div> */}
+                            {thanhToanRows}
                         </div>
                     </div>
 
@@ -333,20 +537,36 @@ const CheckOut = () => {
                         <div className="summary">
                             <div className="summary-item">
                                 <span>Tổng tiền hàng</span>
-                                <span>₫{totalAmount.toLocaleString('vi-VN')}</span>
+                                {
+                                    phuongThuc === 3 ? (
+                                        <span>{tongTienHangSol}
+                                            <img src='/images/solana.png' />
+                                        </span>
+                                    ) : (
+                                        <span>₫{totalAmount.toLocaleString('vi-VN')}</span>
+                                    )
+                                }
                             </div>
 
-                            {checkoutCart.length <= 1 ? (
+                            {/* {checkoutCart.length <= 1 ? (
                                 <div className="summary-item">
                                     <span>Tổng tiền phí vận chuyển</span>
                                     <span>₫{shippingFee.toLocaleString('vi-VN')}</span>
                                 </div>
-                            ) : (
-                                <div className="summary-item">
-                                    <span>Tổng tiền phí vận chuyển</span>
-                                    <span>₫{(shippingFee * 2).toLocaleString('vi-VN')}</span>
-                                </div>
-                            )}
+                            ) : ( */}
+                            <div className="summary-item">
+                                <span>Tổng tiền phí vận chuyển</span>
+                                {
+                                    phuongThuc === 3 ? (
+                                        <span>{feeSol * checkoutCart.length}
+                                            <img src='/images/solana.png' />
+                                        </span>
+                                    ) : (
+                                        <span>₫{(shippingFee * checkoutCart.length).toLocaleString('vi-VN')}</span>
+                                    )
+                                }
+                            </div>
+                            {/* )} */}
 
                             <div className="summary-item">
                                 <span>Tổng cộng Voucher giảm giá</span>
@@ -354,7 +574,16 @@ const CheckOut = () => {
                             </div>
                             <div className="summary-item grand-total">
                                 <span>Tổng thanh toán</span>
-                                <p>₫{grandTotal.toLocaleString('vi-VN')}</p>
+                                {
+                                    phuongThuc === 3 ? (
+                                        <p>{totalSol}
+                                            <img src='/images/solana.png' />
+                                        </p>
+                                    ) : (
+                                        <p>₫{grandTotal.toLocaleString('vi-VN')}</p>
+                                    )
+                                }
+
                             </div>
                             <button onClick={createOrder} className="place-order-button">Đặt hàng</button>
                         </div>
@@ -362,6 +591,14 @@ const CheckOut = () => {
 
                 </div>
             </div>
+
+            {
+                showQrCodeSolana && <><QrCodeSolana
+                    qrCodeLink={qrCodeData}
+                    totalSOL={totalSol}
+                    onClose={handleCloseQrCode}
+                /></>
+            }
 
             <FooterUser />
 

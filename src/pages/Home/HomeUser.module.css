@@ -492,7 +492,7 @@ span {
   height: auto;
   background-color: #ffffff;
   box-shadow: 0 0 3px #646464;
-  z-index: 99999999999;
+  z-index: 999;
 }
 .header_no_fixed{
   position: relative;
@@ -503,7 +503,7 @@ span {
   height: auto;
   background-color: #ffffff;
   box-shadow: 0 0 3px #646464;
-  z-index: 99999999999;
+  z-index: 999;
 }
 .parent {
   width: 100%;

@@ -122,6 +122,7 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
     const toggleRechargeForm = () => {
         setShowRechargeForm(true);
     };
+    
     const handleClickAdd = (key) => {
         navigate('/profile-user', { state: { key } });
     }

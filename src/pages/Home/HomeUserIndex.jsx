@@ -13,6 +13,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";  
 import ProductFormSlider from '../../utils/Order/ProductFormSlider';
 import { TRUE } from 'sass';
+import AddProduct from '../../utils/Order/AddProduct';
 
 const HomeUserIndex = () => {
     const [products, setProducts] = useState([]); // Toàn bộ sản phẩm
@@ -169,6 +170,7 @@ const HomeUserIndex = () => {
             {/* Banner */}
             <section className={styles.bannerSection}>
                 <div className={styles.menuBar}>
+                    <AddProduct/>
                     <ul>
                         <li onClick={() => handleCategoryClick(1)}>
                             <FontAwesomeIcon icon={faBook} style={{ marginRight: '7px' }} />
