@@ -224,9 +224,6 @@ const CheckOut = () => {
             return;
         }
 
-        console.log(voucherSelected);
-
-
         if (phuongThuc === 3) {
             generateQRCode(); // Chỉ gọi generateQRCode, setShowQrCodeSolana sẽ được gọi bên trong generateQRCode
         } else {
