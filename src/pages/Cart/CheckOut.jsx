@@ -336,7 +336,7 @@ const CheckOut = () => {
     const toggleForm = async (index, idCuaHang) => {
         const response = await axios.get(`http://localhost:8080/api/v1/save-voucher/${idCuaHang}`);
         setListVoucher(response.data)
-        console.log(listVoucher)
+        console.log(listVoucher )
         setVisibleFormIndex(visibleFormIndex === index ? null : index);
     };
 
@@ -496,6 +496,7 @@ const CheckOut = () => {
                                                                 <p>Đơn tối thiểu {voucher.voucher.gia_ap_dung || '₫225k'}</p>
                                                                 <p>Số lần sử dụng: {voucher.voucher.so_lan_dung || '6'}</p>
                                                                 <p>HSD: {voucher.voucher.ngay_het_han || '21/12/2024'}</p>
+                                                                {product.gia * product.so_luong >=voucher.voucher.gia_ap_dung ? (<p>Đủ điều kiện</p>) : (<p>Không đủ điều kiện</p>)}
                                                             </div>
                                                         </div>
                                                     ))

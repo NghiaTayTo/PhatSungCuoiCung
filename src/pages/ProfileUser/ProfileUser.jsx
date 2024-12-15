@@ -21,6 +21,7 @@ const ProfileUser = () => {
         email: '',           // Email (chỉ đọc)
         so_dt: '',           // Số điện thoại
         ngay_sinh: '',       // Ngày sinh
+        anh_dai_dien: '',
     });
     const [key, setKey] = useState(1);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -35,6 +36,7 @@ const ProfileUser = () => {
                 const id_tai_khoan = sessionStorage.getItem('id_tai_khoan'); // Lấy ID tài khoản từ session storage
                 const response = await axios.get(`http://localhost:8080/api/taikhoan/profile/${id_tai_khoan}`);
                 setUserData(response.data.result); // Lưu dữ liệu người dùng vào state
+                console.log(userData)
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu người dùng:", error);
             }
@@ -55,9 +57,9 @@ const ProfileUser = () => {
                 <div className="profile-container">
                     <div className="profile-sidebar">
                         <div className="profile-sidebar-user">
-                            <img src='/images/avtadmin.jpg' />
+                            <img src={userData.anh_dai_dien} />
                             <div className="profile-sidebar-user-text">
-                                <strong>Phan Trong Nghiax đẹp trai</strong>
+                                <strong>{userData.ho_ten}</strong>
                                 <div>
                                     <FontAwesomeIcon icon={faPen}></FontAwesomeIcon>
                                     <p>Sửa hồ sơ</p>
