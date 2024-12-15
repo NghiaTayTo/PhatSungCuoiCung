@@ -68,7 +68,7 @@ const ProfileUser = () => {
                         </div>
 
                         <ul>
-                            <li onClick={() => handleClickOption(1)} className={key === 1 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faUser}></FontAwesomeIcon>Tài khoản của tôi</li>
+                        <li onClick={() => handleClickOption(1)} className={key === 1 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faUser}></FontAwesomeIcon>Tài khoản của tôi</li>
                             <li onClick={() => handleClickOption(2)} className={key === 2 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faLocationDot}></FontAwesomeIcon>Địa chỉ</li>
                             <li onClick={() => handleClickOption(3)} className={key === 3 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faUnlock}></FontAwesomeIcon>Đổi mật khẩu</li>
                             <li onClick={() => handleClickOption(4)} className={key === 4 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faFileInvoiceDollar}></FontAwesomeIcon>Đơn mua</li>
