@@ -7,6 +7,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { getProductToBrowse } from '../../../utils/API/ProductAPI';
 import Loading from '../../../utils/Order/Loading';
 import ListManagerBookAdmin from '../ListData/ListManagerBookAdmin';
+import Pagination from '../../../utils/Pagination/Pagination'
 
 const NewBook = () => {
 
@@ -61,6 +62,7 @@ const NewBook = () => {
                             </div>
 
                             <ListManagerBookAdmin listBooks={listBooks} trangThaiSach={'new_book'}/>
+                            <Pagination />
                         </>
                     )
                 }

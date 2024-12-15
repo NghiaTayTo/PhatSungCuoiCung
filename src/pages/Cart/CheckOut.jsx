@@ -354,7 +354,7 @@ const CheckOut = () => {
     const toggleForm = async (index, idCuaHang) => {
         const response = await axios.get(`http://localhost:8080/api/v1/save-voucher/${idCuaHang}`);
         setListVoucher(response.data)
-        console.log(listVoucher)
+        console.log(listVoucher )
         setVisibleFormIndex(visibleFormIndex === index ? null : index);
     };
 

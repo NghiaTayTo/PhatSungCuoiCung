@@ -3,12 +3,11 @@ import styles from './HomeUser.module.css';
 import stylesIndex from './HomeUserIndex.module.css';
 import { filterProduct, getAllBook, getProductsByNameCategory } from '../../utils/API/ProductAPI';
 import { Link, useNavigate } from 'react-router-dom';
+import { getAllBookUser } from '../../utils/API/ProductAPI';
+import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import FooterUser from '../Component/FooterUser';
 import HeaderUser from '../Component/HeaderUser';
-import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import { getCategory } from '../../utils/API/CategoryAPI';
-import Loading from '../../utils/Order/Loading';
 const HomeUser = () => {
     const [products, setProducts] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
@@ -26,28 +25,43 @@ const HomeUser = () => {
     const [idCategory, setIdCategory] = useState('');
 
     const productsPerPage = 20; // Số sản phẩm mỗi trang
+
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const ma_the_loai = searchParams.get('ma_the_loai');
+    const ma_the_loai = searchParams.get('ma_the_loai'); // Mã thể loại từ query params
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const query = queryParams.get('query'); // Từ khóa tìm kiếm từ query params
+    // const ma_the_loai = searchParams.get('ma_the_loai');
     const ten_the_loai = searchParams.get('ten_the_loai');
 
+    // Fetch sản phẩm theo mã thể loại hoặc tìm kiếm
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                if (ma_the_loai) {
-                    // Fetch theo mã thể loại
+                if (query) {
+                    // Fetch sản phẩm theo từ khóa tìm kiếm
+                    const response = await axios.get(
+                        `http://localhost:8080/api/v1/sanpham/${encodeURIComponent(query)}`
+                    );
+                    setSearchResults(response.data);
+                    setIsSearching(true);
+                } else if (ma_the_loai) {
+                    // Fetch sản phẩm theo mã thể loại
                     const response = await axios.get(
                         `http://localhost:8080/api/v1/sanpham/00000-1000000/orderBy-no%20sort/theloai?ma_the_loai=${ma_the_loai}`
                     );
                     setProducts(response.data);
-                } else if(ten_the_loai){
+                    setIsSearching(false);
+                } else if (ten_the_loai) {
                     const response = await getProductsByNameCategory(ten_the_loai);
                     setProducts(response);
                     setNameCategory(ten_the_loai);
-                }else{
+                } else {
                     // Fetch toàn bộ sản phẩm nếu không có ma_the_loai
-                    const data = await getAllBook();
+                    const data = await getAllBookUser();
                     setProducts(data);
+                    setIsSearching(false);
                 }
 
                 const categoryData = await getCategory();
@@ -57,13 +71,12 @@ const HomeUser = () => {
             }
         };
 
-        fetchProducts();
-    }, [ma_the_loai]);
 
+        fetchProducts();
+    }, [query, ma_the_loai]);
 
     // Hàm xử lý khi có kết quả tìm kiếm từ HeaderUser
     const handleSearchResults = (results) => {
-        console.log("Search results:", results);
         setSearchResults(results);
         setIsSearching(results.length > 0);
         setCurrentPage(1); // Quay về trang đầu khi có kết quả tìm kiếm mới
@@ -77,7 +90,10 @@ const HomeUser = () => {
     // Lấy các sản phẩm cho trang hiện tại
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = (isSearching ? searchResults : products || []).slice(indexOfFirstProduct, indexOfLastProduct);
+    const displayedProducts = (isSearching ? searchResults : products).slice(
+        indexOfFirstProduct,
+        indexOfLastProduct
+    );
 
     // Xử lý chuyển trang
     const handlePageChange = (pageNumber) => {
@@ -231,37 +247,60 @@ const HomeUser = () => {
                         <h3>{titleSearchFunction()}</h3>
                         <div>
                             Sản phẩm ( {products.length} )
+                            {displayedProducts.length > 0 ? (
+                                displayedProducts.map((product, index) => (
+                                    <div
+                                        className={styles.productCard}
+                                        key={index}
+                                        onClick={() => handleProductClick(product.ma_san_pham)}
+                                    >
+                                        <div className={styles.imageContainer}>
+                                            <img
+                                                className={styles.productImage}
+                                                src={product.anh_san_pham}
+                                                alt={product.ten_san_pham}
+                                            />
+                                        </div>
+                                        <div className={styles.productInfo}>
+                                            <p className={styles.productName}>{product.ten_san_pham}</p>
+                                            <p className={styles.productPrice}>
+                                                {product.gia ? product.gia.toLocaleString() : 0} VND
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className={styles.noResults}>Không tìm thấy sản phẩm phù hợp.</p>
+                            )}
                         </div>
                     </div>
                     <div className={styles.sectionProductList}>
-                        {
-                            products.length < 0 ? (
-                                <h1>Không tìm thấy sản phẩm mong muốn.</h1>
-                            ) : (
-                                <>
-                                    {productRows}
-                                </>
-                            )
-                        }
-
+                        {products.length <= 0 ? (
+                            <h1>Không tìm thấy sản phẩm mong muốn.</h1>
+                        ) : (
+                            <>
+                                {productRows}
+                            </>
+                        )}
                     </div>
                 </div>
-
 
             </section>
 
             {/* Điều hướng phân trang */}
-            <div className={styles.pagination}>
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
-                        className={`${styles.pageButton} ${currentPage === index + 1 ? styles.activePage : ""}`}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div>
+            {totalPages > 1 && (
+                <div className={styles.pagination}>
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            key={index + 1}
+                            className={`${styles.pageButton} ${currentPage === index + 1 ? styles.activePage : ''}`}
+                            onClick={() => handlePageChange(index + 1)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+            )}
 
             <FooterUser />
         </div>
