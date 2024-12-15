@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styles from './HomeUser.module.css';
 import stylesIndex from './HomeUserIndex.module.css';
 import { filterProduct, getAllBook, getProductsByNameCategory } from '../../utils/API/ProductAPI';
-import { Link, useNavigate } from 'react-router-dom';
 import { getAllBookUser } from '../../utils/API/ProductAPI';
 import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import FooterUser from '../Component/FooterUser';
 import HeaderUser from '../Component/HeaderUser';
 import axios from 'axios';
+import Loading from '../../utils/Order/Loading';
+import { getCategory } from '../../utils/API/CategoryAPI';
+
 const HomeUser = () => {
     const [products, setProducts] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
