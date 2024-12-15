@@ -5,6 +5,8 @@ import Admin from './FormManager/Admin';
 import Seller from './FormManager/Seller';
 import User from './FormManager/User';
 
+import 'react-notifications/lib/notifications.css';
+
 import { CartProvider } from './context/cartContext';
 import BuyerChat from './chat/BuyerChat';
 import SellerChat from './chat/SellerChat';

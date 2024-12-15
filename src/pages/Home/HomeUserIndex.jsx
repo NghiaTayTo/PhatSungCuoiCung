@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import styles from './HomeUserIndex.module.css';
-import { getAllBookUser } from '../../utils/API/ProductAPI'; // API để lấy sản phẩm
+import { getAllBookUser, getProductsByDaBanDesc, getProductsByNameCategory } from '../../utils/API/ProductAPI'; // API để lấy sản phẩm
 import { useNavigate } from 'react-router-dom';
 import FooterUser from '../Component/FooterUser';
 import HeaderUser from '../Component/HeaderUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faArrowAltCircleRight, faBook, faFireFlameCurved, faHeart, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faBook } from '@fortawesome/free-solid-svg-icons';
 import ImageCarousel from './ImageCarousel';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";  
-import ProductFormSlider from '../../utils/Order/ProductFormSlider';
-import { TRUE } from 'sass';
-import AddProduct from '../../utils/Order/AddProduct';
+import "slick-carousel/slick/slick-theme.css";
 
 const HomeUserIndex = () => {
     const [products, setProducts] = useState([]); // Toàn bộ sản phẩm
@@ -25,6 +23,13 @@ const HomeUserIndex = () => {
     const productsPerPage = 10; // Số sản phẩm hiển thị trên mỗi trang
     const navigate = useNavigate();
 
+    const [vanHoc, setVanHoc] = useState([]);
+    const [lichSu, setLichSu] = useState([]);
+    const [truyenTranh, setTruyenTranh] = useState([]);
+    const [banChays, setBanChays] = useState([]);
+
+    const [hoveredProduct, setHoveredProduct] = useState({});
+
     // Lấy danh sách sản phẩm khi load trang
     useEffect(() => {
         const fetchProducts = async () => {
@@ -34,6 +39,21 @@ const HomeUserIndex = () => {
                 // Lấy ngẫu nhiên sản phẩm cho từng danh mục
                 setFeaturedProducts(data.sort(() => 0.5 - Math.random()).slice(0, 8));
                 setNewProducts(data.sort(() => 0.5 - Math.random()).slice(0, 8));
+
+                const vanHocData = await getProductsByNameCategory('văn học');
+                setVanHoc(vanHocData);
+                const lichSuData = await getProductsByNameCategory('lịch sử');
+                setLichSu(lichSuData);
+                const truyenTranhData = await getProductsByNameCategory('truyện tranh');
+                setTruyenTranh(truyenTranhData);
+
+                const banChayData = await getProductsByDaBanDesc();
+                setBanChays(banChayData);
+                const firstProduct = banChayData[0];
+                console.log('firstProduct: ', firstProduct);
+
+                setHoveredProduct(firstProduct);
+
             } catch (error) {
                 console.error('Lỗi khi lấy sản phẩm:', error);
             }
@@ -56,6 +76,10 @@ const HomeUserIndex = () => {
     // Chuyển hướng đến danh mục với mã thể loại
     const handleCategoryClick = (maTheLoai) => {
         navigate(`/HomeUser?ma_the_loai=${maTheLoai}`);
+    };
+
+    const handleNameCategoryClick = (tenTheLoai) => {
+        navigate(`/HomeUser?ten_the_loai=${tenTheLoai}`);
     };
 
     // Tính toán sản phẩm hiển thị cho trang hiện tại
@@ -152,13 +176,61 @@ const HomeUserIndex = () => {
         ],
     };
 
+    const [activeIndex1, setActiveIndex1] = useState(null);
+    const categories1 = [
+        "Sách bán chạy",
+        "Sách - truyện tranh",
+        "Sách lịch sử"
+    ];
+    const handleItemClick = (index) => {
+        setActiveIndex1(index); // Cập nhật trạng thái khi nhấn
+    };
 
-    const [hoveredProduct, setHoveredProduct] = useState(null);
 
     const handleMouseEnter = (product) => {
         setHoveredProduct(product);
     };
 
+    const [quantity, setQuantity] = useState(1);
+
+    //* Hàm thêm vào giỏ hàng
+    const addToCart = (product) => {
+        const user = JSON.parse(sessionStorage.getItem('user')); // Lấy thông tin người dùng từ session
+        if (!user) {
+            // NotificationManager.warning('Bạn cần đăng nhập trước khi thêm sản phẩm vào giỏ hàng!', 'Cảnh báo');
+            alert('Vui lòng đăng nhập trước khi thêm vào giỏ hàng');
+            navigate("/login");
+            return;
+        }
+
+        const cartKey = `cart_${user.id_tai_khoan}`;
+        const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+        const existingProduct = cart.find((item) => item.ma_san_pham === product.ma_san_pham);
+        if (existingProduct) {
+            existingProduct.so_luong += quantity;
+        } else {
+            cart.push({ ...product, so_luong: quantity });
+        }
+
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        alert("Sản phẩm đã được thêm vào giỏ hàng");
+        window.location.reload();
+
+    };
+
+    //* Hàm "Mua ngay"
+    const buyNow = (product) => {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        if (!user) {
+            alert("Vui lòng đăng nhập để mua sản phẩm");
+            navigate("/login");
+            return;
+        }
+
+        sessionStorage.setItem('checkoutItem', JSON.stringify({ ...product, so_luong: quantity }));
+        navigate("/checkout");
+    };
 
     return (
         <div className={styles.parent}>
@@ -170,7 +242,6 @@ const HomeUserIndex = () => {
             {/* Banner */}
             <section className={styles.bannerSection}>
                 <div className={styles.menuBar}>
-                    <AddProduct/>
                     <ul>
                         <li onClick={() => handleCategoryClick(1)}>
                             <FontAwesomeIcon icon={faBook} style={{ marginRight: '7px' }} />
@@ -218,80 +289,25 @@ const HomeUserIndex = () => {
                     <img className={styles.bannerImg} src="/images/banner_3.jpg" alt="Banner" />
                 </div>
 
-                {/* <div className={styles.listCategoryHay}>
-                    <div className={styles.listCategoryHayItem}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <h3>Sách bán chạy</h3>
-                            <FontAwesomeIcon className={styles.listCategoryHayItemIcon} icon={faFireFlameCurved}></FontAwesomeIcon>
-                        </div>
-
-                        <img src="./images/1.jpg" alt='Ảnh sản phẩm' />
-                        <p className={styles.listCategoryHayItemName}>Cọ Stylus SilStar BuTouch Professional Hàn Quốc Tương Thích Android, iOS</p>
-                        <strong>350,000đ</strong>
-                        <div className={styles.listCategoryHayItemSol}>
-                            <img src='./images/solana.png' alt='solana icon' />
-                            <p>{product.gia_sol || 0} SOL</p>
-                        </div>
-                    </div>
-                    <div className={styles.listCategoryHayItem}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <h3>SÁCH HAY</h3>
-                            <FontAwesomeIcon className={styles.listCategoryHayItemIcon} icon={faThumbsUp}></FontAwesomeIcon>
-                        </div>
-
-                        <img src="./images/1.jpg" alt='Ảnh sản phẩm' />
-                        <p className={styles.listCategoryHayItemName}>Cọ Stylus SilStar BuTouch Professional Hàn Quốc Tương Thích Android, iOS</p>
-                        <strong>350,000đ</strong>
-                        <div className={styles.listCategoryHayItemSol}>
-                            <img src='./images/solana.png' alt='solana icon' />
-                            <p>0.1 SOL</p>
-                        </div>
-                    </div>
-                    <div className={styles.listCategoryHayItem}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <h3>Sách nổi bật</h3>
-                            <FontAwesomeIcon className={styles.listCategoryHayItemIcon} icon={faHeart}></FontAwesomeIcon>
-                        </div>
-
-                        <img src="./images/1.jpg" alt='Ảnh sản phẩm' />
-                        <p className={styles.listCategoryHayItemName}>Cọ Stylus SilStar BuTouch Professional Hàn Quốc Tương Thích Android, iOS</p>
-                        <strong>350,000đ</strong>
-                        <div className={styles.listCategoryHayItemSol}>
-                            <img src='./images/solana.png' alt='solana icon' />
-                            <p>0.1 SOL</p>
-                        </div>
-                    </div>
-                    <div className={styles.listCategoryHayItem}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <h3>SÁCH MỚI</h3>
-                            <FontAwesomeIcon className={styles.listCategoryHayItemIcon} icon={faBook}></FontAwesomeIcon>
-                        </div>
-
-                        <img src="./images/1.jpg" alt='Ảnh sản phẩm' />
-                        <p className={styles.listCategoryHayItemName}>Cọ Stylus SilStar BuTouch Professional Hàn Quốc Tương Thích Android, iOS</p>
-                        <strong>350,000đ</strong>
-                        <div className={styles.listCategoryHayItemSol}>
-                            <img src='./images/solana.png' alt='solana icon' />
-                            <p>0.1 SOL</p>
-                        </div>
-                    </div>
-                </div> */}
-
                 <div className={styles.listBook}>
                     <div className={styles.listBookHeader}>
                         <h3>SÁCH MỚI</h3>
                         <div className={styles.listBookOption}>
                             <ul>
-                                <li className={styles.li_active}>Sách bán chạy</li>
-                                <li>Sách - truyện tranh</li>
-                                <li>Sách lịch sử</li>
+                                {categories1.map((category, index) => (
+                                    <li
+                                        key={index}
+                                        className={index === activeIndex1 ? styles.li_active : ""}
+                                        onClick={() => handleItemClick(index)}
+                                    >
+                                        {category}
+                                    </li>
+                                ))}
                                 <p>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
                                 </p>
                             </ul>
                         </div>
                     </div>
-
-
 
                     <Slider {...settings}
                         className={styles.sliderCss}
@@ -328,8 +344,6 @@ const HomeUserIndex = () => {
                         ))}
                     </Slider>
 
-
-
                 </div>
 
                 <div className={styles.listBookBanner}>
@@ -337,7 +351,7 @@ const HomeUserIndex = () => {
                         <h3>TÁC PHẨM VĂN HỌC</h3>
                         <div className={styles.listBookOption}>
                             <ul>
-                                <p>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
+                                <p onClick={() => handleNameCategoryClick('Văn học')}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
                                 </p>
                             </ul>
                         </div>
@@ -345,8 +359,12 @@ const HomeUserIndex = () => {
                     <div className={styles.listBookBannerBox}>
                         <img className={styles.listBookBannerBoxImg} src='/images/banner_vanhoc.jpg' alt='Banner' />
                         <div className={styles.listBookBannerProduct}>
-                            {currentProducts.slice(0, 8).map((product, index) => (
-                                <div key={index} className={styles.listBookBannerProductItem}>
+                            {vanHoc.slice(0, 8).map((product, index) => (
+                                <div
+                                    key={index}
+                                    className={styles.listBookBannerProductItem}
+                                    onClick={() => handleProductClick(product.ma_san_pham)}
+                                >
                                     <img src={product.anh_san_pham}
                                         alt={product.ten_san_pham} />
                                     <p className={styles.productName}>{product.ten_san_pham}</p>
@@ -376,8 +394,22 @@ const HomeUserIndex = () => {
                                                         <p>{product.gia_sol || 0} SOL</p>
                                                     </div>
                                                 </div>
-                                                <button className={styles.addCart}>THÊM VÀO GIỎ HÀNG</button>
-                                                <button className={styles.muangay}>MUA NGAY</button>
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        addToCart(product);
+                                                    }}
+                                                    className={styles.addCart}
+                                                >
+                                                    THÊM VÀO GIỎ HÀNG
+                                                </button>
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        buyNow(product);
+                                                    }}
+                                                    className={styles.muangay}>MUA NGAY
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -405,10 +437,11 @@ const HomeUserIndex = () => {
                     </div>
                     <div className={styles.bangXepHangContent}>
                         <div className={styles.bangXepHangProduct}>
-                            {currentProducts.slice(0, 5).map((product, index) => (
-                                <div key={index} 
-                                className={styles.bangXepHangProductItem}
-                                onMouseEnter={() => handleMouseEnter(product)}
+                            {banChays.slice(0, 5).map((product, index) => (
+                                <div key={index}
+                                    className={styles.bangXepHangProductItem}
+                                    onMouseEnter={() => handleMouseEnter(product)}
+                                    onClick={() => handleProductClick(product.ma_san_pham)}
                                 >
                                     <h3 className={styles.xepHang}>0{index + 1}</h3>
                                     <img src={product.anh_san_pham}
@@ -430,29 +463,45 @@ const HomeUserIndex = () => {
                             ))}
                         </div>
                         <div className={styles.bangXepHangProductInfo}>
+
                             <div className={styles.bangXepHangProductInfoImage}>
-                                <img src='/images/101.png' />
+                                <img src={hoveredProduct.anh_san_pham} alt={hoveredProduct.ten_san_pham} />
                             </div>
                             <div className={styles.bangXepHangProductInfoText}>
-                                <h4>Góc nhỏ có nắng</h4>
-                                <p>Tác giả: </p>
-                                <p>Thể loại: </p>
+                                <h4>{hoveredProduct.ten_san_pham}</h4>
+                                <p>Tác giả: {hoveredProduct.tac_gia}</p>
+                                <p>Thể loại: {hoveredProduct.the_loai?.ten_the_loai}</p>
                                 <div className={styles.price}>
                                     <p className={styles.productPrice}>
-                                        120.000đ
+                                        ₫{hoveredProduct.gia?.toLocaleString('vi-VN') || 0}
                                     </p>
                                     <div className={styles.listCategoryHayItemSol}>
                                         <img src='./images/solana.png' alt='solana icon' />
-                                        <p>0.1 SOL</p>
+                                        <p>{hoveredProduct.gia_sol || 0}</p>
                                     </div>
                                 </div>
-                                <strong>Góc nhỏ có nắng ( Tái bản lần thứ 2 )</strong>
-                                <p>Chúng mình đều biết những sắc màu của cuộc sống đều bắt nguồn từ những điều bình dị và thường nhật nhất xung quanh mà ta vẫn thường tiếp xúc mỗi ngày: như bầu trời xanh ngát, như áng mây trắng tinh, như ánh nắng phủ vàng lên những đóa hoa hồng ngọt… Thế nhưng nhịp sống hàng ngày của chúng ta luôn trôi qua trong sự vội vã, những bộn bề hóa thành “bộ lọc” biến bức tranh cuộc sống muôn màu kia trở nên ảm đạm và phủ đầy âu lo, khiến ta dường như quên lãng việc phải khám phá ra những vẻ đẹp thuần khiết của vạn vật, quên mất rằng thế giới mà chúng ta đang sống cũng có ...</p>
+                                <strong>{hoveredProduct.ten_san_pham} ( {hoveredProduct.phien_ban} )</strong>
+                                <p>{hoveredProduct.mo_ta}</p>
                                 <div className={styles.formHoverInfo}>
-                                    <button className={styles.addCart}>THÊM VÀO GIỎ HÀNG</button>
-                                    <button className={styles.muangay}>MUA NGAY</button>
+                                    <button
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            addToCart(hoveredProduct);
+                                        }}
+                                        className={styles.addCart}
+                                    >
+                                        THÊM VÀO GIỎ HÀNG
+                                    </button>
+                                    <button
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            buyNow(hoveredProduct);
+                                        }}
+                                        className={styles.muangay}>MUA NGAY
+                                    </button>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -462,7 +511,7 @@ const HomeUserIndex = () => {
                         <h3>SÁCH LỊCH SỬ</h3>
                         <div className={styles.listBookOption}>
                             <ul>
-                                <p>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
+                                <p onClick={() => handleNameCategoryClick('Lịch sử')}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
                                 </p>
                             </ul>
                         </div>
@@ -470,8 +519,12 @@ const HomeUserIndex = () => {
                     <div className={styles.listBookBannerBox}>
                         <img className={styles.listBookBannerBoxImg2} src='/images/banner_lichsu.jpg' alt='Banner' />
                         <div className={styles.listBookBannerProduct}>
-                            {currentProducts.slice(0, 8).map((product, index) => (
-                                <div key={index} className={styles.listBookBannerProductItem}>
+                            {lichSu.slice(0, 8).map((product, index) => (
+                                <div
+                                    key={index}
+                                    className={styles.listBookBannerProductItem}
+                                    onClick={() => handleProductClick(product.ma_san_pham)}
+                                >
                                     <img src={product.anh_san_pham}
                                         alt={product.ten_san_pham} />
                                     <p className={styles.productName}>{product.ten_san_pham}</p>
@@ -501,8 +554,22 @@ const HomeUserIndex = () => {
                                                         <p>{product.gia_sol || 0} SOL</p>
                                                     </div>
                                                 </div>
-                                                <button className={styles.addCart}>THÊM VÀO GIỎ HÀNG</button>
-                                                <button className={styles.muangay}>MUA NGAY</button>
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        addToCart(product);
+                                                    }}
+                                                    className={styles.addCart}
+                                                >
+                                                    THÊM VÀO GIỎ HÀNG
+                                                </button>
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        buyNow(product);
+                                                    }}
+                                                    className={styles.muangay}>MUA NGAY
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -517,7 +584,7 @@ const HomeUserIndex = () => {
                         <h3>TRUYỆN TRANH - ANIME</h3>
                         <div className={styles.listBookOption}>
                             <ul>
-                                <p>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
+                                <p onClick={() => handleNameCategoryClick('Truyện tranh')}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
                                 </p>
                             </ul>
                         </div>
@@ -526,7 +593,9 @@ const HomeUserIndex = () => {
                         <img className={styles.listBookBannerBoxImg2} src='/images/banner_truyentranh.jpg' alt='Banner' />
                         <div className={styles.listBookBannerProduct}>
                             {currentProducts.slice(0, 8).map((product, index) => (
-                                <div key={index} className={styles.listBookBannerProductItem}>
+                                <div
+                                    onClick={() => handleProductClick(product.ma_san_pham)}
+                                    key={index} className={styles.listBookBannerProductItem}>
                                     <img src={product.anh_san_pham}
                                         alt={product.ten_san_pham} />
                                     <p className={styles.productName}>{product.ten_san_pham}</p>
@@ -556,8 +625,22 @@ const HomeUserIndex = () => {
                                                         <p>{product.gia_sol || 0} SOL</p>
                                                     </div>
                                                 </div>
-                                                <button className={styles.addCart}>THÊM VÀO GIỎ HÀNG</button>
-                                                <button className={styles.muangay}>MUA NGAY</button>
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        addToCart(product);
+                                                    }}
+                                                    className={styles.addCart}
+                                                >
+                                                    THÊM VÀO GIỎ HÀNG
+                                                </button>
+                                                <button
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        buyNow(product);
+                                                    }}
+                                                    className={styles.muangay}>MUA NGAY
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -614,6 +697,8 @@ const HomeUserIndex = () => {
                         )
                     )}
                 </div> */}
+
+                <NotificationContainer />
 
             </section>
 

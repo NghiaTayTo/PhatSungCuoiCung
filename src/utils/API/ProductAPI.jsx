@@ -1,6 +1,7 @@
 import axios from 'axios';
 // import storeID from '../../StoreId';
 import { StoreApi } from '../../StoreId';
+import { minor } from '@mui/material';
 
 let cachedStoreID = null;
 
@@ -360,14 +361,14 @@ export const getAllBook = () => {
             console.error(err)
         })
 }
-export const getAllBookUser = () =>{
+export const getAllBookUser = () => {
     return axios.get('http://localhost:8080/api/v1/product/user')
-    .then(res => {
-        return res.data;
-    })
-    .catch(err => {
-        console.error(err)
-    })
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            console.error(err)
+        })
 }
 
 // * USER - Lấy thông tin chi tiết sản phẩm
@@ -492,3 +493,39 @@ export const searchProducts = async (searchTerm, storeId) => {
         return []; // Trả về mảng rỗng nếu có lỗi
     }
 };
+
+// * Hàm lấy danh sách sản phẩm theo tên thể loại - load trang chủ
+export const getProductsByNameCategory = async (tenTl) => {
+    try {
+        const response = await axios.get(`${hostProduct}/tentheloai-${tenTl}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching store details:', error);
+        throw error;
+    }
+
+
+}
+
+// * Hàm lấy danh sách sản phẩm sắp xếp theo số lượng từ cao đến thấp 
+export const getProductsByDaBanDesc = async () => {
+    try {
+        const response = await axios.get(`${hostProduct}/banchay`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching store details:', error);
+        throw error;
+    }
+}
+
+// * Hàm tìm kiếm sản phẩm
+export const filterProduct = async (min, max, orderBy, idCategory ) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/v1/sanpham/${min}-${max}/orderBy-${orderBy}/theloai?ma_the_loai=${idCategory}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching store details:', error);
+        throw error;
+    }
+}
+

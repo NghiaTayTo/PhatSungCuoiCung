@@ -4,7 +4,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'react-notifications/lib/notifications.css';
 
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -215,6 +215,7 @@ const ProductDetail = () => {
         sessionStorage.setItem('checkoutItem', JSON.stringify({ ...product, so_luong: quantity }));
         navigate("/checkout");
     };
+    
     const handleReport = () => {
         alert('Redirect to report form');
         navigate('/report');
@@ -483,7 +484,6 @@ const ProductDetail = () => {
                                     <FontAwesomeIcon className='truhang' icon={faWindowMinimize}></FontAwesomeIcon>
                                 </button>
                                 <input
-
                                     value={quantity}
                                     min="1"
                                     onChange={(e) => setQuantity(Number(e.target.value))}

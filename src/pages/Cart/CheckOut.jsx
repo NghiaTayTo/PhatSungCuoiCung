@@ -11,6 +11,7 @@ import { faComment, faComments, faLocationDot } from '@fortawesome/free-solid-sv
 import { getPTThanhToan } from '../../utils/API/PTThanhToanAPI';
 import { getSOL, getUSD_VND } from '../../utils/API/SolanaAPI';
 import QrCodeSolana from '../Wallet/QrCodeSolana';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 const CheckOut = () => {
     const API_BASE_URL = "http://localhost:5000";
@@ -89,7 +90,6 @@ const CheckOut = () => {
                 const data = await getPTThanhToan();
                 setThanhToans(data);
 
-
                 const result = await setSol(shippingFee);
                 setFeeSolAmount(result);
 
@@ -125,6 +125,7 @@ const CheckOut = () => {
 
     const handleCloseQrCode = () => {
         setShowQrCodeSolana(false);
+        // clearInterval(intervalId);
     }
 
     const [qrCodeData, setQrCodeData] = useState(null);
@@ -172,8 +173,10 @@ const CheckOut = () => {
                     if (data.success) {
                         // console.log(data) 
                         if (!isTransactionChecked) {
-                            alert('Thanh toán thành công!');
+                            // alert('Thanh toán thành công ')
+                            NotificationManager.success('Thanh toán đơn hàng thành công!', 'Thành công');
                             setShowQrCodeSolana(false);
+                            createBookerPay();
                             isTransactionChecked = true; // Cập nhật trạng thái
                             clearInterval(intervalId); // Dừng vòng lặp ngay lập tức
                             // setTransactionResult(data);
@@ -193,23 +196,15 @@ const CheckOut = () => {
                 });
         };
 
-        // Bắt đầu vòng lặp mỗi 1 giây
-        // intervalId = setInterval(() => {
-        //     if (!isTransactionChecked) {
-        //         checkTransaction();
-        //     }
-        // }, 1000);
-
         const intervalId = setInterval(() => {
             if (!isTransactionChecked) {
                 checkTransaction(); // Gọi hàm kiểm tra giao dịch
             }
         }, 1000);
 
-        // Hủy vòng lặp khi component bị unmount
-        // return () => {
+        // if(showQrCodeSolana === false){
         //     clearInterval(intervalId);
-        // };
+        // }
     };
 
     const handleClickAdd = (key) => {
@@ -220,14 +215,16 @@ const CheckOut = () => {
         const addressId = address?.ma_dia_chi;
 
         if (!addressId) {
-            alert("Vui lòng chọn địa chỉ giao hàng.");
+            NotificationManager.warning('Bạn chưa chọn địa chỉ nhận hàng ', 'Thiếu địa chỉ nhận hàng');
             return;
         }
 
-        if (phuongThuc === 3) {
-            generateQRCode(); // Chỉ gọi generateQRCode, setShowQrCodeSolana sẽ được gọi bên trong generateQRCode
-        } else {
+        if (phuongThuc === 1) {
             createBookerPay();
+        } else if (phuongThuc === 2) {
+
+        } else if (phuongThuc === 3) {
+            generateQRCode();
         }
     };
 
@@ -236,23 +233,42 @@ const CheckOut = () => {
         const userId = JSON.parse(sessionStorage.getItem('user')).id_tai_khoan;
         const addressId = address?.ma_dia_chi;
 
-        // if (!addressId) {
-        //     alert("Vui lòng chọn địa chỉ giao hàng.");
-        //     return;
-        // }
+        let orderDetails = null;
+
+        if (phuongThuc !== 3) {
+            orderDetails = checkoutCart.map((item, index) => {
+                const discountProduct = voucherSelected[index] || 0;
+                return {
+                    so_luong: item.so_luong,
+                    gia: item.gia,
+                    thanh_tien: (item.gia * item.so_luong + shippingFee) - discountProduct,
+                    san_pham: { ma_san_pham: item.ma_san_pham },
+                    id_voucher: item.voucher || null,
+                    phi_van_chuyen: shippingFee,
+                    don_vi_van_chuyen: 'Nhanh',
+                    phuong_thuc_thanh_toan: { id: phuongThuc },
+                    ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu
+                }
+            });
+        } else {
+            orderDetails = checkoutCart.map((item, index) => {
+                // const discountProduct = voucherSelected[index] || 0;
+                return {
+                    so_luong: item.so_luong,
+                    gia: item.gia_sol,
+                    thanh_tien: totalSol,
+                    san_pham: { ma_san_pham: item.ma_san_pham },
+                    id_voucher: item.voucher || null,
+                    phi_van_chuyen: feeSol,
+                    don_vi_van_chuyen: 'Nhanh',
+                    phuong_thuc_thanh_toan: { id: phuongThuc },
+                    ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu
+                }
+            });
+        }
 
         // Chi tiết sản phẩm từ giỏ hàng hoặc sản phẩm "Mua Ngay"
-        const orderDetails = checkoutCart.map((item, index) => {
-            const discountProduct = voucherSelected[index] || 0;
-            return {
-                so_luong: item.so_luong,
-                gia: item.gia,
-                thanh_tien: (item.gia * item.so_luong + shippingFee) - discountProduct,
-                san_pham: { ma_san_pham: item.ma_san_pham },
-                id_voucher: item.voucher || null,
-                ma_trang_thai: 11  // Mã trạng thái mặc định hoặc trạng thái đơn hàng ban đầu
-            }
-        });
+
 
         try {
 
@@ -282,27 +298,29 @@ const CheckOut = () => {
 
             console.log('Order details added successfully:', addDetailsResponse.data);
 
-            // Trừ tiền từ tài khoản của người dùng
-            const totalAmountToDeduct = grandTotal; // Tổng tiền cần trừ (bao gồm phí vận chuyển)
+            if (phuongThuc === 1) {
+                // Trừ tiền từ tài khoản của người dùng
+                const totalAmountToDeduct = grandTotal; // Tổng tiền cần trừ (bao gồm phí vận chuyển)
 
-            try {
-                const deductMoneyResponse = await axios.post(
-                    `http://localhost:8080/api/vi/deductMoney`, // Endpoint mới  
-                    null, // Không cần body vì sử dụng query parameters
-                    {
-                        params: {
-                            idVi: `TTTSS${userId}`, // ID tài khoản cần trừ
-                            amount: totalAmountToDeduct // Số tiền cần trừ
+                try {
+                    const deductMoneyResponse = await axios.post(
+                        `http://localhost:8080/api/vi/deductMoney`, // Endpoint mới  
+                        null, // Không cần body vì sử dụng query parameters
+                        {
+                            params: {
+                                idVi: `TTTSS${userId}`, // ID tài khoản cần trừ
+                                amount: totalAmountToDeduct // Số tiền cần trừ
+                            }
                         }
-                    }
-                );
-                navigate('/donhang');
+                    );
+                    // navigate('/donhang');
 
-            } catch (error) {
-                console.error("Lỗi khi trừ tiền:", error.response?.data || error.message);
-                alert("Vui lòng kiểm tra số dư!");
+
+                } catch (error) {
+                    console.error("Lỗi khi trừ tiền:", error.response?.data || error.message);
+                    alert("Vui lòng kiểm tra số dư!");
+                }
             }
-
             // Điều hướng tới trang đơn hàng
 
             // Xóa sản phẩm khỏi giỏ hàng hoặc sessionStorage
@@ -312,13 +330,13 @@ const CheckOut = () => {
                 localStorage.removeItem(`cart_${userId}`); // Xóa giỏ hàng sau khi đặt hàng thành công
             }
 
-            
+            handleClickAdd(4);
 
         } catch (error) {
             console.error('Lỗi khi tạo đơn hàng hoặc thêm chi tiết đơn hàng:', error);
             alert("Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.");
         }
-        handleClickAdd(4);
+
     }
 
 
@@ -369,6 +387,30 @@ const CheckOut = () => {
 
             return updatedVouchers;
         });
+    };
+
+
+
+    const checkApDungVoucher = (hsdVoucher, soLanDungVoucher, dieuKienInt, giaProduct, soLuongProduct) => {
+        const date = Date.now(); // Lấy thời gian hiện tại (timestamp)
+        const hsdDate = new Date(hsdVoucher); // Chuyển hsdVoucher từ chuỗi thành đối tượng Date
+
+        // Tính khoảng cách giữa hai thời điểm (kết quả là số milliseconds)
+        const timeDifference = hsdDate.getTime() - date;
+
+        // Đổi khoảng cách ra ngày
+        const daysDifference = timeDifference / (1000 * 60 * 60 * 24); // Chia cho số milliseconds trong một ngày
+        const daysDifferenceMath = Math.floor(daysDifference);
+
+        console.log(daysDifferenceMath);
+
+        const thanhTien = giaProduct * soLuongProduct + shippingFee;
+
+        if (daysDifferenceMath > 0 && soLanDungVoucher > 0 && (thanhTien >= dieuKienInt)) {
+            return true;
+        } else {
+            return false;
+        }
     };
 
 
@@ -483,24 +525,59 @@ const CheckOut = () => {
                                             <h3>ZUTEE</h3>
                                             <div className="form_voucher_choose_list">
                                                 {listVoucher.length > 0 ? (
-                                                    listVoucher.map((voucher, i) => (
-                                                        <div
-                                                            key={i}
-                                                            className="form_voucher_choose_item ticket"
-                                                            onClick={() => onVoucherSelect(voucher.voucher.giam_gia, index)} // Gửi giá trị giảm giá lên cha
-                                                            style={{ cursor: 'pointer' }}
-                                                        >
-                                                            <img src={voucher.imageUrl || '/images/zutee.jpg'} alt="Voucher" />
-                                                            <div className="form_voucher_choose_item_info">
-                                                                <p>Giảm {voucher.voucher.giam_gia || '₫25k'}</p>
-                                                                <p>Đơn tối thiểu {voucher.voucher.gia_ap_dung || '₫225k'}</p>
-                                                                <p>Số lần sử dụng: {voucher.voucher.so_lan_dung || '6'}</p>
-                                                                <p>HSD: {voucher.voucher.ngay_het_han || '21/12/2024'}</p>
-                                                            </div>
-                                                        </div>
-                                                    ))
+                                                    listVoucher.map((voucher, i) => {
+                                                        return (
+
+                                                            checkApDungVoucher(
+                                                                voucher.voucher.ngay_het_han,
+                                                                voucher.voucher.so_lan_dung,
+                                                                voucher.voucher.gia_ap_dung,
+                                                                product.gia,
+                                                                product.so_luong) ? (
+                                                                <div
+                                                                    key={i}
+                                                                    className="form_voucher_choose_item ticket"
+                                                                    onClick={() => onVoucherSelect(voucher.voucher.giam_gia, index)} // Gửi giá trị giảm giá lên cha
+                                                                    style={{ cursor: 'pointer' }}
+                                                                >
+                                                                    <img src={voucher.imageUrl || '/images/zutee.jpg'} alt="Voucher" />
+                                                                    <div className="form_voucher_choose_item_info">
+                                                                        <p>Giảm {voucher.voucher.giam_gia || '₫25k'}</p>
+                                                                        <p>Đơn tối thiểu {voucher.voucher.gia_ap_dung || 'Không xác định'}</p>
+                                                                        <p>Số lần sử dụng: {voucher.voucher.so_lan_dung || 'Không xác định'}</p>
+                                                                        <p>HSD: {voucher.voucher.ngay_het_han || 'Không xác định'}</p>
+                                                                    </div>
+
+                                                                </div>
+                                                            ) : (
+                                                                <div
+                                                                    key={i}
+                                                                    className="form_voucher_choose_item ticket"
+                                                                    // onClick={() => onVoucherSelect(voucher.voucher.giam_gia, index)} // Gửi giá trị giảm giá lên cha
+                                                                    style={{ cursor: 'pointer' }}
+                                                                >
+                                                                    <img src={voucher.imageUrl || '/images/zutee.jpg'} alt="Voucher" />
+                                                                    <div className="form_voucher_choose_item_info">
+                                                                        <p>Giảm {voucher.voucher.giam_gia || '₫25k'}</p>
+                                                                        <p>Đơn tối thiểu {voucher.voucher.gia_ap_dung || 'Không xác định'}</p>
+                                                                        <p>Số lần sử dụng: {voucher.voucher.so_lan_dung || 'Không xác định'}</p>
+                                                                        <p>HSD: {voucher.voucher.ngay_het_han || 'Không xác định'}</p>
+                                                                    </div>
+
+                                                                    <div className='voucherHidden'>
+                                                                        <h3>Không đủ điều kiện áp dụng</h3>
+                                                                    </div>
+
+
+
+                                                                </div>
+                                                            )
+
+
+                                                        )
+                                                    })
                                                 ) : (
-                                                    <p>Đang tải voucher...</p>
+                                                    <p>Không có Voucher được lưu.</p>
                                                 )}
                                             </div>
                                         </div>
@@ -587,6 +664,7 @@ const CheckOut = () => {
                     </div>
 
                 </div>
+                <NotificationContainer />
             </div>
 
             {

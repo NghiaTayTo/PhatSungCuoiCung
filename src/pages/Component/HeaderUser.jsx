@@ -126,7 +126,6 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
     const handleClickAdd = (key) => {
         navigate('/profile-user', { state: { key } });
     }
-    
 
 
     return (
@@ -151,7 +150,7 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
                             {user && (
                                 <div className={styles.walletInfo}>
                                     <FontAwesomeIcon icon={faWallet} style={{ marginRight: '5px' }} />
-                                    Số dư ví: {walletBalance ? walletBalance.toLocaleString('vi-VN') : 0} VNĐ
+                                    Ví BookerPay: {walletBalance ? walletBalance.toLocaleString('vi-VN') : 0} VNĐ
                                 </div>
                             )}
                         </div>
@@ -243,8 +242,8 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
                         onMouseLeave={() => setIsCartOpen(false)}
                         onClick={handleCartClick}
                     >
-                        <FontAwesomeIcon style={{ fontSize: '24px', color: '#ed8a47' }} icon={faShoppingCart} />
-                        <span>Giỏ hàng({totalQuantity})</span>
+                        <FontAwesomeIcon style={{ fontSize: '30px', color: '#ed8a47' }} icon={faShoppingCart} />
+                        <span>{totalQuantity}</span>
 
                         {/* Giỏ hàng nhỏ khi hover */}
                         {isCartOpen && (
@@ -265,9 +264,9 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
                                                 className={styles.cartItemImage}
                                             />
                                             <div className={styles.cartItemInfo}>
-                                                <h4 className={styles.cartItemName}>{item.ten_san_pham}</h4>
+                                                <h4 className={styles.cartItemName}>{item.ten_san_pham} vui vẻ là chính</h4>
                                                 <p className={styles.cartItemPrice}>
-                                                    {item.gia ? item.gia.toLocaleString('vi-VN') : 0} đ x {item.so_luong}
+                                                    ₫{item.gia ? item.gia.toLocaleString('vi-VN') : 0} x {item.so_luong}
                                                 </p>
                                             </div>
                                         </div>

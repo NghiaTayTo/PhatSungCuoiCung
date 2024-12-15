@@ -89,7 +89,7 @@ span {
 .help span,
 .userOptions span {
   /* margin-right: 20px; */
-  color: #fff;
+  color: #eeeeee;
   font-size: 14px !important;
   padding: 5px 14px !important;
 }
@@ -100,7 +100,8 @@ span {
 
 .help span:hover,
 .userOptions span:hover {
-  background-color: #ffffffdc;
+  color: #fff;
+  cursor: pointer;
 }
 
 .userOptions {
@@ -209,6 +210,21 @@ span {
   position: relative;
   cursor: pointer;
 }
+.faShoppingCart{
+  position: relative;
+}
+.cart span {
+  background-color: #f25821;
+  color: #fff;
+  width: auto;
+  padding: 0 8px;
+  height: 23px;
+  line-height: 23px;
+  border-radius: 17px;
+  position: absolute;
+  top: -10px;
+  left: 20px;
+}
 
 .cartDropdown {
   position: absolute;
@@ -218,8 +234,8 @@ span {
   max-height: 400px;
   overflow-y: auto;
   background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
   padding: 10px;
   z-index: 10;
 }
@@ -237,9 +253,8 @@ span {
 
 .cartItemImage {
   width: 50px;
-  height: 50px;
+  height: 70px;
   object-fit: cover;
-  border-radius: 4px;
   margin-right: 10px;
 }
 
@@ -344,32 +359,51 @@ span {
 /* styles.css */
 /* styles.css */
 .section {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.searchBarCategory{
+  width: 20%;
+}
+.sectionProductListForm{
+  width: 80%;
+}
+.sectionProductListHeaderText{
+  width: 96%;
+  margin-left: 20px;
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #f25821;
+  display: flex;
+  justify-content: space-between;
+}
+.sectionProductListHeaderText div{
+  font-size: 16px;
+}
+.sectionProductList {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  /* 4 cột cho mỗi hàng */
-  gap: 20px;
-  /* Khoảng cách giữa các sản phẩm */
-  max-width: 1200px;
-  /* Chiều rộng tối đa của section */
-  margin: 0 auto;
-  /* Canh giữa section */
   padding: 20px;
-  /* Padding cho section */
+}
+.storeProductList {
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 20px auto;
+  background-color: #fff;
 }
 
 .productCard {
   background-color: #fff;
-  /* Màu nền cho thẻ sản phẩm */
   border-radius: 8px;
-  /* Bo tròn các góc */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  /* Đổ bóng cho sản phẩm */
   overflow: hidden;
-  /* Giới hạn các phần tử con bên trong */
   transition: transform 0.2s;
-  /* Hiệu ứng chuyển tiếp khi hover */
   text-align: center;
-  /* Canh giữa nội dung */
   cursor: pointer;
   width: 280px;
 }
@@ -476,7 +510,7 @@ span {
   background-color: #f1f1f1;
 }
 
-.wallet {
+.walletInfo {
   border: 1px solid #fff;
   padding: 5px 15px;
   border-radius: 5px;
@@ -708,4 +742,47 @@ span {
 
 .tacGia:hover {
   border-bottom: 1px solid #20ad7c;
+}
+
+.searchBarCategoryList,
+.searchBarCategoryPrice{
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+  margin-top: 20px;
+  border-top: 1px solid #fe6033;
+  height: auto;
+}
+.searchBarCategoryList h3,
+.searchBarCategoryPrice h3{
+  font-size: 22px;
+  margin-bottom: 15px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.searchBarCategoryList li,
+.searchBarCategoryPrice li{
+  color: #707070;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 7px;
+  transition: all .2s ease-in-out;
+}
+.searchBarCategoryList ul{
+  height: 377px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.searchBarCategoryList li:hover,
+.searchBarCategoryPrice li:hover{
+  color: #f25821;
+  padding-left: 8px;
+}
+
+.heightItem{
+  height: 350px;
+  background-color: #fff;
+}
+
+.nameTacGia{
+  color: #20ad7c;
 }

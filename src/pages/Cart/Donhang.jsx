@@ -182,7 +182,6 @@ const DonHang = () => {
                                         <p style={{ fontSize: '16px' }}>{detail.trang_thai?.ten_trang_thai || "Không xác định"}</p>
                                     </div>
                                 </div>
-
                             </div>
                             <div className={styles.orderDetailBodyM}>
                                 <div className={styles.orderDetailBody}>
@@ -194,14 +193,36 @@ const DonHang = () => {
                                 </div>
                                 <div className={styles.orderDetailBodyGiaSoLuong}>
                                     {/* <p style={{ fontSize: '16px' }}>₫{(detail.thanh_tien).toLocaleString()}</p> */}
-                                    <del>₫{(detail.gia * detail.so_luong).toLocaleString()}</del>
-                                    <p style={{ fontSize: '15px' }}>₫{(detail.gia * detail.so_luong).toLocaleString()}</p>
+                                    {
+                                        detail.phuong_thuc_thanh_toan?.id !== 3 ? (
+                                            <>
+                                                <del>₫{(detail.gia * detail.so_luong).toLocaleString()}</del>
+                                                <p style={{ fontSize: '15px' }}>₫{(detail.gia * detail.so_luong).toLocaleString()}</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <del>{(detail.gia * detail.so_luong).toLocaleString()} SOL</del>
+                                                <p style={{ fontSize: '15px' }}>{(detail.gia * detail.so_luong)}
+                                                    <img src='/images/solana.png' />
+                                                </p>
+                                            </>
+                                        )
+                                    }
                                 </div>
 
                             </div>
                             <div className={styles.orderDetailFooterM}>
                                 <div className={styles.orderDetailFooterMMoney}>
-                                    <p style={{ fontSize: '16px' }}>Thành tiền: <span>₫{(detail.thanh_tien).toLocaleString()}</span></p>
+                                    {
+                                        detail.phuong_thuc_thanh_toan?.id !== 3 ? (
+                                            <p style={{ fontSize: '16px' }}>Thành tiền: <span>₫{(detail.thanh_tien).toLocaleString()}</span></p>
+                                        ) : (
+                                            <p style={{ fontSize: '16px' }}>Thành tiền: <span>{(detail.thanh_tien).toLocaleString()}</span>
+                                                 <img src='/images/solana.png' />
+                                            </p>
+                                        )
+                                    }
+
                                 </div>
                                 <div className={styles.orderDetailFooter}>
                                     {detail.trang_thai?.ma_trang_thai === 11 && (

@@ -138,8 +138,10 @@ const ListProduct = ({ listBooks = [], keySearch, searchName }) => {
                 return 'conhang';
             } else if(trangThai === 4){
                 return 'hethang'
-            }else{
+            }else if(trangThai === 5){
                 return 'yeucaumokhoa'
+            }else{
+                return 'huyduyet'
             }
         }
         const handleGetTrangThaiText = (trangThai) => {
@@ -151,8 +153,10 @@ const ListProduct = ({ listBooks = [], keySearch, searchName }) => {
                 return 'Còn hàng';
             } else if(trangThai === 4){
                 return 'Hết hàng'
-            }else{
+            }else if(trangThai === 5){
                 return 'Yêu cầu mở khóa'
+            }else{
+                return 'Hủy duyệt'
             }
         }
 

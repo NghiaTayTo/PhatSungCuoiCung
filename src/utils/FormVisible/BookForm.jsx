@@ -274,7 +274,8 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
         const newBook = {
             ...book,
             trang_thai_duyet: false,
-            trang_thai_khoa: false
+            trang_thai_khoa: false,
+            trang_thai_huy_duyet: false
         };
 
         const fetchData = async () => {

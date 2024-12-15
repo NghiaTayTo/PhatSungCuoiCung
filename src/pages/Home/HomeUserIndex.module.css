@@ -428,7 +428,7 @@
     height: 40px !important;
     background-color: #68696a6e;
     border-radius: 50%;
-    z-index: 1000;
+    z-index: 888;
 }
 .sliderCss button:nth-child(1){
 
