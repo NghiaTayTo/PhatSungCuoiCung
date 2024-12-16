@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 import './FormDetailsAdmin.css';
 import { getCustomerById, updateCustomer } from '../../../utils/API/CustomerAPI';
-import { Transgender } from '@mui/icons-material';
-import NotificationUI from '../../../utils/Notification/NotificationUI';
+// import { Transgender } from '@mui/icons-material';
+// import NotificationUI from '../../../utils/Notification/NotificationUI';
 
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 

@@ -409,7 +409,8 @@ const HomeUserIndex = () => {
                                     onClick={() => handleProductClick(product.ma_san_pham)}
                                 >
                                     <img src={product.anh_san_pham}
-                                        alt={product.ten_san_pham} />
+                                        alt={product.ten_san_pham} 
+                                        />
                                     <p className={styles.productName}>{product.ten_san_pham}</p>
                                     <div className={styles.price}>
                                         <p className={styles.productPrice}>

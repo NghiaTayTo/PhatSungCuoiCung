@@ -647,7 +647,7 @@ const ProductDetail = () => {
                             )}
                         </div>
                         <div className='product-reviews-list2'>
-                            <p>4.9 <span>trên 5</span></p>
+                            <p>{diemTrungBinh} <span>trên 5</span></p>
                             <button
                                 id={selectedButton === 'all' ? 'search-comment-choose' : undefined}
                                 onClick={() => handleButtonClick('all')}

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Header.css";
-// import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { faBell, faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import { faBan, faXmark } from "@fortawesome/free-solid-svg-icons";
 

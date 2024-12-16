@@ -45,11 +45,11 @@ const SidebarAdmin = () => {
                         <FontAwesomeIcon className='mr-5' icon={faList}></FontAwesomeIcon>
                         Thể loại sách</Link>
                 </li>
-                <li>
+                {/* <li>
                     <Link className={openMenu === "manage-banner" ? 'itemStyle-click itemStyle' : 'itemStyle'} onClick={() => handleMenuClick("manage-banner")} to="/admin/manage-banner">
                         <FontAwesomeIcon className='mr-5' icon={faRectangleAd}></FontAwesomeIcon>
                         Quản lý banner</Link>
-                </li>
+                </li> */}
                 <li style={{marginBottom: '10px'}}>
                     <Link style={{marginBottom: '12px'}} className={openMenu === "manager-book" ? 'itemStyle-click itemStyle' : 'itemStyle'} onClick={() => handleMenuClick("manager-book")}>
                         <FontAwesomeIcon className='mr-5' icon={faBook}></FontAwesomeIcon>
@@ -204,7 +204,7 @@ const SidebarAdmin = () => {
                         Voucher</Link>
                 </li> */}
 
-                <li>
+                {/* <li>
                     <Link style={{marginBottom: '12px'}} className={openMenu === "comments" ? 'itemStyle-click itemStyle' : 'itemStyle'} onClick={() => handleMenuClick("comments")}>
                         <FontAwesomeIcon className='mr-5' icon={faComments}></FontAwesomeIcon>
                         Bình luận sản phẩm
@@ -227,7 +227,7 @@ const SidebarAdmin = () => {
                         </div>
 
                     </Link>
-                </li>
+                </li> */}
 
                 
 

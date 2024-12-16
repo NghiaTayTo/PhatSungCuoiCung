@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getCategory } from '../../../utils/API/CategoryAPI';
-import { getBookByMaSP, getSanPhamById, updateSanPham } from '../../../utils/API/ProductAPI';
+import { getBookByMaSP, updateSanPham } from '../../../utils/API/ProductAPI';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import NotificationUI from '../../../utils/Notification/NotificationUI';
+// import NotificationUI from '../../../utils/Notification/NotificationUI';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger } from 'react-bootstrap';
 import { renderTooltip } from '../../../utils/Order/ToolTip';

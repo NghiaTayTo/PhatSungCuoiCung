@@ -96,17 +96,13 @@ const StoreForm = ({ onClose, storeData }) => {
                 const updatedStore = await updateCuaHang(store);
 
                 if (updatedStore) {
-                    // setStore(updatedStore);
-                    // setCloseNotification(true);
-                    // setIsUpdate(true);
-                    // setNotificationStatus('updateIsGood')
                     NotificationManager.success('Thành Công', 'Cập nhật cửa hàng');
-                    // window.location.reload();
+                   
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 }
             } catch (error) {
-                // setCloseNotification(true);
-                // setIsUpdate(false);
-                // setNotificationStatus('updateIsFail')
                 NotificationManager.error('Thất bại', 'Cập nhật cửa hàng');
                 console.error(error);
             }

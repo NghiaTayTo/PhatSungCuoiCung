@@ -616,6 +616,7 @@
 }
 .listBookBannerProductItem {
     width: 90%;
+    /* height: 350px; */
     box-sizing: border-box;
     padding: 15px;
     cursor: pointer;
@@ -626,12 +627,7 @@
 .listBookBannerProductItem:hover{
     box-shadow: 0 0 10px #9c9999;
 }
-.listBookBannerProductItem img{
-    display: block;
-    margin: 0 auto;
-    width: 80%;
-    height: auto;
-}
+
 .listBookBannerProductItem .price{
     display: flex;
     /* justify-content: space-between; */
@@ -788,10 +784,12 @@
     font-family: 'Montserrat', sans-serif;
 }
 .listBookBannerProductItem img{
+
     display: block;
     margin: 0 auto;
-    width: 80%;
-    height: auto;
+    width: 150px;
+    height: 200px;
+    object-fit: cover;
 }
 .noResults{
     font-size: 20px;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 
-import ListProductByComment from "../../../utils/ManageListUI/ListProductByComment";
+// import ListProductByComment from "../../../utils/ManageListUI/ListProductByComment";
 
-import { getListCommentByBookID } from "../../../utils/API/DanhGiaAPI";
+// import { getListCommentByBookID } from "../../../utils/API/DanhGiaAPI";
 import { getSanPhamOrderByComment } from "../../../utils/API/ProductAPI";
 import Loading from '../../../utils/Order/Loading';
 import ListProductByCommentAdmin from '../ListData/ListProductByCommentAdmin';

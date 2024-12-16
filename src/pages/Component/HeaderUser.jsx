@@ -122,7 +122,7 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
     const toggleRechargeForm = () => {
         setShowRechargeForm(true);
     };
-    
+
     const handleClickAdd = (key) => {
         navigate('/profile-user', { state: { key } });
     }
@@ -158,11 +158,11 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
                             <span>
                                 <FontAwesomeIcon icon={faGift} style={{ marginRight: '4px' }} /> Ưu đãi & tiện ích
                             </span>
-                            
-                                <span onClick={()=> handleClickAdd(4)}>
-                                    <FontAwesomeIcon icon={faBox} style={{ marginRight: '4px' }} /> Kiểm tra đơn hàng
-                                </span>
-                           
+
+                            <span onClick={() => handleClickAdd(4)}>
+                                <FontAwesomeIcon icon={faBox} style={{ marginRight: '4px' }} /> Kiểm tra đơn hàng
+                            </span>
+
                             <div>
                                 {user ? (
                                     <div
@@ -226,6 +226,7 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
                         onSortChange={handleSortChange}
                     />
 
+                    
                     {/* Contact Section */}
                     <div className={styles.contact}>
                         <FontAwesomeIcon style={{ fontSize: '24px', color: '#ed8a47', marginRight: '6px' }} icon={faPhoneAlt} />
@@ -329,7 +330,7 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
             </header>
 
             {/* Modal cho Form Nạp Tiền */}
-            {showRechargeForm  && <RechargeForm  onClose={()=>setShowRechargeForm(false)}/> }
+            {showRechargeForm && <RechargeForm onClose={() => setShowRechargeForm(false)} />}
         </div>
     );
 };
