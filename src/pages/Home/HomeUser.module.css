@@ -380,6 +380,9 @@ span {
   display: flex;
   justify-content: space-between;
 }
+.sectionProductListHeaderText p{
+  font-size: 17px;
+}
 .sectionProductListHeaderText div{
   font-size: 16px;
 }

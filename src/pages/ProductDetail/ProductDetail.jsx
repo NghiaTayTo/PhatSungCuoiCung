@@ -31,6 +31,7 @@ const ProductDetail = () => {
     const [responseSeller, setResponseSeller] = useState([])
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState(null);
+    
     // * Phân trang
     const [pagination, setPagination] = useState();
     // * Trang hiện tại
@@ -68,6 +69,11 @@ const ProductDetail = () => {
 
     const [currentProducts, setCurrentProducts] = useState([]);
     const [userID, setUserID] = useState(null);
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleSearchResults = (results) => {
+        setSearchResults(results);
+    };
 
 
     // Lấy chi tiết sản phẩm
@@ -438,7 +444,7 @@ const ProductDetail = () => {
 
     return (
         <div className={styles.parent}>
-            <HeaderUser fixed={false} />
+            <HeaderUser fixed={false} onSearchResults={handleSearchResults} />
 
             <section className="product-detail">
                 {/* Thông tin chính của sản phẩm */}
