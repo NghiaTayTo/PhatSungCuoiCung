@@ -37,6 +37,11 @@ const CheckOut = () => {
     const [showQrCodeSolana, setShowQrCodeSolana] = useState(false);
 
     const navigate = useNavigate();
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleSearchResults = (results) => {
+        setSearchResults(results);
+    };
 
     // Load giỏ hàng từ localStorage hoặc sản phẩm "Mua Ngay" từ sessionStorage
     useEffect(() => {
@@ -420,7 +425,7 @@ const CheckOut = () => {
 
     return (
         <div className={styles.parent}>
-            <HeaderUser fixed={false} />
+            <HeaderUser fixed={false} onSearchResults={handleSearchResults} />
 
             <div className="checkout-container">
                 <div className="shipping-info">

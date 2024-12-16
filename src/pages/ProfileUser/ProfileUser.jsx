@@ -27,6 +27,7 @@ const ProfileUser = () => {
     });
     const [key, setKey] = useState(1);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [searchResults, setSearchResults] = useState([]);
 
     // Hàm lấy dữ liệu người dùng từ API
     useEffect(() => {
@@ -55,11 +56,14 @@ const ProfileUser = () => {
     const handleClickOption = (key) => {
         setKey(key);
     };
+    const handleSearchResults = (results) => {
+        setSearchResults(results);
+    };
 
     return (
         <div className="profile-page" >
             {/* Sử dụng HeaderUser */}
-            <HeaderUser fixed={true} />
+            <HeaderUser onSearchResults={handleSearchResults} fixed={true} />
 
             <section className="profile-section" >
                 <div className="profile-container">

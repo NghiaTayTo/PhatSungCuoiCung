@@ -10,7 +10,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const ShoppingCart = () => {
     const [cart, setCart] = useState([]);
     const navigate = useNavigate();
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(null);
+    const [searchResults, setSearchResults] = useState([]);
+
+    const handleSearchResults = (results) => {
+        setSearchResults(results);
+    };
 
     useEffect(() => {
         const storedUser = JSON.parse(sessionStorage.getItem('user'));
@@ -91,7 +96,7 @@ const ShoppingCart = () => {
 
     return (
         <div className={styles.parent}>
-            <HeaderUser />
+            <HeaderUser onSearchResults={handleSearchResults} />
 
             <div className="cart-content">
                 {cart.length === 0 ? (
