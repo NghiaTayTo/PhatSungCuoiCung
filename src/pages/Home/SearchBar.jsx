@@ -39,16 +39,6 @@ export default function SearchBar({ query, setQuery, onSearchResults, ma_the_loa
 
     return (
         <div className={styles.searchBar}>
-            <select
-                className={styles.search_all}
-                value={sortOption}
-                onChange={(e) => onSortChange(e.target.value)}
-            >
-                <option value="">Tất cả</option>
-                <option value="new">Mới nhất</option>
-                <option value="price-high-to-low">Giá giảm dần</option>
-                <option value="price-low-to-high">Giá tăng dần</option>
-            </select>
             <input
                 type="text"
                 value={query}

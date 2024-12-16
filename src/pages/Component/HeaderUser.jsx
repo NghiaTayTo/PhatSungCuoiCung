@@ -264,7 +264,7 @@ const HeaderUser = ({ logout, onSearchResults, fixed }) => {
                                                 className={styles.cartItemImage}
                                             />
                                             <div className={styles.cartItemInfo}>
-                                                <h4 className={styles.cartItemName}>{item.ten_san_pham} vui vẻ là chính</h4>
+                                                <h4 className={styles.cartItemName}>{item.ten_san_pham}</h4>
                                                 <p className={styles.cartItemPrice}>
                                                     ₫{item.gia ? item.gia.toLocaleString('vi-VN') : 0} x {item.so_luong}
                                                 </p>

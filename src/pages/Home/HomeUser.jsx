@@ -41,29 +41,28 @@ const HomeUser = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
+                setProducts([]); // Reset danh sách sản phẩm cũ
+                setSearchResults([]); // Reset kết quả tìm kiếm cũ
+                setIsSearching(false);
+
                 if (query) {
-                    // Fetch sản phẩm theo từ khóa tìm kiếm
                     const response = await axios.get(
                         `http://localhost:8080/api/v1/sanpham/${encodeURIComponent(query)}`
                     );
                     setSearchResults(response.data);
                     setIsSearching(true);
                 } else if (ma_the_loai) {
-                    // Fetch sản phẩm theo mã thể loại
                     const response = await axios.get(
                         `http://localhost:8080/api/v1/sanpham/00000-1000000/orderBy-no%20sort/theloai?ma_the_loai=${ma_the_loai}`
                     );
                     setProducts(response.data);
-                    setIsSearching(false);
                 } else if (ten_the_loai) {
                     const response = await getProductsByNameCategory(ten_the_loai);
                     setProducts(response);
                     setNameCategory(ten_the_loai);
                 } else {
-                    // Fetch toàn bộ sản phẩm nếu không có ma_the_loai
                     const data = await getAllBookUser();
                     setProducts(data);
-                    setIsSearching(false);
                 }
 
                 const categoryData = await getCategory();
@@ -73,9 +72,9 @@ const HomeUser = () => {
             }
         };
 
-
         fetchProducts();
     }, [query, ma_the_loai]);
+
 
     // Hàm xử lý khi có kết quả tìm kiếm từ HeaderUser
     const handleSearchResults = (results) => {
@@ -92,10 +91,7 @@ const HomeUser = () => {
     // Lấy các sản phẩm cho trang hiện tại
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const displayedProducts = (isSearching ? searchResults : products).slice(
-        indexOfFirstProduct,
-        indexOfLastProduct
-    );
+    const displayedProducts = isSearching ? searchResults : products;
 
     // Xử lý chuyển trang
     const handlePageChange = (pageNumber) => {
@@ -114,25 +110,36 @@ const HomeUser = () => {
         setNameCategory(name);
 
         try {
+            // Đặt lại trạng thái tìm kiếm
+            setIsSearching(false);
+            setSearchResults([]);
+
+            // Lọc sản phẩm theo thể loại
             const data = await filterProduct(min, max, 'no sort', id);
             setProducts(data);
         } catch (e) {
             console.log(e);
         }
-    }
+    };
 
-    // * Hàm chọn giá tiền
     const handleClickPrice = async (text, priceStart, priceEnd) => {
         setMin(priceStart);
         setMax(priceEnd);
         setPriceText(text);
+
         try {
+            // Đặt lại trạng thái tìm kiếm
+            setIsSearching(false);
+            setSearchResults([]);
+
+            // Lọc sản phẩm theo giá
             const data = await filterProduct(priceStart, priceEnd, 'no sort', idCategory);
             setProducts(data);
         } catch (e) {
             console.log(e);
         }
-    }
+    };
+
 
     const titleSearchFunction = () => {
         if (nameCategory !== '' && priceText !== '') {
@@ -243,49 +250,63 @@ const HomeUser = () => {
                         </ul>
                     </div>
                 </div>
-                {/* Hiển thị sản phẩm dựa trên kết quả tìm kiếm hoặc danh sách gốc */}
-                <div className={styles.sectionProductListForm}>
-                    <div className={styles.sectionProductListHeaderText}>
-                        <h3>{titleSearchFunction()}</h3>
-                        <div>
-                            Sản phẩm ( {products.length} )
+               
+                    <div className={styles.sectionProductListForm}>
+                        <div className={styles.sectionProductListHeaderText}>
+                            <h3>{titleSearchFunction()}</h3>
+                            <p>Sản phẩm ({displayedProducts.length})</p>
+                        </div>
+
+                        <div className={styles.sectionProductList}>
                             {displayedProducts.length > 0 ? (
-                                displayedProducts.map((product, index) => (
+                                displayedProducts.slice(indexOfFirstProduct, indexOfLastProduct).map((product, index) => (
                                     <div
-                                        className={styles.productCard}
                                         key={index}
+                                        className={`${stylesIndex.listBookBannerProductItem} ${styles.heightItem}`}
                                         onClick={() => handleProductClick(product.ma_san_pham)}
                                     >
-                                        <div className={styles.imageContainer}>
-                                            <img
-                                                className={styles.productImage}
-                                                src={product.anh_san_pham}
-                                                alt={product.ten_san_pham}
-                                            />
-                                        </div>
-                                        <div className={styles.productInfo}>
-                                            <p className={styles.productName}>{product.ten_san_pham}</p>
-                                            <p className={styles.productPrice}>
-                                                {product.gia ? product.gia.toLocaleString() : 0} VND
+                                        <img src={product.anh_san_pham} alt={product.ten_san_pham} />
+                                        <p className={stylesIndex.productName}>{product.ten_san_pham}</p>
+                                        <p className={styles.nameTacGia}>{product.tac_gia}</p>
+                                        <div className={stylesIndex.price}>
+                                            <p className={stylesIndex.productPrice}>
+                                                ₫{product.gia ? product.gia.toLocaleString('vi-VN') : 0}
                                             </p>
+                                            <div className={stylesIndex.listCategoryHayItemSol}>
+                                                <img src='./images/solana.png' alt='solana icon' />
+                                                <p>{product.gia_sol || 0}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className={stylesIndex.formHover}>
+                                            <div className={stylesIndex.formHoverInfo}>
+                                                <h5>{product.ten_san_pham}</h5>
+                                                <p className={stylesIndex.tg}>{product.tac_gia}</p>
+                                                <p className={stylesIndex.mt}>{product.mo_ta}</p>
+                                                <div className={stylesIndex.positionOk}>
+                                                    <span>Xem thêm</span>
+                                                    <div className={stylesIndex.money}>
+                                                        <p className={stylesIndex.productPrice}>
+                                                            {product.gia ? product.gia.toLocaleString('vi-VN') : 0}đ
+                                                        </p>
+                                                        <div className={stylesIndex.listCategoryHayItemSol}>
+                                                            <img src='./images/solana.png' alt='solana icon' />
+                                                            <p>{product.gia_sol || 0}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button className={stylesIndex.addCart}>THÊM VÀO GIỎ HÀNG</button>
+                                                    <button className={stylesIndex.muangay}>MUA NGAY</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <p className={styles.noResults}>Không tìm thấy sản phẩm phù hợp.</p>
+                                <p className={stylesIndex.noResults}>Không tìm thấy sản phẩm phù hợp.</p>
                             )}
                         </div>
                     </div>
-                    <div className={styles.sectionProductList}>
-                        {products.length <= 0 ? (
-                            <h1>Không tìm thấy sản phẩm mong muốn.</h1>
-                        ) : (
-                            <>
-                                {productRows}
-                            </>
-                        )}
-                    </div>
-                </div>
+
 
             </section>
 

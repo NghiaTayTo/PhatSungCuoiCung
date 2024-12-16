@@ -31,6 +31,12 @@ const ProfileUser = () => {
         if (keyForm === 4) {
             setKey(keyForm)
         }
+        if(keyForm === 3){
+            setKey(keyForm)
+        }
+        if(keyForm === 2){
+            setKey(keyForm)
+        }
         const fetchUserData = async () => {
             try {
                 const id_tai_khoan = sessionStorage.getItem('id_tai_khoan'); // Lấy ID tài khoản từ session storage

@@ -61,17 +61,52 @@ const Register = () => {
         }
     };
 
-    // Đăng ký tài khoản
     const handleRegister = async () => {
+        // Xóa thông báo lỗi trước đó
+        setErrorMessage('');
+    
+        // Biến flag để kiểm tra tất cả điều kiện
+        let hasError = false;
+    
+        // Validate họ tên
+        if (!userInfo.hoTen) {
+            setErrorMessage("Vui lòng nhập họ và tên\n");
+            hasError = true;
+        }
+    
+        // Validate email
+        if (!userInfo.email) {
+            setErrorMessage((prev) => prev + "\nVui lòng nhập email!\n");
+            hasError = true;
+        }
+    
+        // Validate mã OTP
         if (!code) {
-            setErrorMessage('Vui lòng nhập mã OTP!');
+            setErrorMessage((prev) => prev + "\nVui lòng nhập mã OTP!\n");
+            hasError = true;
+        }
+    
+        // Validate mật khẩu
+        if (!userInfo.matKhau) {
+            setErrorMessage((prev) => prev + "\nVui lòng nhập mật khẩu!\n");
+            hasError = true;
+        }
+    
+        // Validate xác nhận mật khẩu
+        if (!userInfo.confirmMatKhau) {
+            setErrorMessage((prev) => prev + "\nVui lòng nhập lại mật khẩu!\n");
+            hasError = true;
+        } else if (userInfo.matKhau !== userInfo.confirmMatKhau) {
+            setErrorMessage((prev) => prev + "\nMật khẩu và xác nhận mật khẩu không khớp.\n");
+            hasError = true;
+        }
+    
+        // Nếu có lỗi thì không thực hiện gửi API
+        if (hasError) {
             return;
         }
-        if (userInfo.matKhau !== userInfo.confirmMatKhau) {
-            setErrorMessage('Mật khẩu và xác nhận mật khẩu không khớp.');
-            return;
-        }
-
+    
+        // Thực hiện đăng ký nếu không có lỗi
         try {
             const response = await axios.post('http://localhost:8080/api/taikhoan/register', {
                 ho_ten: userInfo.hoTen,
@@ -81,7 +116,7 @@ const Register = () => {
                 vai_tro: { ma_vai_tro: 1 }, // Người dùng thông thường
                 trang_thai_tk: 0, // Chờ kích hoạt
             });
-
+    
             if (response.data.message === 'Đăng ký tài khoản thành công') {
                 alert('Đăng ký thành công!');
                 navigate('/login');
@@ -93,6 +128,7 @@ const Register = () => {
             setErrorMessage('Đăng ký thất bại. Vui lòng thử lại.');
         }
     };
+    
 
     return (
 

@@ -28,6 +28,7 @@ const ProductDetail = () => {
     const [reportMenuVisible, setReportMenuVisible] = useState(false);
     const [responseSeller, setResponseSeller] = useState([])
     const [user, setUser] = useState(null);
+    const [cart, setCart] = useState(null);
     // * Phân trang
     const [pagination, setPagination] = useState();
     // * Trang hiện tại
@@ -64,9 +65,14 @@ const ProductDetail = () => {
     const [selectedButton, setSelectedButton] = useState('all');
 
     const [currentProducts, setCurrentProducts] = useState([]);
+    const [userID, setUserID] = useState(null);
 
     // Lấy chi tiết sản phẩm
     useEffect(() => {
+        const storedUser = JSON.parse(sessionStorage.getItem('user'));
+        if (storedUser) {
+            setUserID(storedUser.id_tai_khoan);
+        }
         const fetchProductData = async () => {
             try {
                 const productData = await getProductByMaSPUser(id); // API lấy chi tiết sản phẩm
@@ -186,22 +192,34 @@ const ProductDetail = () => {
             navigate("/login");
             return;
         }
-
+    
         const cartKey = `cart_${user.id_tai_khoan}`;
-        const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
-
-        const existingProduct = cart.find((item) => item.ma_san_pham === product.ma_san_pham);
+        const currentCart = JSON.parse(localStorage.getItem(cartKey)) || [];
+    
+        // Tìm sản phẩm đã có trong giỏ
+        const existingProduct = currentCart.find((item) => item.ma_san_pham === product.ma_san_pham);
         if (existingProduct) {
-            existingProduct.so_luong += quantity;
+            if (existingProduct.so_luong + quantity > product.con_hang) {
+                alert(`Không thể thêm quá số lượng có sẵn (${product.con_hang})`);
+                return;
+            }
+            existingProduct.so_luong += quantity; // Cập nhật số lượng
         } else {
-            cart.push({ ...product, so_luong: quantity });
+            if (quantity > product.con_hang) {
+                alert(`Số lượng không hợp lệ. Chỉ còn ${product.con_hang} sản phẩm.`);
+                return;
+            }
+            currentCart.push({ ...product, so_luong: quantity });
         }
-
-        localStorage.setItem(cartKey, JSON.stringify(cart));
+    
+        // Lưu vào localStorage
+        localStorage.setItem(cartKey, JSON.stringify(currentCart));
+        setCart(currentCart); // Đồng bộ trạng thái giỏ hàng
         alert("Sản phẩm đã được thêm vào giỏ hàng");
+        // navigate('/shopping'); // Điều hướng tới giỏ hàng nếu cần
         window.location.reload();
-
     };
+    
 
     // Hàm "Mua ngay"
     const buyNow = () => {
@@ -215,19 +233,6 @@ const ProductDetail = () => {
         sessionStorage.setItem('checkoutItem', JSON.stringify({ ...product, so_luong: quantity }));
         navigate("/checkout");
     };
-    
-    const handleReport = () => {
-        alert('Redirect to report form');
-        navigate('/report');
-    };
-
-    // Điều hướng đến cửa hàng
-    const handleStoreClick = () => {
-        if (storeInfo?.ma_cua_hang) {
-            navigate(`/cuahang/${storeInfo.ma_cua_hang}`);
-        }
-    };
-
     const formatMoney = (amount) => {
         if (amount >= 1000) {
             return `${(amount / 1000).toFixed(1).replace(/\.0$/, '')}k`;
@@ -307,29 +312,6 @@ const ProductDetail = () => {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber)
     }
-
-
-    // const voucherRows = listVoucher.map((voucher, index) => {
-
-    //     return (
-    //         <div key={index} className='list-voucher-item'>
-    //             <div className='list-voucher-item-info'>
-    //                 <div className='list-voucher-item-info-info'>
-    //                     <p>{voucher.ten_voucher}</p>
-    //                     <p>Giảm {formatMoney(voucher.giam_gia)}</p>
-    //                     <p>Đơn tối thiểu {formatMoney(voucher.gia_ap_dung)}</p>
-    //                     <p>Số lần dùng: {voucher.so_lan_dung}</p>
-    //                     <p>HSD: {voucher.ngay_het_han}</p>
-    //                 </div>
-    //                 <div className='list-voucher-item-info-button'>
-    //                     <button>LƯU</button>
-    //                     <button>MUA NGAY</button>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     )
-    // });
-
     const fetchAllRatingData = async () => {
         try {
             const reviewsResponse = await axios.get(
@@ -395,7 +377,7 @@ const ProductDetail = () => {
                 id_tai_khoan: user.id_tai_khoan, // ID tài khoản người dùng, thay bằng giá trị thực tế
             };
     
-            const response = await axios.post('http://localhost:8080/api/v1/save-voucher', payload, {
+            const response = await axios.post(`http://localhost:8080/api/v1/save-voucher`, payload, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -488,6 +470,7 @@ const ProductDetail = () => {
                                     min="1"
                                     onChange={(e) => setQuantity(Number(e.target.value))}
                                     className="quantityInput"
+                                    readOnly
                                 />
                                 <button
                                     className="quantityBtn"

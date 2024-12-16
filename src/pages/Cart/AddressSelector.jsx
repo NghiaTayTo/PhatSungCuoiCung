@@ -23,8 +23,8 @@ const AddressSelector = ({ onSelectAddress, onClose }) => {
 
         fetchAddresses();
     }, []);
-    const handleAddAddress = () =>{
-        navigate('/address')
+    const handleAddAddress = (key) =>{
+        navigate('/profile-user', { state: { key } });
     }
 
     return (
@@ -40,7 +40,7 @@ const AddressSelector = ({ onSelectAddress, onClose }) => {
                     ))}
                 </ul>
                 <button style={{fontSize: '14px', marginRight: '180px'}} onClick={onClose} className="close-button">Đóng</button>
-                <button style={{fontSize: '14px'}} onClick={handleAddAddress} className="close-button">Thêm địa chỉ</button>
+                <button style={{fontSize: '14px'}} onClick={() => handleAddAddress(2)} className="close-button">Thêm địa chỉ</button>
             </div>
         </div>
     );

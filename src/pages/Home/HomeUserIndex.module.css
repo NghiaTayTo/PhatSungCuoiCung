@@ -615,12 +615,13 @@
     margin: 0 auto;
 }
 .listBookBannerProductItem {
-    width: 100%;
+    width: 90%;
     box-sizing: border-box;
     padding: 15px;
     cursor: pointer;
     transition: all .2s ease-in-out;
     position: relative;
+    margin: 10px
 }
 .listBookBannerProductItem:hover{
     box-shadow: 0 0 10px #9c9999;
@@ -791,4 +792,8 @@
     margin: 0 auto;
     width: 80%;
     height: auto;
+}
+.noResults{
+    font-size: 20px;
+    color: red;
 }
