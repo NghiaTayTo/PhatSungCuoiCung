@@ -317,7 +317,7 @@ const CheckOut = () => {
 
                 } catch (error) {
                     console.error("Lỗi khi trừ tiền:", error.response?.data || error.message);
-                    alert("Vui lòng kiểm tra số dư!");
+                    NotificationManager.warning('Vui lòng kiểm tra số dư Ví BookerPay', '');
                     return;
                 }
             }
@@ -338,7 +338,7 @@ const CheckOut = () => {
             window.location.reload();
         } catch (error) {
             console.error('Lỗi khi tạo đơn hàng hoặc thêm chi tiết đơn hàng:', error);
-            alert("Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.");
+            NotificationManager.error('Có lỗi xảy ra khi đặt hàng', '');
         }
 
     }
@@ -687,6 +687,8 @@ const CheckOut = () => {
                     onClose={() => setShowAddressSelector(false)}
                 />
             )}
+                  <NotificationContainer />
+            
         </div>
     );
 };

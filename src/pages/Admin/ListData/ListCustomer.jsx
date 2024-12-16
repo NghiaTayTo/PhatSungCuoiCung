@@ -140,7 +140,7 @@ const ListCustomer = ({ CustomerList = [], keySearch, searchName, trangThaiTK })
             <td style={{ width: '120px', textAlign: 'center' }}>
                 <img className='image-border-radius'
                     // src={`${customer.anh_dai_dien}`} 
-                    src="/images/avtadmin.jpg"
+                    src={customer.anh_dai_dien || `/images/avt_default.png`}
                     alt="customer" />
             </td>
             <td style={{ width: '190px' }}>{customer.ho_ten}</td>

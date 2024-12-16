@@ -12,6 +12,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import CamMuaHangForm from './CamMuaHangForm';
 
 const HomeUserIndex = () => {
     const [products, setProducts] = useState([]); // Toàn bộ sản phẩm
@@ -30,10 +31,21 @@ const HomeUserIndex = () => {
 
     const [hoveredProduct, setHoveredProduct] = useState({});
 
+    const [user, setUser] = useState(null);
+
     // Lấy danh sách sản phẩm khi load trang
     useEffect(() => {
+        const storedUser = JSON.parse(sessionStorage.getItem('user'));
+        if (storedUser) {
+            setUser(storedUser);
+            // NotificationManager.success('Đăng nhập thành công', '');
+            // fetchWalletBalance(storedUser.id_tai_khoan);
+        }
+        console.log(storedUser);
         const fetchProducts = async () => {
             try {
+
+
                 const data = await getAllBookUser(); // Lấy toàn bộ sản phẩm từ API
                 setProducts(data);
                 // Lấy ngẫu nhiên sản phẩm cho từng danh mục
@@ -193,15 +205,24 @@ const HomeUserIndex = () => {
 
     const [quantity, setQuantity] = useState(1);
 
+    const [hasNotified, setHasNotified] = useState(false);
+
     //* Hàm thêm vào giỏ hàng
     const addToCart = (product) => {
         const user = JSON.parse(sessionStorage.getItem('user')); // Lấy thông tin người dùng từ session
         if (!user) {
-            // NotificationManager.warning('Bạn cần đăng nhập trước khi thêm sản phẩm vào giỏ hàng!', 'Cảnh báo');
-            alert('Vui lòng đăng nhập trước khi thêm vào giỏ hàng');
-            navigate("/login");
+            if (!hasNotified) { // Chỉ hiển thị thông báo nếu chưa hiển thị lần nào
+                NotificationManager.warning('Vui lòng đăng nhập trước khi thêm vào giỏ hàng', 'Chưa đăng nhập');
+                setHasNotified(true); // Đánh dấu đã hiển thị thông báo
+
+                setTimeout(() => {
+                    navigate("/login");
+                    setHasNotified(false); // Reset trạng thái để thông báo lại khi cần
+                }, 3000);
+            }
             return;
         }
+
 
         const cartKey = `cart_${user.id_tai_khoan}`;
         const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
@@ -214,17 +235,26 @@ const HomeUserIndex = () => {
         }
 
         localStorage.setItem(cartKey, JSON.stringify(cart));
-        alert("Sản phẩm đã được thêm vào giỏ hàng");
-        window.location.reload();
-
+        NotificationManager.success('Thành công', 'Thêm sản phẩm vào giỏ hàng');
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
     };
 
+    const [hienalert, setHienalert] = useState(false);
     //* Hàm "Mua ngay"
     const buyNow = (product) => {
         const user = JSON.parse(sessionStorage.getItem('user'));
         if (!user) {
-            alert("Vui lòng đăng nhập để mua sản phẩm");
-            navigate("/login");
+            if (!hienalert) { // Chỉ hiển thị thông báo nếu chưa hiển thị lần nào
+                NotificationManager.warning('Vui lòng đăng nhập để mua sản phẩm', 'Chưa đăng nhập');
+                setHienalert(true); // Đánh dấu đã hiển thị thông báo
+
+                setTimeout(() => {
+                    navigate("/login");
+                    setHienalert(false); // Reset trạng thái để thông báo lại khi cần
+                }, 3000);
+            }
             return;
         }
 
@@ -239,8 +269,21 @@ const HomeUserIndex = () => {
                 fixed={true}
             />
 
+            {
+                user?.trang_thai_tk === true && (
+                    <CamMuaHangForm />
+                )
+            }
+
             {/* Banner */}
             <section className={styles.bannerSection}>
+
+
+
+                {/* <div classs>
+                <p>Tài khoản đã bị cấm MUA HÀNG</p>
+            </div> */}
+
                 <div className={styles.menuBar}>
                     <ul>
                         <li onClick={() => handleCategoryClick(1)}>
@@ -403,13 +446,31 @@ const HomeUserIndex = () => {
                                                 >
                                                     THÊM VÀO GIỎ HÀNG
                                                 </button>
-                                                <button
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                        buyNow(product);
-                                                    }}
-                                                    className={styles.muangay}>MUA NGAY
-                                                </button>
+
+                                                {
+                                                    user === null && (
+                                                        <button
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                buyNow(product);
+                                                            }}
+                                                            className={styles.muangay}>MUA NGAY
+                                                        </button>
+                                                    )
+                                                }
+
+                                                {
+                                                    user?.trang_thai_tk === false &&
+                                                    <button
+                                                        onClick={(event) => {
+                                                            event.stopPropagation();
+                                                            buyNow(product);
+                                                        }}
+                                                        className={styles.muangay}>MUA NGAY
+                                                    </button>
+
+                                                }
+
                                             </div>
                                         </div>
                                     </div>
@@ -492,13 +553,29 @@ const HomeUserIndex = () => {
                                     >
                                         THÊM VÀO GIỎ HÀNG
                                     </button>
-                                    <button
-                                        onClick={(event) => {
-                                            event.stopPropagation();
-                                            buyNow(hoveredProduct);
-                                        }}
-                                        className={styles.muangay}>MUA NGAY
-                                    </button>
+
+                                    {
+                                        user === null && (
+                                            <button
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    buyNow(hoveredProduct);
+                                                }}
+                                                className={styles.muangay}>MUA NGAY
+                                            </button>
+                                        )
+                                    }
+                                    {
+                                        user?.trang_thai_tk === false &&
+                                        <button
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                buyNow(hoveredProduct);
+                                            }}
+                                            className={styles.muangay}>MUA NGAY
+                                        </button>
+                                    }
+
                                 </div>
                             </div>
 
@@ -563,13 +640,29 @@ const HomeUserIndex = () => {
                                                 >
                                                     THÊM VÀO GIỎ HÀNG
                                                 </button>
-                                                <button
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                        buyNow(product);
-                                                    }}
-                                                    className={styles.muangay}>MUA NGAY
-                                                </button>
+
+                                                {
+                                                    user === null && (
+                                                        <button
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                buyNow(product);
+                                                            }}
+                                                            className={styles.muangay}>MUA NGAY
+                                                        </button>
+                                                    )
+                                                }
+                                                {
+                                                    user?.trang_thai_tk === false &&
+                                                    <button
+                                                        onClick={(event) => {
+                                                            event.stopPropagation();
+                                                            buyNow(product);
+                                                        }}
+                                                        className={styles.muangay}>MUA NGAY
+                                                    </button>
+                                                }
+
                                             </div>
                                         </div>
                                     </div>
@@ -634,13 +727,28 @@ const HomeUserIndex = () => {
                                                 >
                                                     THÊM VÀO GIỎ HÀNG
                                                 </button>
-                                                <button
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                        buyNow(product);
-                                                    }}
-                                                    className={styles.muangay}>MUA NGAY
-                                                </button>
+                                                {
+                                                    user === null && (
+                                                        <button
+                                                            onClick={(event) => {
+                                                                event.stopPropagation();
+                                                                buyNow(product);
+                                                            }}
+                                                            className={styles.muangay}>MUA NGAY
+                                                        </button>
+                                                    )
+                                                }
+                                                {
+                                                    user?.trang_thai_tk === false &&
+                                                    <button
+                                                        onClick={(event) => {
+                                                            event.stopPropagation();
+                                                            buyNow(product);
+                                                        }}
+                                                        className={styles.muangay}>MUA NGAY
+                                                    </button>
+                                                }
+
                                             </div>
                                         </div>
                                     </div>

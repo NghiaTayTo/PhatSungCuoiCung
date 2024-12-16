@@ -1,0 +1,10 @@
+.camMuaHang{
+    background-color: red;
+    color: #fff;
+    padding: 14px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    font-size: 18px;
+    z-index: 100000;
+}

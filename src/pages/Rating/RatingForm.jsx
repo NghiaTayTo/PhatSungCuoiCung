@@ -2,6 +2,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import styles from "./RatingForm.module.css"; // Tạo file CSS để styling
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 const RatingForm = ({ onClose, userId, orderDetailId, productId }) => {
     const [rating, setRating] = useState(0);
@@ -25,11 +27,11 @@ const RatingForm = ({ onClose, userId, orderDetailId, productId }) => {
 
 
             if (response.status === 200) {
-                alert('Gửi đánh giá thành công!');
+                NotificationManager.success('Gửi đánh giá thành công', '');
             }
         } catch (error) {
             console.error('Lỗi khi gửi đánh giá:', error.response.data);
-            alert('Gửi đánh giá thất bại!');
+            NotificationManager.error('Gửi đánh giá thất bại', '');
         }
         onClose();
 
@@ -65,6 +67,9 @@ const RatingForm = ({ onClose, userId, orderDetailId, productId }) => {
                     </button>
                 </div>
             </div>
+
+            <NotificationContainer />
+
         </div>
     );
 };

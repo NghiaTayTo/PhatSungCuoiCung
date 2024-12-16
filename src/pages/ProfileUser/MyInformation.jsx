@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { handleImageUpload } from '../../utils/Order/UploadImageFileOnCloud';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 const MyInformation = () => {
     const [userData, setUserData] = useState({
@@ -48,47 +50,31 @@ const MyInformation = () => {
                     ...prevState,
                     anh_dai_dien: uploadedImageUrl,
                 }));
-                alert('Ảnh đã được tải lên thành công!');
+                NotificationManager.success('Ảnh tải lên thành công', '');
                 
             } catch (error) {
                 console.error('Lỗi khi tải ảnh lên Cloudinary:', error);
-                alert('Không thể tải ảnh lên, vui lòng thử lại.');
+                NotificationManager.error('Ảnh tải lên thất bại', '');
             }
         }
     };
-    
+
+    const [hasNotified, setHasNotified] = useState(false);
     const handleSaveProfile = async (e) => {
         e.preventDefault();
         try {
             const id_tai_khoan = sessionStorage.getItem('id_tai_khoan');
             await axios.put(`http://localhost:8080/api/taikhoan/profile/${id_tai_khoan}`, userData);
-            alert('Cập nhật hồ sơ thành công!');
-
-            window.location.reload();
+            NotificationManager.success('Cập nhật hồ sơ thành công', '');
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         } catch (error) {
             console.error('Lỗi khi cập nhật hồ sơ:', error);
-            alert('Đã xảy ra lỗi khi cập nhật hồ sơ.');
+            NotificationManager.error('Cập nhật hồ sơ thất bại', '');
         }
     };
     
-
-    // Xử lý lưu thông tin hồ sơ
-    // const handleSaveProfile = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         const id_tai_khoan = sessionStorage.getItem('id_tai_khoan');
-    //         const data = await axios.put(`http://localhost:8080/api/taikhoan/profile/${id_tai_khoan}`, userData);
-    //         if(data){
-    //         alert('Cập nhật hồ sơ thành công!');
-    //         window.location.reload();
-    //         }else{
-    //             alert('cc')
-    //         }
-    //     } catch (error) {
-    //         console.error('Lỗi khi cập nhật hồ sơ:', error);
-    //         alert('Đã xảy ra lỗi khi cập nhật hồ sơ.');
-    //     }
-    // };
 
     return (
         <div className='d-flex'>
@@ -155,6 +141,8 @@ const MyInformation = () => {
                 </div>
                 <p>Định dạng: .JPEG, .PNG, .JPG</p>
             </div>
+                  <NotificationContainer />
+            
         </div>
     );
 };

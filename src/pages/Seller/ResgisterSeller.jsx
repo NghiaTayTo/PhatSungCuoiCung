@@ -9,6 +9,7 @@ import defaultAvatar from './default_avatar.png';
 import defaultCover from './default_cover.png';
 import { handleImageUpload } from '../../utils/Order/UploadImageFileOnCloud'
 import { createFileFromUrl } from '../../utils/Order/UploadImageFileOnCloud'
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 const RegisterSeller = () => {
     const [user, setUser] = useState(null);
@@ -77,7 +78,7 @@ const RegisterSeller = () => {
 
 
     // Save the updated address
-
+    const [hasNotified, setHasNotified] = useState(false);
 
     // Submit registration form
     const handleRegisterSeller = async () => {
@@ -126,12 +127,21 @@ const RegisterSeller = () => {
                 sessionStorage.setItem('id_tai_khoan', taikhoan.data.result.id_tai_khoan);
             }
 
-            alert("Đăng ký thành công!");
-            navigate('/HomeUserIndex');
+            if (!hasNotified) { // Chỉ hiển thị thông báo nếu chưa hiển thị lần nào
+                NotificationManager.success('Đăng ký cửa hàng thành công', '');
+                setHasNotified(true); // Đánh dấu đã hiển thị thông báo
+
+                setTimeout(() => {
+                    navigate('/HomeUserIndex');
+                    setHasNotified(false); // Reset trạng thái để thông báo lại khi cần
+                }, 3000);
+            }
+
+
             console.log("Seller registered:", response.data);
         } catch (error) {
             console.error("Error registering seller:", error);
-            alert("Đăng ký thất bại!");
+            NotificationManager.error('Đăng ký cửa hàng thất bại', '');
         }
     };
 
@@ -196,7 +206,9 @@ const RegisterSeller = () => {
                         </div>
                     </div>
                 </div>
-            </section>  
+            </section>
+                  <NotificationContainer />
+            
             {/* <FooterUser /> */}
             {showAddressSelector && (
                 <AddressSelector

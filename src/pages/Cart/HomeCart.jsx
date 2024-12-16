@@ -10,8 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const ShoppingCart = () => {
     const [cart, setCart] = useState([]);
     const navigate = useNavigate();
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
+        const storedUser = JSON.parse(sessionStorage.getItem('user'));
+        if (storedUser) {
+            setUser(storedUser);
+            // fetchWalletBalance(storedUser.id_tai_khoan);
+        }
         const user = JSON.parse(sessionStorage.getItem('user'));
         if (user) {
             const cartKey = `cart_${user.id_tai_khoan}`;
@@ -30,30 +36,30 @@ const ShoppingCart = () => {
         const updatedCart = cart.map((item) => {
             if (item.ma_san_pham === productId) {
                 const newQuantity = item.so_luong + change;
-    
+
                 // Kiểm tra điều kiện sản phẩm còn hàng
                 if (newQuantity > item.con_hang) {
                     alert(`Sản phẩm "${item.ten_san_pham}" chỉ còn ${item.con_hang} sản phẩm.`);
                     return item; // Giữ nguyên nếu vượt quá số lượng có sẵn
                 }
-    
+
                 if (newQuantity > 0) {
                     return { ...item, so_luong: newQuantity };
                 }
             }
             return item;
         });
-    
+
         setCart(updatedCart);
         updateCartInLocalStorage(updatedCart);
     };
-    
+
 
     const handleRemoveItem = (productId) => {
         const updatedCart = cart.filter(item => item.ma_san_pham !== productId);
         setCart(updatedCart);
         updateCartInLocalStorage(updatedCart);
-        window.location.reload(); 
+        window.location.reload();
     };
 
     const handleSelectItem = (productId) => {
@@ -175,13 +181,18 @@ const ShoppingCart = () => {
                         ))}
                         <div className="cart-summary">
                             <p>Tổng thanh toán: <span>₫{totalAmount.toLocaleString('vi-VN')}</span></p>
-                            <button
-                                style={{ fontSize: '16px'}}
-                                onClick={handleCheckout}
-                                className="checkout-button"
-                            >
-                                Tiến hành thanh toán
-                            </button>
+
+                            {
+                                user?.trang_thai_tk === false &&
+                                <button
+                                    style={{ fontSize: '16px' }}
+                                    onClick={handleCheckout}
+                                    className="checkout-button"
+                                >
+                                    Tiến hành thanh toán
+                                </button>
+                            }
+
                         </div>
                     </>
                 )}

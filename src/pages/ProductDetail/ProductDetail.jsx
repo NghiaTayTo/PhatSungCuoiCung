@@ -14,6 +14,8 @@ import { faFacebook, faFacebookMessenger, faPinterest } from '@fortawesome/free-
 import { getSumLuotBanByMaCuaHang } from '../../utils/API/OrderDetailsAPI';
 import { getVouchersByCuaHangIdDetailsUser } from '../../utils/API/VoucherAPI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 import Pagination from '../../utils/Pagination/Pagination';
 
 import StarRating from '../../utils/Order/StarRating';
@@ -66,6 +68,7 @@ const ProductDetail = () => {
 
     const [currentProducts, setCurrentProducts] = useState([]);
     const [userID, setUserID] = useState(null);
+
 
     // Lấy chi tiết sản phẩm
     useEffect(() => {
@@ -184,49 +187,69 @@ const ProductDetail = () => {
         window.scrollTo(0, 0);
     };
 
+    const [hienalert, setHienalert] = useState(false);
     // Hàm thêm vào giỏ hàng
     const addToCart = () => {
-        const user = JSON.parse(sessionStorage.getItem('user')); // Lấy thông tin người dùng từ session
+        const user = JSON.parse(sessionStorage.getItem('user')); // lấy thông tin người dùng từ session
         if (!user) {
-            alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
-            navigate("/login");
+            if (!hienalert) { // Chỉ hiển thị thông báo nếu chưa hiển thị lần nào
+                NotificationManager.warning('Vui lòng đăng nhập để mua sản phẩm', 'Chưa đăng nhập');
+                setHienalert(true); // Đánh dấu đã hiển thị thông báo
+
+                setTimeout(() => {
+                    navigate("/login");
+                    setHienalert(false); // Reset trạng thái để thông báo lại khi cần
+                }, 3000);
+            }
             return;
         }
-    
+
         const cartKey = `cart_${user.id_tai_khoan}`;
         const currentCart = JSON.parse(localStorage.getItem(cartKey)) || [];
-    
+
         // Tìm sản phẩm đã có trong giỏ
         const existingProduct = currentCart.find((item) => item.ma_san_pham === product.ma_san_pham);
         if (existingProduct) {
             if (existingProduct.so_luong + quantity > product.con_hang) {
-                alert(`Không thể thêm quá số lượng có sẵn (${product.con_hang})`);
+                // alert(`Không thể thêm quá số lượng có sẵn (${product.con_hang})`);
+                NotificationManager.warning(`Không thể thêm quá ${product.con_hang} sản phẩm có sẵn`, 'Thêm vào giỏ hàng');
                 return;
             }
             existingProduct.so_luong += quantity; // Cập nhật số lượng
         } else {
             if (quantity > product.con_hang) {
-                alert(`Số lượng không hợp lệ. Chỉ còn ${product.con_hang} sản phẩm.`);
+                // alert(`Số lượng không hợp lệ. Chỉ còn ${product.con_hang} sản phẩm.`);
+                NotificationManager.warning(`Số lượng không hợp lệ. Chỉ còn ${product.con_hang} sản phẩm`, 'Thêm vào giỏ hàng');
                 return;
             }
             currentCart.push({ ...product, so_luong: quantity });
         }
-    
+
         // Lưu vào localStorage
         localStorage.setItem(cartKey, JSON.stringify(currentCart));
         setCart(currentCart); // Đồng bộ trạng thái giỏ hàng
-        alert("Sản phẩm đã được thêm vào giỏ hàng");
+        NotificationManager.success('Thành công', 'Thêm sản phẩm vào giỏ hàng');
         // navigate('/shopping'); // Điều hướng tới giỏ hàng nếu cần
-        window.location.reload();
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
     };
-    
 
+
+    const [hasNotified, setHasNotified] = useState(false);
     // Hàm "Mua ngay"
     const buyNow = () => {
         const user = JSON.parse(sessionStorage.getItem('user'));
         if (!user) {
-            alert("Vui lòng đăng nhập để mua sản phẩm");
-            navigate("/login");
+            if (!hasNotified) { // Chỉ hiển thị thông báo nếu chưa hiển thị lần nào
+                NotificationManager.warning('Vui lòng đăng nhập để mua sản phẩm', 'Chưa đăng nhập');
+                setHasNotified(true); // Đánh dấu đã hiển thị thông báo
+
+                setTimeout(() => {
+                    navigate("/login");
+                    setHasNotified(false); // Reset trạng thái để thông báo lại khi cần
+                }, 3000);
+            }
             return;
         }
 
@@ -376,21 +399,21 @@ const ProductDetail = () => {
                 id_voucher: voucher.id_voucher, // ID của voucher
                 id_tai_khoan: user.id_tai_khoan, // ID tài khoản người dùng, thay bằng giá trị thực tế
             };
-    
+
             const response = await axios.post(`http://localhost:8080/api/v1/save-voucher`, payload, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-    
+
             console.log('Voucher saved successfully:', response.data);
-            alert('Lưu voucher thành công!');
+            NotificationManager.success('Thành công', 'Lưu Voucher');
         } catch (error) {
             console.error('Error saving voucher:', error);
-            alert('Lưu voucher thất bại!');
+            NotificationManager.error('Thất bại', 'Lưu Voucher');
         }
     };
-    
+
     const voucherRows = listVoucher.map((voucher, index) => {
         return (
             <div key={index} className="list-voucher-item">
@@ -403,7 +426,7 @@ const ProductDetail = () => {
                         <p>HSD: {voucher.ngay_het_han}</p>
                     </div>
                     <div className="list-voucher-item-info-button">
-                        <button style={{marginTop: '35px'}} onClick={() => handleSaveVoucher(voucher)}>LƯU</button>
+                        <button style={{ marginTop: '35px' }} onClick={() => handleSaveVoucher(voucher)}>LƯU</button>
                     </div>
                 </div>
             </div>
@@ -415,7 +438,7 @@ const ProductDetail = () => {
 
     return (
         <div className={styles.parent}>
-            <HeaderUser fixed={false}/>
+            <HeaderUser fixed={false} />
 
             <section className="product-detail">
                 {/* Thông tin chính của sản phẩm */}
@@ -487,7 +510,18 @@ const ProductDetail = () => {
                                 <button style={{ marginRight: '20px' }} className="add-to-cart-btn" onClick={addToCart}>
                                     <FontAwesomeIcon className="add-to-cart-btn-icon" icon={faCartPlus}></FontAwesomeIcon>
                                     Thêm vào giỏ hàng</button>
-                                <button onClick={buyNow} className="buy-now-btn">MUA NGAY</button>
+                                {
+                                    user === null && (
+                                        <button
+                                            onClick={buyNow}
+                                            className="buy-now-btn">MUA NGAY
+                                        </button>
+                                    )
+                                }
+                                {
+                                    user?.trang_thai_tk === false && <button onClick={buyNow} className="buy-now-btn">MUA NGAY</button>
+                                }
+
                             </div>
                         </div>
 
@@ -666,6 +700,8 @@ const ProductDetail = () => {
                     </div>
                 </div>
             </section>
+            <NotificationContainer />
+
 
             <FooterUser />
         </div>

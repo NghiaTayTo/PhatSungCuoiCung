@@ -18,7 +18,7 @@ import ReportForm from '../../utils/ReportForm/ReportForm';
 import NotificationUI from '../Notification/NotificationUI';
 
 import { getPhanHoiDanhGiaByMaDanhGia, insertPhanHoiDanhGia, deletePhanHoiDanhGia } from '../../utils/API/PhanHoiDanhGiaAPI';
-import {StoreApi} from '../../StoreId';
+import { StoreApi } from '../../StoreId';
 
 
 const ListCommentDetails = ({ listComments = [], keySearch, searchName, rating }) => {
@@ -169,7 +169,7 @@ const ListCommentDetails = ({ listComments = [], keySearch, searchName, rating }
                                 <div>
                                     <div className='comment-account'>
                                         <div className='comment-account_img'>
-                                            <img src={`/images/avt6.jpg`} alt="book" />
+                                            <img src={comment.tai_khoan_danh_gia?.anh_dai_dien || `/images/avt_default.png`} alt="book" />
                                         </div>
                                         <div style={{ marginLeft: '15px' }}>
                                             <p className='comment-account_name'>{comment.tai_khoan_danh_gia?.ho_ten}</p>
@@ -227,7 +227,7 @@ const ListCommentDetails = ({ listComments = [], keySearch, searchName, rating }
                                     <div>
                                         <div className='comment-account'>
                                             <div className='comment-account_img'>
-                                                <img src={`/images/avt6.jpg`} alt="book" />
+                                                <img src={comment.tai_khoan_danh_gia?.anh_dai_dien || `/images/avt_default.png`} alt="book" />
                                             </div>
                                             <div style={{ marginLeft: '15px' }}>
                                                 <p className='comment-account_name'>{comment.tai_khoan_danh_gia?.ho_ten}</p>

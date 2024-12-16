@@ -7,6 +7,8 @@ import { FaFacebook, FaGoogle } from 'react-icons/fa';
 // import FooterUser from '../Component/FooterUser';
 import './Register.css';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 const Register = () => {
     const [code, setCode] = useState(''); // Mã OTP người dùng nhập
@@ -61,37 +63,39 @@ const Register = () => {
         }
     };
 
+    const [hasNotified, setHasNotified] = useState(false);
+
     const handleRegister = async () => {
         // Xóa thông báo lỗi trước đó
         setErrorMessage('');
-    
+
         // Biến flag để kiểm tra tất cả điều kiện
         let hasError = false;
-    
+
         // Validate họ tên
         if (!userInfo.hoTen) {
             setErrorMessage("Vui lòng nhập họ và tên\n");
             hasError = true;
         }
-    
+
         // Validate email
         if (!userInfo.email) {
             setErrorMessage((prev) => prev + "\nVui lòng nhập email!\n");
             hasError = true;
         }
-    
+
         // Validate mã OTP
         if (!code) {
             setErrorMessage((prev) => prev + "\nVui lòng nhập mã OTP!\n");
             hasError = true;
         }
-    
+
         // Validate mật khẩu
         if (!userInfo.matKhau) {
             setErrorMessage((prev) => prev + "\nVui lòng nhập mật khẩu!\n");
             hasError = true;
         }
-    
+
         // Validate xác nhận mật khẩu
         if (!userInfo.confirmMatKhau) {
             setErrorMessage((prev) => prev + "\nVui lòng nhập lại mật khẩu!\n");
@@ -100,12 +104,12 @@ const Register = () => {
             setErrorMessage((prev) => prev + "\nMật khẩu và xác nhận mật khẩu không khớp.\n");
             hasError = true;
         }
-    
+
         // Nếu có lỗi thì không thực hiện gửi API
         if (hasError) {
             return;
         }
-    
+
         // Thực hiện đăng ký nếu không có lỗi
         try {
             const response = await axios.post('http://localhost:8080/api/taikhoan/register', {
@@ -116,10 +120,18 @@ const Register = () => {
                 vai_tro: { ma_vai_tro: 1 }, // Người dùng thông thường
                 trang_thai_tk: 0, // Chờ kích hoạt
             });
-    
+
             if (response.data.message === 'Đăng ký tài khoản thành công') {
-                alert('Đăng ký thành công!');
-                navigate('/login');
+                if (!hasNotified) { // Chỉ hiển thị thông báo nếu chưa hiển thị lần nào
+                    NotificationManager.success('Thành công', 'Đăng ký tài khoản mới');
+                    setHasNotified(true); // Đánh dấu đã hiển thị thông báo
+
+                    setTimeout(() => {
+                        navigate("/login");
+                        setHasNotified(false); // Reset trạng thái để thông báo lại khi cần
+                    }, 3000);
+                }
+                // navigate('/login');
             } else {
                 setErrorMessage(response.data.message);
             }
@@ -128,7 +140,7 @@ const Register = () => {
             setErrorMessage('Đăng ký thất bại. Vui lòng thử lại.');
         }
     };
-    
+
 
     return (
 
@@ -228,6 +240,7 @@ const Register = () => {
                     </div>
                 </div>
             </section>
+             <NotificationContainer />
             {/* <FooterUser /> */}
         </div>
     );

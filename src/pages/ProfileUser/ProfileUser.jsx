@@ -11,6 +11,8 @@ import AddressUser from './AddressUser';
 import ChangePassword from './ChangePass';
 import KhoVoucher from './KhoVoucher';
 import DonHang from '../Cart/Donhang';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 const ProfileUser = () => {
     const location = useLocation();
@@ -31,10 +33,10 @@ const ProfileUser = () => {
         if (keyForm === 4) {
             setKey(keyForm)
         }
-        if(keyForm === 3){
+        if (keyForm === 3) {
             setKey(keyForm)
         }
-        if(keyForm === 2){
+        if (keyForm === 2) {
             setKey(keyForm)
         }
         const fetchUserData = async () => {
@@ -104,6 +106,7 @@ const ProfileUser = () => {
                 </div>
 
             </section>
+            <NotificationContainer />
 
             <FooterUser />
         </div>

@@ -7,6 +7,8 @@ import RatingForm from '../Rating/RatingForm';
 import ReportForm from '../Rating/Report';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faSearch, faStore } from '@fortawesome/free-solid-svg-icons';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 const DonHang = () => {
     const [orderDetails, setOrderDetails] = useState([]);
@@ -66,6 +68,8 @@ const DonHang = () => {
                     : detail
             );
 
+            NotificationManager.success('Đơn hàng đã được hủy', '');
+
             setOrderDetails(updatedOrderDetails);
             setFilteredOrderDetails(updatedOrderDetails.filter(detail => activeStatus === "Tất cả" || detail.trang_thai?.ten_trang_thai === activeStatus));
 
@@ -87,7 +91,8 @@ const DonHang = () => {
 
             setOrderDetails(updatedOrderDetails);
             setFilteredOrderDetails(updatedOrderDetails.filter(detail => activeStatus === "Tất cả" || detail.trang_thai?.ten_trang_thai === activeStatus));
-            alert("Đơn hàng đã được xác nhận nhận hàng");
+        
+            NotificationManager.success('Đã xác nhận nhận hàng', '');
         } catch (error) {
             console.error("Lỗi khi xác nhận nhận hàng:", error);
         }
@@ -105,8 +110,8 @@ const DonHang = () => {
 
             setOrderDetails(updatedOrderDetails);
             setFilteredOrderDetails(updatedOrderDetails.filter(detail => activeStatus === "Tất cả" || detail.trang_thai?.ten_trang_thai === activeStatus));
-
-            alert("Yêu cầu trả hàng/Hoàn tiền đã được gửi.");
+            NotificationManager.success('Đã gửi yêu cầu trả hàng - hoàn tiền', '');
+            
         } catch (error) {
             console.error("Lỗi khi yêu cầu trả hàng/Hoàn tiền:", error);
         }
@@ -218,7 +223,7 @@ const DonHang = () => {
                                             <p style={{ fontSize: '16px' }}>Thành tiền: <span>₫{(detail.thanh_tien).toLocaleString()}</span></p>
                                         ) : (
                                             <p style={{ fontSize: '16px' }}>Thành tiền: <span>{(detail.thanh_tien).toLocaleString()}</span>
-                                                 <img src='/images/solana.png' />
+                                                <img src='/images/solana.png' />
                                             </p>
                                         )
                                     }
@@ -284,6 +289,8 @@ const DonHang = () => {
             {showFormReport && (
                 <ReportForm userId={userId} storeId={idCuaHang} productId={idProduct} onClose={handleCloseFormReport} />
             )}
+            <NotificationContainer />
+
         </div>
     );
 };
