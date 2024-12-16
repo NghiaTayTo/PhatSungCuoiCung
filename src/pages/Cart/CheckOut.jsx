@@ -301,7 +301,6 @@ const CheckOut = () => {
             if (phuongThuc === 1) {
                 // Trừ tiền từ tài khoản của người dùng
                 const totalAmountToDeduct = grandTotal; // Tổng tiền cần trừ (bao gồm phí vận chuyển)
-
                 try {
                     const deductMoneyResponse = await axios.post(
                         `http://localhost:8080/api/vi/deductMoney`, // Endpoint mới  
@@ -319,19 +318,24 @@ const CheckOut = () => {
                 } catch (error) {
                     console.error("Lỗi khi trừ tiền:", error.response?.data || error.message);
                     alert("Vui lòng kiểm tra số dư!");
+                    return;
                 }
             }
             // Điều hướng tới trang đơn hàng
 
             // Xóa sản phẩm khỏi giỏ hàng hoặc sessionStorage
             if (buyNowProduct) {
-                sessionStorage.removeItem('checkoutItem'); // Xóa sản phẩm "Mua Ngay" khỏi sessionStorage
+                sessionStorage.removeItem('checkoutItem');
             } else {
-                localStorage.removeItem(`cart_${userId}`); // Xóa giỏ hàng sau khi đặt hàng thành công
+                const remainingCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+                const updatedCart = remainingCart.filter(
+                    item => !checkoutCart.some(purchased => purchased.ma_san_pham === item.ma_san_pham)
+                );
+                localStorage.setItem(`cart_${userId}`, JSON.stringify(updatedCart));
             }
-
+            
             handleClickAdd(4);
-
+            window.location.reload();
         } catch (error) {
             console.error('Lỗi khi tạo đơn hàng hoặc thêm chi tiết đơn hàng:', error);
             alert("Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại.");
@@ -352,7 +356,7 @@ const CheckOut = () => {
     const [visibleFormIndex, setVisibleFormIndex] = useState(null);
 
     const toggleForm = async (index, idCuaHang) => {
-        const response = await axios.get(`http://localhost:8080/api/v1/save-voucher/${idCuaHang}`);
+        const response = await axios.get(`http://localhost:8080/api/v1/save-voucher/${user.id_tai_khoan}/${idCuaHang}`);
         setListVoucher(response.data)
         console.log(listVoucher )
         setVisibleFormIndex(visibleFormIndex === index ? null : index);

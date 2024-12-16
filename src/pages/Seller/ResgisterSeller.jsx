@@ -196,7 +196,7 @@ const RegisterSeller = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section>  
             {/* <FooterUser /> */}
             {showAddressSelector && (
                 <AddressSelector

@@ -5,17 +5,25 @@ import Loading from '../../utils/Order/Loading';
 const KhoVoucher = () => {
     const [vouchers, setVouchers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [userID, setUserID] = useState(null);
+
 
     // Hàm fetch dữ liệu từ API
     useEffect(() => {
+        
         const fetchVouchers = async () => {
+            const storedUser = await JSON.parse(sessionStorage.getItem('user'));
+        if (storedUser) {
+            setUserID(storedUser.id_tai_khoan);
+        }
             try {
-                const response = await axios.get('http://localhost:8080/api/v1/save-voucher', {
+                const response = await axios.get(`http://localhost:8080/api/v1/save-voucher/get-${userID}`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
                 setVouchers(response.data); // Lưu dữ liệu từ API vào state
+                console.log(userID)
             } catch (error) {
                 console.error('Error fetching vouchers:', error);
             } finally {
@@ -36,7 +44,7 @@ const KhoVoucher = () => {
                 <h2>Kho Voucher</h2>
                 <div className="voucher-user_list">
                     {vouchers.length === 0 ? (
-                        <p>Không có voucher nào được lưu.</p>
+                        <p style={{fontSize: '20px', color: 'red'}}>Không có voucher nào được lưu. {userID}</p>
                     ) : (
                         vouchers.map((voucher, index) => (
                             <div key={index} className="voucher-user_item">

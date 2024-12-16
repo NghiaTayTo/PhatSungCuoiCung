@@ -6,6 +6,7 @@ import logo from '../Home/logoBooker.png';
 const RechargeForm = ({ onClose }) => {
     const [inputAmount, setInputAmount] = useState('');
     const [displayAmount, setDisplayAmount] = useState(0);
+    const [amount, setAmount] = useState(0)
     const [isInvoiceVisible, setIsInvoiceVisible] = useState(false);
     const [imgSrc, setImgSrc] = useState('');
     const [user, setUser] = useState(null);
@@ -36,6 +37,7 @@ const RechargeForm = ({ onClose }) => {
         const value = e.target.value;
         const numericValue = value.replace(/\D/g, ''); // Chỉ giữ lại số
         setInputAmount(numericValue);
+        setAmount(numericValue)
         setDisplayAmount(Number(numericValue));
         setImgSrc(`https://apiqr.web2m.com/api/generate/ACB/12897891/LE%20CHAU%20KIET?amount=${numericValue}&memo=${walletId}&is_mask=0&bg=0`);
     };
@@ -161,7 +163,7 @@ const RechargeForm = ({ onClose }) => {
                                     <i className="fa-solid fa-money-bill"></i> Số tiền thanh toán:
                                 </div>
                                 <span style={{ color: 'rgb(134, 236, 50)' }}>
-                                    {displayAmount.toLocaleString('vi-VN') || 0} VND
+                                    {amount.toLocaleString('vi-VN') || 0} VND
                                 </span>
                                 <hr />
                                 <div>

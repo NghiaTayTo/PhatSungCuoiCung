@@ -30,20 +30,30 @@ const ShoppingCart = () => {
         const updatedCart = cart.map((item) => {
             if (item.ma_san_pham === productId) {
                 const newQuantity = item.so_luong + change;
+    
+                // Kiểm tra điều kiện sản phẩm còn hàng
+                if (newQuantity > item.con_hang) {
+                    alert(`Sản phẩm "${item.ten_san_pham}" chỉ còn ${item.con_hang} sản phẩm.`);
+                    return item; // Giữ nguyên nếu vượt quá số lượng có sẵn
+                }
+    
                 if (newQuantity > 0) {
                     return { ...item, so_luong: newQuantity };
                 }
             }
             return item;
         });
+    
         setCart(updatedCart);
         updateCartInLocalStorage(updatedCart);
     };
+    
 
     const handleRemoveItem = (productId) => {
         const updatedCart = cart.filter(item => item.ma_san_pham !== productId);
         setCart(updatedCart);
         updateCartInLocalStorage(updatedCart);
+        window.location.reload(); 
     };
 
     const handleSelectItem = (productId) => {
@@ -123,20 +133,6 @@ const ShoppingCart = () => {
                                         </p>
                                     </div>
                                     <div className="product-quantity">
-                                        {/* <button className='buttonCart' onClick={() => handleQuantityChange(product.ma_san_pham, -1)}>-</button>
-                                        <input
-                                            type="number"
-                                            style={{ width: '45px', height: '35px', border: 'none', padding: '5px' }}
-                                            value={product.so_luong}
-                                            readOnly
-                                        />
-                                        <button
-                                            className='buttonCart'
-                                            style={{ marginRight: '10px' }}
-                                            onClick={() => handleQuantityChange(product.ma_san_pham, 1)}
-                                        >
-                                            +
-                                        </button> */}
                                         <div className="quantityWrapper" style={{ marginLeft: '20px' }}>
                                             <button
                                                 className="quantityBtn"

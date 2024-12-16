@@ -78,8 +78,8 @@ const HomeUserIndex = () => {
         navigate(`/HomeUser?ma_the_loai=${maTheLoai}`);
     };
 
-    const handleNameCategoryClick = (tenTheLoai) => {
-        navigate(`/HomeUser?ten_the_loai=${tenTheLoai}`);
+    const handleNameCategoryClick = () => {
+        navigate(`/HomeUser`);
     };
 
     // Tính toán sản phẩm hiển thị cho trang hiện tại
@@ -351,7 +351,7 @@ const HomeUserIndex = () => {
                         <h3>TÁC PHẨM VĂN HỌC</h3>
                         <div className={styles.listBookOption}>
                             <ul>
-                                <p onClick={() => handleNameCategoryClick('Văn học')}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
+                                <p onClick={() => handleNameCategoryClick()}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
                                 </p>
                             </ul>
                         </div>
@@ -384,7 +384,7 @@ const HomeUserIndex = () => {
                                             <p className={styles.tg}>{product.tac_gia}</p>
                                             <p className={styles.mt}>{product.mo_ta}</p>
                                             <div className={styles.positionOk}>
-                                                <span>Xem thêm</span>
+                                                <span onClick={() => handleNameCategoryClick()}>Xem thêm</span>
                                                 <div className={styles.money}>
                                                     <p className={styles.productPrice}>
                                                         {product.gia ? product.gia.toLocaleString('vi-VN') : 0}đ
@@ -511,7 +511,7 @@ const HomeUserIndex = () => {
                         <h3>SÁCH LỊCH SỬ</h3>
                         <div className={styles.listBookOption}>
                             <ul>
-                                <p onClick={() => handleNameCategoryClick('Lịch sử')}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
+                                <p onClick={() => handleNameCategoryClick()}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
                                 </p>
                             </ul>
                         </div>
@@ -544,7 +544,7 @@ const HomeUserIndex = () => {
                                             <p className={styles.tg}>{product.tac_gia}</p>
                                             <p className={styles.mt}>{product.mo_ta}</p>
                                             <div className={styles.positionOk}>
-                                                <span>Xem thêm</span>
+                                                <span onClick={() => handleNameCategoryClick()}>Xem thêm</span>
                                                 <div className={styles.money}>
                                                     <p className={styles.productPrice}>
                                                         {product.gia ? product.gia.toLocaleString('vi-VN') : 0}đ
@@ -584,7 +584,7 @@ const HomeUserIndex = () => {
                         <h3>TRUYỆN TRANH - ANIME</h3>
                         <div className={styles.listBookOption}>
                             <ul>
-                                <p onClick={() => handleNameCategoryClick('Truyện tranh')}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
+                                <p onClick={() => handleNameCategoryClick()}>Xem thêm <FontAwesomeIcon icon={faAngleRight}></FontAwesomeIcon>
                                 </p>
                             </ul>
                         </div>
@@ -615,7 +615,7 @@ const HomeUserIndex = () => {
                                             <p className={styles.tg}>{product.tac_gia}</p>
                                             <p className={styles.mt}>{product.mo_ta}</p>
                                             <div className={styles.positionOk}>
-                                                <span>Xem thêm</span>
+                                                <span onClick={() => handleNameCategoryClick()}>Xem thêm</span>
                                                 <div className={styles.money}>
                                                     <p className={styles.productPrice}>
                                                         {product.gia ? product.gia.toLocaleString('vi-VN') : 0}đ
