@@ -15,6 +15,8 @@ import NotificationUI from '../Notification/NotificationUI';
 import { getGiaoDichByID, updateGiaoDich } from '../API/GiaoDichAPI';
 import { getCuaHangById, getCuaHangByIdAdmin, updateCuaHang } from '../API/StoreAPI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 const ListTransaction = ({ listBooks, keySearch }) => {
     const [pagination, setPagination] = useState();
@@ -75,14 +77,15 @@ const ListTransaction = ({ listBooks, keySearch }) => {
                 const dataUpdate = await updateGiaoDich(data);
                 const cuaHangUpdateData = await updateCuaHang(cuaHangUpdate);
                 if (dataUpdate && cuaHangUpdateData) {
-                    setNotificationStatus('xacNhanIsSuccess');
+                    // setNotificationStatus('xacNhanIsSuccess');
+                    NotificationManager.success('Thành công', 'Hủy giao dịch rút tiền');
                     setCloseNotification(true);
                     window.location.reload();
                 }
             } catch (e) {
                 setCloseNotification(true);
 
-                setNotificationStatus('xacNhanIsSuccess');
+                NotificationManager.error('Thất bại', 'Hủy giao dịch rút tiền');
 
                 console.log("Lỗi khi update giao dịch cửa hàng" + e);
             }
@@ -222,22 +225,8 @@ const ListTransaction = ({ listBooks, keySearch }) => {
                 )
             }
 
+            <NotificationContainer />
 
-
-            {/* <FontAwesomeIcon className='pagination-icon' icon={faAngleLeft}></FontAwesomeIcon> */}
-
-            {/* <FontAwesomeIcon className='pagination-icon' icon={faAngleRight}></FontAwesomeIcon> */}
-
-            {//selectedBook
-                isDetailVisible && (
-                    <VoucherForm
-                        keyForm={'detailVoucher'}
-                        onClose={handleCloseDetails}
-                        nameShop={'Sunrise2.vn'}
-                        isHanSuDung={isHanSuDung}
-                    />
-                )
-            }
             {
                 notificationDelGiaoDich && (
                     <Notification
@@ -247,28 +236,7 @@ const ListTransaction = ({ listBooks, keySearch }) => {
                         onApply={handleApplyGiaoDich} />
                 )
             }
-            {notificationStatus === 'xacNhanIsSuccess' && closeNotification === true && (
-
-                <NotificationUI
-                    type="success"
-                    title="Hủy giao dịch rút tiền"
-                    description={`Thành công.`}
-                    onClose={handleCloseNotification}
-                    keyPage={"bookForm"}
-                />
-
-            )}
-            {notificationStatus === 'xacNhanIsFail' && closeNotification === true && (
-
-                <NotificationUI
-                    type="error"
-                    title="Hủy giao dịch rút tiền"
-                    description={`Thất bại.`}
-                    onClose={handleCloseNotification}
-                    keyPage={"bookForm"}
-                />
-
-            )}
+            
         </div>
     );
 };

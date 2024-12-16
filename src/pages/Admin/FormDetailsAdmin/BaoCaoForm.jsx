@@ -6,6 +6,9 @@ import { getBaoCaoCuaHangById, updateBaoCaoCuaHang } from '../../../utils/API/Ba
 import './FormDetailsAdmin.css';
 import NotificationUI from '../../../utils/Notification/NotificationUI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
+
 const BaoCaoForm = ({ baoCaoID, onClose, trangThaiBaoCao }) => {
 
     const [baoCao, setBaoCao] = useState({});
@@ -39,14 +42,14 @@ const BaoCaoForm = ({ baoCaoID, onClose, trangThaiBaoCao }) => {
                 };
             }
             console.log('báo cáo');
-            
+
             const response = await updateBaoCaoCuaHang(dataUpdate);
             if (response) {
+                NotificationManager.success('Thành công', 'Xác nhận báo cáo');
                 window.location.reload();
-                setNotificationStatus('updateIsSuccess');
             }
         } catch (e) {
-            setNotificationStatus('updateIsFail');
+            NotificationManager.error('Thất bại', 'Xác nhận báo cáo');
             console.log(e);
         }
     }
@@ -138,28 +141,7 @@ const BaoCaoForm = ({ baoCaoID, onClose, trangThaiBaoCao }) => {
                 </div>
             </div>
 
-            {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="success"
-                        title="Xác nhận báo cáo"
-                        description={`"Thành công."`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
-            {notificationStatus === 'updateIsFail' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="error"
-                        title="Xác nhận báo cáo"
-                        description={`"Thất bại."`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
+            <NotificationContainer />
 
         </div>
     );

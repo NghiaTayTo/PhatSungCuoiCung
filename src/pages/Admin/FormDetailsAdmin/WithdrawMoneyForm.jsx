@@ -5,6 +5,9 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import NotificationUI from '../../../utils/Notification/NotificationUI';
 import { getCuaHangByIdAdmin, updateCuaHangAdmin } from '../../../utils/API/StoreAPI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
+
 const WithdrawMoneyForm = ({ moneyID, onClose }) => {
 
     const [withdrawMoney, setWithdrawMoney] = useState({});
@@ -40,20 +43,18 @@ const WithdrawMoneyForm = ({ moneyID, onClose }) => {
                 const dataUpdate = await updateGiaoDich(data);
 
                 if (dataUpdate && trangThai === 1) {
-                    setNotificationStatus('xacNhanIsSuccess');
-                    setCloseNotification(true);
+                    NotificationManager.success('Thành công', 'Chuyển tiền');
                     window.location.reload();
                 } else {
-                    setNotificationStatus('huyIsSuccess');
-                    setCloseNotification(true);
+                    NotificationManager.success('Thành công', 'Hủy yêu cầu rút tiền');
                     window.location.reload();
                 }
             } catch (e) {
                 setCloseNotification(true);
                 if (trangThai === 1) {
-                    setNotificationStatus('xacNhanIsSuccess');
+                    NotificationManager.error('Thất bại', 'Chuyển tiền');
                 } else {
-                    setNotificationStatus('huyIsSuccess');
+                    NotificationManager.error('Thất bại', 'Hủy yêu cầu rút tiền');
                 }
                 console.log("Lỗi khi update giao dịch cửa hàng" + e);
             }
@@ -102,7 +103,7 @@ const WithdrawMoneyForm = ({ moneyID, onClose }) => {
                         </div>
                         <div className='qrcode-form-store-info'>
                             <h3>{store.ten_cua_hang}</h3>
-                            <p style={{marginTop: '25px'}}>Số tiền rút: <span>{withdrawMoney.so_tien?.toLocaleString()}đ</span></p>
+                            <p style={{ marginTop: '25px' }}>Số tiền rút: <span>{withdrawMoney.so_tien?.toLocaleString()}đ</span></p>
                             <p>Ngày giao dịch: <span>{withdrawMoney.ngay_giao_dich}</span></p>
                             <p>Nội dung chuyển khoản: <span>{withdrawMoney.mo_ta}</span></p>
                         </div>
@@ -131,50 +132,8 @@ const WithdrawMoneyForm = ({ moneyID, onClose }) => {
                 </div>
             </div>
 
-            {notificationStatus === 'xacNhanIsSuccess' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="success"
-                        title="Xác nhận rút tiền"
-                        description={`Thành công.`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
-            {notificationStatus === 'xacNhanIsFail' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="error"
-                        title="Xác nhận rút tiền"
-                        description={`Thất bại.`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
-            {notificationStatus === 'huyIsSuccess' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="success"
-                        title="Hủy rút tiền"
-                        description={`Thành công.`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
-            {notificationStatus === 'huyIsFail' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="error"
-                        title="Hủy rút tiền"
-                        description={`Thất bại.`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
+            <NotificationContainer />
+
 
         </div>
     );

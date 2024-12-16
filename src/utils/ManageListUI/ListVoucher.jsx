@@ -171,14 +171,12 @@ const ListProduct = ({ listVouchers = [], keySearch, searchName }) => {
         : [];
 
     const getStatusInt = (statusInt) => {
-        switch (statusInt) {
-            case 0:
-                return 'chuaapdung';
-            case 1:
-                return 'hethan';
-            case 2:
-            default:
-                return 'conhan';
+        if (statusInt === 0) {
+            return 'chuaapdung';
+        } else if (statusInt === 1) {
+            return 'hethan';
+        } else if (statusInt === 2) {
+            return 'conhan';
         }
     };
 
@@ -207,7 +205,7 @@ const ListProduct = ({ listVouchers = [], keySearch, searchName }) => {
                 {/* <input type="checkbox"
                     checked={isCheckedAll || checkedProducts[index]} // Checkbox cho từng sản phẩm
                     onChange={() => handleCheckProduct(index)}></input>  */}
-                    <span>{index + 1 + indexOfFirstItem}</span>
+                <span>{index + 1 + indexOfFirstItem}</span>
             </td>
 
             <td style={{ width: '120px' }}>{voucher.ten_voucher}</td>
@@ -226,12 +224,14 @@ const ListProduct = ({ listVouchers = [], keySearch, searchName }) => {
             <td style={{ width: '100px', textAlign: 'center' }}>
                 <button type="button" onClick={(e) => {
                     e.stopPropagation();
-                    handleShowDetails(voucher.id_voucher)}}>
+                    handleShowDetails(voucher.id_voucher)
+                }}>
                     <FontAwesomeIcon icon={faEye}></FontAwesomeIcon>
                 </button>
                 <button onClick={(e) => {
                     e.stopPropagation();
-                    handleShowDelBook(voucher.ten_voucher, voucher.id_voucher)}}>
+                    handleShowDelBook(voucher.ten_voucher, voucher.id_voucher)
+                }}>
                     <FontAwesomeIcon icon={faTrashCan}></FontAwesomeIcon>
                 </button>
             </td>
@@ -296,7 +296,7 @@ const ListProduct = ({ listVouchers = [], keySearch, searchName }) => {
                                                 {/* <input type="checkbox"
                                                     checked={isCheckedAll}
                                                     onChange={handleCheckAll}></input> */}
-                                                    Stt
+                                                Stt
                                             </th>
                                             <th style={{ width: '120px' }}>Mã Voucher</th>
                                             <th style={{ width: '150px', textAlign: 'center' }}>Giá giảm</th>

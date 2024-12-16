@@ -13,7 +13,7 @@ import { faEye } from "@fortawesome/free-regular-svg-icons";
 import OrderForm from '../FormVisible/OrderForm';
 import PrintBill from '../FormVisible/PrintBill';
 
-const ListOrder = ({ listOrders = [], keySearch, status, statusHeader, title, keyForm }) => {
+const ListOrder = ({ listOrders = [], keySearch, status, statusHeader, title, keyForm , trangThaiBtn}) => {
 
     const [orderDetails, setOrderDetails] = useState([]);
     const [pagination, setPagination] = useState();
@@ -220,27 +220,10 @@ const ListOrder = ({ listOrders = [], keySearch, status, statusHeader, title, ke
                         status={status}
                         statusHeader={statusHeader}
                         orderID={selectedOrder}
+                        trangThaiBtn={trangThaiBtn}
                     />
                 )
             }
-            {/* {
-                notificationApplyOrder && status === 'xacnhan' && (
-                    <Notification
-                        title={'Xác nhận đơn hàng'}
-                        content1={'Khi bấm xác nhận đồng nghĩa với việc bạn thông báo cho khách hàng biết rằng: “Sản phẩm đã được đóng gói và chuyển giao cho đơn vị vận chuyển"'}
-                        onClose={handleCloseApplyOrder}
-                        onApply={handleApplyApplyOrder} />
-                )
-            }
-            {
-                notificationApplyOrder && status === 'trahang' && (
-                    <Notification
-                        title={'Xác nhận trả hàng - hoàn tiền'}
-                        content1={'Khi bấm xác nhận đồng nghĩa với việc bạn thông báo cho khách hàng biết rằng: “Tôi đồng ý với yêu cầu Trả hàng - Hoàn tiền."'}
-                        onClose={handleCloseApplyOrder}
-                        onApply={handleApplyApplyOrder} />
-                )
-            } */}
 
             {
                 isPrintBill && (

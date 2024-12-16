@@ -16,10 +16,12 @@ import { getCategory, getCategoryByID } from '../../utils/API/CategoryAPI';
 import { handleImageUpload } from '../../utils/Order/UploadImageFileOnCloud';
 import { OverlayTrigger } from 'react-bootstrap';
 import { renderTooltip } from '../Order/ToolTip';
-import { getSOL, getSolanaPrice, getUSD_VND } from '../API/SolanaAPI';
+import { getSOL,  getUSD_VND } from '../API/SolanaAPI';
 import { getCuaHangByIdAdmin } from '../API/StoreAPI';
 import SolanaForm from './SolanaForm';
 import { faSquarespace } from '@fortawesome/free-brands-svg-icons';
+
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
 
@@ -183,6 +185,9 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
         if (!book.gia) {
             newErrors.gia = true;
         }
+        if (!book.gia_sol || book.gia_sol== NaN || book.gia_sol == undefined || book.gia_sol == null) {
+            newErrors.gia_sol = true;
+        }
         if (!book.so_trang) {
             newErrors.so_trang = true;
         }
@@ -227,6 +232,9 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
         }
         if (!book.gia) {
             newErrors.gia = true;
+        }
+        if (!book.gia_sol || book.gia_sol == NaN || book.gia_sol == undefined || book.gia_sol == null) {
+            newErrors.gia_sol = true;
         }
         if (!book.so_trang) {
             newErrors.so_trang = true;
@@ -282,10 +290,12 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
             const response = await addSanPham(newBook);
             if (response) {
                 setBook(response);
-                setNotificationStatus('addBookIsSuccess');
+                // setNotificationStatus('addBookIsSuccess');
+                NotificationManager.success('Thành công', 'Thêm sản phẩm mới');
                 window.location.reload();
             } else {
-                setNotificationStatus('addBookIsFail');
+                // setNotificationStatus('addBookIsFail');
+                NotificationManager.error('Thất bại', 'Thêm sản phẩm mới');
             }
         };
 
@@ -301,12 +311,14 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
             };
             const response = await updateSanPham(bookData);
             if (response) {
+                NotificationManager.success('Thành công', 'Gửi yêu cầu mở khóa');
                 window.location.reload();
-                setNotificationStatus('moKhoaIsSuccess');
+                // setNotificationStatus('moKhoaIsSuccess');
             }
         } catch (e) {
+            NotificationManager.error('Thất bại', 'Gửi yêu cầu mở khóa');
             console.log(e);
-            setNotificationStatus('moKhoaIsFail');
+            // setNotificationStatus('moKhoaIsFail');
         }
     }
 
@@ -319,12 +331,14 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
             };
             const response = await updateSanPham(bookData);
             if (response) {
+                NotificationManager.success('Thành công', 'Hủy yêu cầu mở khóa sách');
                 window.location.reload();
-                setNotificationStatus('huymoKhoaIsSuccess');
+                // setNotificationStatus('huymoKhoaIsSuccess');
             }
         } catch (e) {
+            NotificationManager.error('Thất bại', 'Hủy yêu cầu mở khóa sách');
             console.log(e);
-            setNotificationStatus('huymoKhoaIsFail');
+            // setNotificationStatus('huymoKhoaIsFail');
         }
     }
 
@@ -334,10 +348,12 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
         const fetchData = async () => {
             const response = await updateSanPham(book);
             if (response) {
-                setNotificationStatus('updateIsSuccess');
+                NotificationManager.success('Thành công', 'Cập nhật sản phẩm');
+                // setNotificationStatus('updateIsSuccess');
                 setLoad(true);
             } else {
-                setNotificationStatus('updateIsFail');
+                NotificationManager.error('Thất bại', 'Cập nhật sản phẩm');
+                // setNotificationStatus('updateIsFail');
             }
         };
 
@@ -354,19 +370,25 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                 };
                 const response = await updateSanPham(bookData);
                 if (response) {
-                    window.location.reload();
+                    
                     if (key === 'hien') {
-                        setNotificationStatus('hienIsSuccess');
+                        NotificationManager.success('Thành công', 'Hiển thị sách');
+                        // setNotificationStatus('hienIsSuccess');
                     } else {
-                        setNotificationStatus('anIsSuccess');
+                        NotificationManager.success('Thành công', 'Ẩn sách');
+                        // setNotificationStatus('anIsSuccess');
                     }
+                    // window.location.reload();
+                    setLoad(true);
                 }
             } catch (e) {
                 console.log(e);
                 if (key === 'hien') {
-                    setNotificationStatus('hienIsFail');
+                    NotificationManager.error('Thất bại', 'Hiển thị sách');
+                    // setNotificationStatus('hienIsFail');
                 } else {
-                    setNotificationStatus('anIsFail');
+                    NotificationManager.errpr('Thất bại', 'Ẩn sách');
+                    // setNotificationStatus('anIsFail');
                 }
             }
         };
@@ -385,7 +407,10 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                 handleUpdateTrangThaiSanPham('trang_thai_khoa', false, 'Mở khóa');
             }
         } catch (error) {
-            setNotificationStatus('duyetIsFail');
+            // NotificationManager.success('Sản phẩm đã được thêm thành công!', 'Thành công');
+            // setNotificationStatus('duyetIsFail');
+            console.log(error);
+            
         }
     }
 
@@ -400,16 +425,13 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
             setTextTrangThai(`${code} sản phẩm`);
 
             if (isUpdated) {
-                window.location.reload();
-                setNotificationStatus('updateIsSuccess');
-                setCloseNotification(true);
-            } else {
-                setNotificationStatus('updateIsFail');
-                setCloseNotification(true);
+                NotificationManager.success('Thành công', 'Cập nhật sản phẩm');
+                setLoad(true);
+            }else{
+                NotificationManager.error('Thất bại', 'Cập nhật sản phẩm');
             }
         } catch (error) {
-            setNotificationStatus('updateIsFail');
-            setCloseNotification(true);
+            NotificationManager.error('Thất bại', 'Cập nhật sản phẩm');
         }
     }
 
@@ -418,11 +440,16 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
         try {
             const isDeleted = await handleDelete();
             if (isDeleted) {
-                window.location.reload();
-                setNotificationStatus('deleteIsSuccess');
+                
+                NotificationManager.success('Thành công', 'Xóa sản phẩm');
+                setLoad(true);
+            }else{
+                NotificationManager.error('Thất bại', 'Xóa sản phẩm');
             }
-        } catch (error) {
-            setNotificationStatus('deleteIsFail');
+        } 
+        catch (error) {
+            NotificationManager.error('Thất bại', 'Xóa sản phẩm');
+            console.log(error);
         }
     }
 
@@ -439,6 +466,10 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                 return false;
             });
     }
+
+    
+    
+    
 
     // * Hàm hiện thông báo xóa sản phẩm
     const handleShowDelBook = () => {
@@ -719,6 +750,8 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                                     value={book.gia_sol}
                                     disabled={true}
                                 />
+                                {errors.gia_sol && <span>Thông tin không hợp lệ!</span>}
+
                             </div>
                             <div>
                                 <label for="name">Ngôn ngữ</label>
@@ -890,7 +923,7 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                     </div>
                 </div>
 
-
+{/* 
 
                 {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
                     <div>
@@ -1046,7 +1079,7 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                             keyPage={"bookForm"}
                         />
                     </div>
-                )}
+                )} */}
             </div>
 
             {
@@ -1059,6 +1092,8 @@ const BookForm = ({ keyForm, onClose, bookID, statusText, statusInt }) => {
                         onApply={handleApplyDelBook} />
                 )
             }
+            
+            <NotificationContainer />
 
         </div>
     );

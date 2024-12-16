@@ -15,7 +15,8 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 import BookForm from '../FormVisible/BookForm';
 import Notification from '../Notification/Notification';
-import NotificationUI from '../Notification/NotificationUI';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 import { deleteBook } from '../../utils/API/ProductAPI';
 
 
@@ -154,9 +155,9 @@ const ListProduct = ({ listBooks = [], keySearch, searchName }) => {
             } else if(trangThai === 4){
                 return 'Hết hàng'
             }else if(trangThai === 5){
-                return 'Yêu cầu mở khóa'
+                return 'Đang yêu cầu mở khóa'
             }else{
-                return 'Hủy duyệt'
+                return 'Không được duyệt'
             }
         }
 
@@ -167,14 +168,14 @@ const ListProduct = ({ listBooks = [], keySearch, searchName }) => {
         try {
             const isDeleted = await handleDelete();
             if (isDeleted) {
+                NotificationManager.success('Thành công', 'Xóa sách');
                 window.location.reload();
-                setNotificationStatus('deleteIsSuccess');
             } else {
 
-                setNotificationStatus('deleteIsFail');
+               NotificationManager.error('Thất bại', 'Xóa sách');
             }
         } catch (error) {
-            setNotificationStatus('deleteIsFail');
+           NotificationManager.error('Thất bại', 'Xóa sách');
         }
     }
 
@@ -441,28 +442,8 @@ const ListProduct = ({ listBooks = [], keySearch, searchName }) => {
                         onApply={handleApplyExcel} />
                 )
             }
-            {notificationStatus === 'deleteIsSuccess' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="success"
-                        title="Xóa sách"
-                        description={`"Xóa sách thành công."`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
-            {notificationStatus === 'deleteIsFail' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="error"
-                        title="Xóa sách"
-                        description={`"Sách đang được giao dịch - không thể xóa."`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
+            
+            <NotificationContainer />
         </div >
     );
 };

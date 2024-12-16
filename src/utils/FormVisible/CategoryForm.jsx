@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { addCategory, getCategoryByID, updateCategory } from '../../utils/API/CategoryAPI';
 import NotificationUI from '../Notification/NotificationUI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 const CategoryForm = ({ categoryID, keyForm, onClose }) => {
 
@@ -67,16 +69,14 @@ const CategoryForm = ({ categoryID, keyForm, onClose }) => {
                 if (data) {
                     setCategory(data)
                     setErrors({});
-                    setNotificationStatus('insertIsSuccess');
-                    setCloseNotification(true);
+                    NotificationManager.success('Thành công', 'Thêm thể loại mới');
                     window.location.reload();
                 }
             } catch (e) {
                 const newErrors = {};
                 newErrors.trung_ten_the_loai = true;
                 setErrors(newErrors);
-                setNotificationStatus('insertIsFail');
-                setCloseNotification(true);
+                NotificationManager.error('Thất bại', 'Thêm thể loại sách');
                 setLoad(false);
                 console.log(e);
             }
@@ -91,19 +91,16 @@ const CategoryForm = ({ categoryID, keyForm, onClose }) => {
                 const data = await updateCategory(category);
                 if (data) {
                     setErrors({});
-                    setNotificationStatus('updateIsSuccess');
-                    setCloseNotification(true);
+                    NotificationManager.success('Thành công', 'Cập nhật thể loại sách');
                     setLoad(true);
                 } else {
                     setErrors({});
-                    setNotificationStatus('updateIsFail');
-                    setCloseNotification(true);
+                    NotificationManager.error('Thất bại', 'Cập nhật thể loại sách');
                     setLoad(false);
                 }
             } catch (e) {
                 setErrors({});
-                setNotificationStatus('updateIsFail');
-                setCloseNotification(true);
+                NotificationManager.error('Thất bại', 'Cập nhật thể loại sách');
                 setLoad(false);
                 console.log(e);
             }
@@ -196,51 +193,7 @@ const CategoryForm = ({ categoryID, keyForm, onClose }) => {
                     </div>
                 </div>
 
-
-                {notificationStatus === 'insertIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title="Tạo thể loại"
-                            description={`"Thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'insertIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title="Tạo thể loại"
-                            description={`"Thể loại đã tồn tại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title="Cập nhật"
-                            description={`"Cập nhật thể loại thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'updateIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title="Cập nhật"
-                            description={`"Cập nhật thể loại thất bại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
+                <NotificationContainer />
 
             </div>
         </div>

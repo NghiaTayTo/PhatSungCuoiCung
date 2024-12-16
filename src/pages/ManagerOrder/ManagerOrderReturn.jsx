@@ -25,9 +25,11 @@ import {
 const ManagerOrder = () => {
 
     // * Trả hàng - Hoàn tiền
-    const maTrangThai = 15;
+    const maTrangThai = 15; // yêu cầu trả hàng
     const maTrangThai2 = 17; // xác nhận trả hàng
     const maTrangThai3 = 18; // hủy yêu cầu trả hàng
+
+    const [trangThaiBtn, setTrangThaiBtn] = useState(true);
 
     const [listOrder, setListOrder] = useState([])
     const [isLoading, setIsLoading] = useState(true);
@@ -89,6 +91,11 @@ const ManagerOrder = () => {
                 setTotalRevenue(revenueData);
 
                 setTitle(title);
+                if(matt === maTrangThai){
+                    setTrangThaiBtn(true);
+                }else{
+                    setTrangThaiBtn(false);
+                }
             } catch (err) {
                 console.log("Lỗi khi load order mới" + err);
             }
@@ -207,7 +214,7 @@ const ManagerOrder = () => {
                                 </div>
 
                                 <ListOrder listOrders={listOrder} keySearch={keySearch} status='trahang' statusHeader={'Trả hàng - Hoàn tiền'} 
-                                title={title} keyForm={'seller'}/>
+                                title={title} keyForm={'seller'} trangThaiBtn={trangThaiBtn}/>
                             </>
                         )
                 }

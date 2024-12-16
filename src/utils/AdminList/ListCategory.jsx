@@ -16,6 +16,8 @@ import VoucherForm from '../FormVisible/VoucherForm';
 import Notification from '../Notification/Notification';
 import NotificationUI from '../Notification/NotificationUI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 import { deleteCategoryByID, deleteCategoryByMa, getCountBookByStore } from '../../utils/API/CategoryAPI';
 import CategoryForm from '../FormVisible/CategoryForm';
 
@@ -75,13 +77,13 @@ const ListCategory = ({ listCategory = [], keySearch }) => {
             try {
                 const isDeleted = await handleDelete();
                 if (isDeleted) {
+                    NotificationManager.success('Thành công', 'Xóa thể loại sách');
                     window.location.reload();
-                    setNotificationStatus('deleteIsSuccess');
                 } else {
-                    setNotificationStatus('deleteIsFail');
+                    NotificationManager.error('Thất bại', 'Xóa thể loại sách');
                 }
             } catch (error) {
-                setNotificationStatus('deleteIsFail');
+                NotificationManager.error('Thành công', 'Xóa thể loại sách');
             }
         }
         fetchData();

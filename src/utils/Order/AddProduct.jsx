@@ -12,7 +12,7 @@ const AddProduct = () => {
 
     if (isSuccess) {
       // Thông báo thành công
-      NotificationManager.success('Sản phẩm đã được thêm thành công!', 'Thành công');
+      NotificationManager.success('Thành công', 'Thành công');
     } else {
       // Thông báo thất bại
       NotificationManager.warning('Đã xảy ra lỗi khi thêm sản phẩm!', 'Thất bại');

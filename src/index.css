@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.notification-container {
+  z-index: 99999999999 !important;
+  font-size: 17px !important;
+}
+

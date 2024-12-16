@@ -3,7 +3,9 @@ import './ReportForm.css';
 import { getAllViPham, getViPhamById } from '../API/ViPhamAPI';
 import { getCommentById } from '../API/DanhGiaAPI';
 import { addBaoCaoCuaHang } from '../API/BaoCaoAPI';
-import NotificationUI from '../Notification/NotificationUI';
+
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 const ReportForm = ({ IDComment, taiKhoanBiBaoCao = {}, cuaHangBaoCao = {}, onClose }) => {
 
@@ -61,10 +63,6 @@ const ReportForm = ({ IDComment, taiKhoanBiBaoCao = {}, cuaHangBaoCao = {}, onCl
     //     }
     // }
 
-    // * Đóng thông báo
-    const [closeNotification, setCloseNotification] = useState(true);
-    const [notificationStatus, setNotificationStatus] = useState('');
-
     const viPhamKhac = {
         id_vi_pham: 7,
         ten_vi_pham: 'Vi phạm khác',
@@ -89,7 +87,8 @@ const ReportForm = ({ IDComment, taiKhoanBiBaoCao = {}, cuaHangBaoCao = {}, onCl
                         danh_gia: comment,
                         trang_thai_bao_cao: trangThaiBaoCao
                     });
-                    setNotificationStatus("addIsYes")
+                    // setNotificationStatus("addIsYes")
+                    NotificationManager.success('Thành công', 'Gửi báo cáo');
                 }
             } else {
                 const dataViPham = await getViPhamById(selectedOption);
@@ -100,10 +99,12 @@ const ReportForm = ({ IDComment, taiKhoanBiBaoCao = {}, cuaHangBaoCao = {}, onCl
                     danh_gia: comment,
                     trang_thai_bao_cao: trangThaiBaoCao
                 });
-                setNotificationStatus("addIsYes")
+                // setNotificationStatus("addIsYes")
+                NotificationManager.success('Thành công', 'Gửi báo cáo');
             }
         } catch (e) {
-            setNotificationStatus("addIsNo")
+            // setNotificationStatus("addIsNo")
+            NotificationManager.error('Thất bại', 'Gửi báo cáo');
             console.log(e);
         }
     };
@@ -123,12 +124,7 @@ const ReportForm = ({ IDComment, taiKhoanBiBaoCao = {}, cuaHangBaoCao = {}, onCl
         fetchData();
     }, [IDComment, taiKhoanBiBaoCao, cuaHangBaoCao])
 
-    
-    // * Đóng thông báo
-    const handleCloseNotification = () => {
-        setCloseNotification(false);
-        setNotificationStatus('')
-    }
+
 
 
     return (
@@ -166,29 +162,7 @@ const ReportForm = ({ IDComment, taiKhoanBiBaoCao = {}, cuaHangBaoCao = {}, onCl
 
             </div>
 
-
-            {notificationStatus === 'addIsYes' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="success"
-                        title="Gửi báo cáo"
-                        description={`"Thành công"`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
-            {notificationStatus === 'addIsNo' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="error"
-                        title="Gửi báo cáo"
-                        description={`"Thất bại"`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
+            <NotificationContainer />
 
 
         </div>

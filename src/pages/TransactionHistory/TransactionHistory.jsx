@@ -12,6 +12,8 @@ import { getCuaHangById, updateCuaHang } from '../../utils/API/StoreAPI';
 import NotificationUI from '../../utils/Notification/NotificationUI';
 import { addGiaoDich, createQRCode, getAllGiaoDichByStore, getAllGiaoDichByStoreLength, getGiaoDichByCuaHangAndTrangThai, getGiaoDichByCuaHangAndTrangThaiLength } from '../../utils/API/GiaoDichAPI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 const TransactionHistory = () => {
     const [giaoDichByStore, setGiaoDichByStore] = useState([]);
 
@@ -143,7 +145,8 @@ const TransactionHistory = () => {
                     account_name: response.data.data.ownerName
                 }));
                 setCheckResult(response.data.data.ownerName);
-                setNotificationStatus('searchIsSuccess');
+                // setNotificationStatus('searchIsSuccess');
+                NotificationManager.success('Hợp lệ', 'Tài khoản ngân hàng');
 
                 // Gọi hàm thêm tài khoản ngân hàng sau khi có kết quả tìm kiếm
                 if (key === 'add') {
@@ -160,12 +163,14 @@ const TransactionHistory = () => {
 
             } else {
                 setCheckResult('Không tìm thấy tài khoản');
-                setNotificationStatus('searchIsFail');
+                // setNotificationStatus('searchIsFail');
+                NotificationManager.error('Thất bại', 'Không tìm thấy tài khoản');
             }
         } catch (error) {
             console.error('Error checking bank account:', error);
             setCheckResult('Không tìm thấy tài khoản');
-            setNotificationStatus('searchIsFail');
+            NotificationManager.error('Thất bại', 'Không tìm thấy tài khoản');
+            // setNotificationStatus('searchIsFail');
         }
     };
 
@@ -175,11 +180,13 @@ const TransactionHistory = () => {
             const account = await addTaiKhoanNganHang(data);
             if (account) {
                 setBankInfo(account);
-                setNotificationStatus('addIsSuccess');
+                NotificationManager.success('Thành công', 'Thêm tài khoản ngân hàng');
+                // setNotificationStatus('addIsSuccess');
                 window.location.reload(); // Reload sau khi thêm thành công
             }
         } catch (e) {
-            setNotificationStatus('addIsFail');
+            // setNotificationStatus('addIsFail');
+            NotificationManager.error('Thất bại', 'Thêm tài khoản ngân hàng');
             console.error('Error adding bank account:', e);
         }
     };
@@ -190,11 +197,13 @@ const TransactionHistory = () => {
             const account = await updateTaiKhoanNganHang(data);
             if (account) {
                 setBankInfo(account);
-                setNotificationStatus('addIsSuccess');
+                NotificationManager.success('Thành công', 'Cập nhật tài khoản ngân hàng');
+                // setNotificationStatus('addIsSuccess');
                 window.location.reload(); // Reload sau khi thêm thành công
             }
         } catch (e) {
-            setNotificationStatus('addIsFail');
+            // setNotificationStatus('addIsFail');
+            NotificationManager.error('Thất bại', 'Cập nhật tài khoản ngân hàng');
             console.error('Error adding bank account:', e);
         }
     };
@@ -218,10 +227,12 @@ const TransactionHistory = () => {
                 const qrDataURL = await createQRCode(qrCode);
                 handleAddGiaoDich(qrDataURL.data.qrDataURL, data);
                 handleTruDoanhThuCuaHang(dataUpdate);
-                setNotificationStatus('giaoDichIsSuccess');
+                // setNotificationStatus('giaoDichIsSuccess');
+                NotificationManager.success('Thành công', 'Tạo giao dịch rút tiền');
                 window.location.reload();
             } catch (error) {
-                setNotificationStatus('giaoDichIsFail');
+                // setNotificationStatus('giaoDichIsFail');
+                NotificationManager.error('Thất bại', 'Tạo giao dịch rút tiền');
                 console.error("Lỗi khi tạo QR Code:", error);
             }
         } else {
@@ -521,72 +532,7 @@ const TransactionHistory = () => {
                 </div>
 
 
-                {notificationStatus === 'addIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title="Thêm tài khoản ngân hàng"
-                            description={`"Thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'addIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title="Thêm tài khoản ngân hàng"
-                            description={`"Thất bại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'searchIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title="Tài khoản ngân hàng"
-                            description={`"Thông tin tài khoản hợp lệ."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'searchIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title="Tài khoản ngân hàng"
-                            description={`"Thông tin tài khoản không hợp lệ."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'giaoDichIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title="Tạo giao dịch"
-                            description={`"Thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'giaoDichIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title="Tạo giao dịch"
-                            description={`"Thất bại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
+                <NotificationContainer />
 
             </div>
         </div>

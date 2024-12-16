@@ -1,24 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config(); // Tải biến môi trường từ file .env
 
-// const connectDatabase = async () => {
-//     try {
-//         // In ra giá trị của MONGO_URI để kiểm tra
-//         console.log('Mongo URI:', process.env.MONGO_URI); 
-//         console.log('Environment Variables:', process.env);
-
-//         // Kết nối đến MongoDB
-//         await mongoose.connect(process.env.MONGO_URI, {
-//             useNewUrlParser: true,
-//             useUnifiedTopology: true,
-//         });
-
-//         console.log('Connected to MongoDB');
-//     } catch (err) {
-//         console.error('Error connecting to MongoDB:', err.message);
-//         process.exit(1); // Dừng server nếu không kết nối được
-//     }
-// };
 
 const connectDatabase = async () => {
     try {

@@ -6,6 +6,7 @@ import NotificationUI from '../../../utils/Notification/NotificationUI';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { OverlayTrigger } from 'react-bootstrap';
 import { renderTooltip } from '../../../utils/Order/ToolTip';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { faSquarespace } from '@fortawesome/free-brands-svg-icons';
 
 const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }) => {
@@ -110,7 +111,7 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
                 handleUpdateTrangThaiSanPham('trang_thai_duyet', true, 'Mở khóa');
             }
         } catch (error) {
-            setNotificationStatus('duyetIsFail');
+            NotificationManager.error('Thất bại', 'Cập nhật trạng thái thất bại');
         }
     }
 
@@ -124,16 +125,13 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
             setTextTrangThai(`${code} sản phẩm`);
 
             if (isUpdated) {
-                window.location.reload();
-                setNotificationStatus('updateIsSuccess');
-                setCloseNotification(true);
+                NotificationManager.success('Thành công', 'Cập nhật trạng thái sách');
+                setLoad(true)
             } else {
-                setNotificationStatus('updateIsFail');
-                setCloseNotification(true);
+                NotificationManager.error('Thất bại', 'Cập nhật trạng thái sách');
             }
         } catch (error) {
-            setNotificationStatus('updateIsFail');
-            setCloseNotification(true);
+            NotificationManager.error('Thất bại', 'Cập nhật trạng thái sách');
         }
     }
 
@@ -150,16 +148,35 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
             setTextTrangThai(`${code} sản phẩm`);
 
             if (isUpdated) {
-                window.location.reload();
-                setNotificationStatus('updateIsSuccess');
-                setCloseNotification(true);
+                NotificationManager.success('Thành công', 'Mở khóa sách');
+                setLoad(true);
+                
             } else {
-                setNotificationStatus('updateIsFail');
-                setCloseNotification(true);
+                NotificationManager.error('Thất bại', 'Mở khóa sách');
             }
         } catch (error) {
-            setNotificationStatus('updateIsFail');
-            setCloseNotification(true);
+            NotificationManager.error('Thất bại', 'Mở khóa sách');
+        }
+    }
+
+    const handleHuyDuyetSanPham = async () => {
+        try{
+            const sanPham = {
+                ...book,
+                trang_thai_huy_duyet: true
+            }
+            const isUpdated = await updateSanPham(sanPham);
+
+            if (isUpdated) {
+                NotificationManager.success('Thành công', 'Hủy duyệt sách');
+                window.location.reload();
+            } else {
+                NotificationManager.error('Thất bại', 'Hủy duyệt sách');
+            }
+        }catch(e){
+            NotificationManager.error('Thất bại', 'Hủy duyệt sách');
+            console.log(e);
+            
         }
     }
 
@@ -339,7 +356,7 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
                         {/* bấm vào nút thêm sản phẩm */}
                         {trangThaiSach === 'new_book' && (
                             <div className="addnewbook-form_btn">
-                                <button className='xoasanpham_btn' onClick={onClose}>Hủy yêu cầu</button>
+                                <button className='xoasanpham_btn' onClick={handleHuyDuyetSanPham}>Hủy yêu cầu</button>
                                 <button className='yeucaumokhoa_btn' onClick={() => handleSubmitTrangThai('duyet')}>Duyệt sản phẩm</button>
                             </div>
                         )}
@@ -393,95 +410,9 @@ const BookFormAdmin = ({ onClose, bookID, statusText, statusInt, trangThaiSach }
                             )
                         }
                     </div>
-                </div>
-                {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title="Cập nhật"
-                            description={`"Cập nhật sách thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'updateIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title="Cập nhật"
-                            description={`"Cập nhật sách thất bại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'addBookIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title="Thêm sách"
-                            description={`"Tạo sách mới thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'addBookIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title="Thêm sách"
-                            description={`"Tạo sách mới thất bại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'deleteIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title="Xóa sách"
-                            description={`"Xóa sách thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'deleteIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title="Xóa sách"
-                            description={`"Sách đang được giao dịch - không thể xóa."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title={textTrangThai}
-                            description={`"Thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'updateIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title={textTrangThai}
-                            description={`"Thất bại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
+                </div>      
+                <NotificationContainer />
+                
             </div>
 
         </div>

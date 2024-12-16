@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
-import './ManagerBook.css';
-import BoxThongKeBlue from '../Order/BoxThongKeBlue';
+import { getProductToHuyYeuCauDuyet } from '../../../utils/API/ProductAPI';
+import Loading from '../../../utils/Order/Loading';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { getProductToBrowse } from '../../../utils/API/ProductAPI';
-import Loading from '../../../utils/Order/Loading';
 import ListManagerBookAdmin from '../ListData/ListManagerBookAdmin';
-import Pagination from '../../../utils/Pagination/Pagination'
+import BoxThongKeBlack from '../Order/BoxThongKeBlack';
 
-const NewBook = () => {
+const BookHuyDuyet = () => {
 
     const [listBooks, setListBooks] = useState([]);
 
@@ -19,7 +16,7 @@ const NewBook = () => {
         setIsLoading(true);
         const fecthData = async () => {
             try {
-                const data = await getProductToBrowse();
+                const data = await getProductToHuyYeuCauDuyet();
                 setListBooks(data);
             } catch (e) {
                 console.log(e);
@@ -29,19 +26,21 @@ const NewBook = () => {
         fecthData();
     }, []);
 
+
     return (
         <div className="page scroll-container">
             <div className="container">
+
                 {
                     isLoading ? (
                         <Loading />
                     ) : (
                         <>
                             <div className='admin-home'>
-                                <BoxThongKeBlue title={'Sách mới'} value={listBooks.length} image={'books.png'} cursor={'pointer'} />
+                                <BoxThongKeBlack title={'Sách bị hủy duyệt'} value={listBooks.length} image={'books.png'} cursor={'pointer'} />
                             </div>
                             <div className="product-search_item">
-                                <label style={{ fontWeight: '600' }}>Tên thể loại</label>
+                                <label style={{ fontWeight: '600' }}>Tên sách</label>
                                 <div
                                     style={{ width: "350px" }}
                                     className="product-search_item__flex"
@@ -61,14 +60,14 @@ const NewBook = () => {
                                 </div>
                             </div>
 
-                            <ListManagerBookAdmin listBooks={listBooks} trangThaiSach={'new_book'}/>
-                            
+                            <ListManagerBookAdmin listBooks={listBooks} trangThaiSach={'huy_duyet'}/>
                         </>
                     )
                 }
+
             </div>
         </div>
     );
 };
 
-export default NewBook;
+export default BookHuyDuyet;

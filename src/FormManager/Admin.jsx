@@ -34,6 +34,7 @@ import ManagerStoreDetailsDichVu from '../pages/Admin/Store/ManagerStoreDetailsD
 import CustomerDisabled from '../pages/Admin/Customer/CustomerDisabled';
 import P2PNap from '../pages/Admin/Money/P2PNap';
 import P2PRut from '../pages/Admin/Money/P2PRut';
+import BookHuyDuyet from '../pages/Admin/ManagerBook/BookHuyDuyet';
 
 
 const Admin = () => {
@@ -49,6 +50,7 @@ const Admin = () => {
                         <Route path="manage-category" element={<Category />} />
 
                         <Route path="new-book" element={<NewBook />} />
+                        <Route path="huy-yeu-cau-duyet" element={<BookHuyDuyet />} />
                         <Route path="book-infringed" element={<BookInfringed />} />
                         <Route path="book-disabled" element={<BookDisabled />} />
                         <Route path="unlock-book" element={<UnlockBook />} />

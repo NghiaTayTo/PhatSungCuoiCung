@@ -14,6 +14,8 @@ import Notification from '../Notification/Notification';
 import { getVouchersByCuaHangIdAndVoucherID, addVoucher, updateVoucherByID, deleteVoucherByID } from "../../utils/API/VoucherAPI";
 import { getCuaHangById } from "../../utils/API/StoreAPI";
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 const VoucherForm = ({ keyForm, onClose, voucherID, nameShop }) => {
 
     // * Thông tin voucher
@@ -307,11 +309,13 @@ const VoucherForm = ({ keyForm, onClose, voucherID, nameShop }) => {
                 // setBookUpdate(data);
                 // alert('Cập nhật sản phẩm thành công!');
                 // setBook(data);
-                setNotificationStatus('updateIsSuccess');
+                // setNotificationStatus('updateIsSuccess');
+                NotificationManager.success('Thành công', 'Cập nhật Voucher');
                 setLoad(true);
             })
             .catch(error => {
-                setNotificationStatus('updateIsFail');
+                // setNotificationStatus('updateIsFail');
+                NotificationManager.error('Thất bại', 'Cập nhật Voucher');
                 console.error('Error updating data:', error);
             });
     }
@@ -320,11 +324,13 @@ const VoucherForm = ({ keyForm, onClose, voucherID, nameShop }) => {
         addVoucher(voucher)
             .then(data => {
                 setVoucher(data);
-                setNotificationStatus('addIsSuccess');
+                // setNotificationStatus('addIsSuccess');
+                NotificationManager.success('Thành công', 'Thêm Voucher mới');
                 window.location.reload();
             })
             .catch(error => {
-                setNotificationStatus('addIsFail');
+                // setNotificationStatus('addIsFail');
+                NotificationManager.error('Thất bại', 'Thêm Voucher mới');
                 console.error('Error fetching data:', error);
             });
     }
@@ -546,6 +552,8 @@ const VoucherForm = ({ keyForm, onClose, voucherID, nameShop }) => {
                         />
                     </div>
                 )}
+
+                 <NotificationContainer />
             </div>
 
             {

@@ -2,6 +2,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { getCuaHangByIdAdmin, updateCuaHangAdmin } from '../../../utils/API/StoreAPI';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import NotificationUI from '../../../utils/Notification/NotificationUI';
 
 const StoreFromAdmin = ({ storeId, onClose, keyForm }) => {
@@ -48,13 +49,13 @@ const StoreFromAdmin = ({ storeId, onClose, keyForm }) => {
             }
             const data = await updateCuaHangAdmin(dataUpdate);
             if (data) {
-                setNotificationStatus('updateIsSuccess');
+                NotificationManager.success('Thành công', 'Duyệt cửa hàng');
                 window.location.reload();
             }
 
         } catch (error) {
             console.error(error);
-            setNotificationStatus('updateIsFail');
+            NotificationManager.error('Thất bại', 'Duyệt cửa hàng');
         }
     }
 
@@ -143,28 +144,7 @@ const StoreFromAdmin = ({ storeId, onClose, keyForm }) => {
                 </div>
             </div>
 
-            {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="success"
-                        title="Duyệt cửa hàng"
-                        description={`"Thành công."`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
-            {notificationStatus === 'updateIsFail' && closeNotification === true && (
-                <div>
-                    <NotificationUI
-                        type="error"
-                        title="Duyệt cửa hàng"
-                        description={`"Thất bại."`}
-                        onClose={handleCloseNotification}
-                        keyPage={"bookForm"}
-                    />
-                </div>
-            )}
+            <NotificationContainer />
 
         </div>
     );

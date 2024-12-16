@@ -433,6 +433,17 @@ export const getProductToYeuCauMoKhoa = () => {
         })
 }
 
+// * ADMIN - Hàm lấy sách bị hủy duyệt
+export const getProductToHuyYeuCauDuyet = () => {
+    return axios.get(`${hostProduct}/huy-yeu-cau-duyet`)
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
+
 // * ADMIN - Hàm lấy sản phẩm bị khóa
 export const getProductLocked = () => {
     return axios.get(`${hostProduct}/vo-hieu-hoa`)

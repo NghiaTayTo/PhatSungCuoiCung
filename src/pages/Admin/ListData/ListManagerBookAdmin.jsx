@@ -2,7 +2,7 @@ import { faArrowDownLong, faEye, faTrashCan } from '@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import BookForm from '../../../utils/FormVisible/BookForm';
-import { Pagination } from 'react-bootstrap';
+import Pagination from '../../../utils/Pagination/Pagination';
 import Notification from '../../../utils/Notification/Notification';
 import NotificationUI from '../../../utils/Notification/NotificationUI';
 import BookFormAdmin from '../FormDetailsAdmin/BookFormAdmin';
@@ -10,9 +10,9 @@ import BookFormAdmin from '../FormDetailsAdmin/BookFormAdmin';
 const ListManagerBookAdmin = ({ listBooks = [], keySearch, searchName, trangThaiSach }) => {
     // * Mảng các Sản phẩm
     const [productList, setProductList] = useState([]);
-    // * Phân trang
+
     const [pagination, setPagination] = useState();
-    // * Trang hiện tại
+    // * Phân trang
     const [currentPage, setCurrentPage] = useState(1);
     // * Mỗi trang 10 sản phẩm
     const [checkedProducts, setCheckedProducts] = useState(Array(10).fill(false)); // Mảng cho 10 sản phẩm
@@ -44,6 +44,7 @@ const ListManagerBookAdmin = ({ listBooks = [], keySearch, searchName, trangThai
         setStatusInt(statusInt);
         setDetailVisible(true); // Hiển thị giao diện chi tiết
     };
+
     const handleCloseDetails = () => {
         setDetailVisible(false);
     };
@@ -125,11 +126,12 @@ const ListManagerBookAdmin = ({ listBooks = [], keySearch, searchName, trangThai
             return 'conhang';
         } else if (trangThai === 4) {
             return 'hethang'
-        } else {
+        } else if (trangThai === 5) {
             return 'yeucaumokhoa'
+        } else {
+            return 'huyduyet'
         }
     }
-
     const handleGetTrangThaiText = (trangThai) => {
         if (trangThai === 1) {
             return 'Chờ duyệt';
@@ -139,8 +141,10 @@ const ListManagerBookAdmin = ({ listBooks = [], keySearch, searchName, trangThai
             return 'Còn hàng';
         } else if (trangThai === 4) {
             return 'Hết hàng'
-        } else {
+        } else if (trangThai === 5) {
             return 'Yêu cầu mở khóa'
+        } else {
+            return 'Không được duyệt'
         }
     }
 

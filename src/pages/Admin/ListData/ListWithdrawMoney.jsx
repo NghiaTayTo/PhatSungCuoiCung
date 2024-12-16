@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { OverlayTrigger, Pagination } from 'react-bootstrap';
+import { OverlayTrigger } from 'react-bootstrap';
+import Pagination from '../../../utils/Pagination/Pagination';
 import { renderTooltip } from '../../../utils/Order/ToolTip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';

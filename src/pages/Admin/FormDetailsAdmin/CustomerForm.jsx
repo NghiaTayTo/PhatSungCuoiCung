@@ -7,6 +7,8 @@ import { getCustomerById, updateCustomer } from '../../../utils/API/CustomerAPI'
 import { Transgender } from '@mui/icons-material';
 import NotificationUI from '../../../utils/Notification/NotificationUI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 const CustomerForm = ({ customerID, status, onClose }) => {
 
     const [customer, setCustomer] = useState({});
@@ -62,13 +64,11 @@ const CustomerForm = ({ customerID, status, onClose }) => {
             }
             const response = await updateCustomer(dataUpdateTrangThaiTk);
             if (response) {
-                setCloseNotification(true);
-                setNotificationStatus('updateIsSuccess');
+                NotificationManager.success('Thành công', 'Cập nhật trạng thái tài khoản');
                 window.location.reload();
             }
         } catch (e) {
-            setCloseNotification(true);
-            setNotificationStatus('updateIsFail');
+            NotificationManager.error('Thất bại', 'Cập nhật trạng thái tài khoản');
             console.log(e);
         }
 
@@ -159,28 +159,7 @@ const CustomerForm = ({ customerID, status, onClose }) => {
                     </div>
 
                 </div>
-                {notificationStatus === 'updateIsSuccess' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="success"
-                            title={'Cập nhật tài khoản'}
-                            description={`"Thành công."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
-                {notificationStatus === 'updateIsFail' && closeNotification === true && (
-                    <div>
-                        <NotificationUI
-                            type="error"
-                            title={'Cập nhật tài khoản'}
-                            description={`"Thất bại."`}
-                            onClose={handleCloseNotification}
-                            keyPage={"bookForm"}
-                        />
-                    </div>
-                )}
+                <NotificationContainer />
             </div>
         </div>
     );

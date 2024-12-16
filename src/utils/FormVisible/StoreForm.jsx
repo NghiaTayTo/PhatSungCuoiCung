@@ -12,6 +12,8 @@ import { handleImageUpload } from '../../utils/Order/UploadImageFileOnCloud';
 
 import NotificationUI from '../Notification/NotificationUI';
 
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 const StoreForm = ({ onClose, storeData }) => {
 
     const [store, setStore] = useState({});
@@ -95,18 +97,17 @@ const StoreForm = ({ onClose, storeData }) => {
 
                 if (updatedStore) {
                     // setStore(updatedStore);
-                    setCloseNotification(true);
-                    setIsUpdate(true);
-                    setNotificationStatus('updateIsGood')
-                } else {
-                    setCloseNotification(true);
-                    setIsUpdate(false);
-                    setNotificationStatus('updateIsFail')
+                    // setCloseNotification(true);
+                    // setIsUpdate(true);
+                    // setNotificationStatus('updateIsGood')
+                    NotificationManager.success('Thành Công', 'Cập nhật cửa hàng');
+                    // window.location.reload();
                 }
             } catch (error) {
-                setCloseNotification(true);
-                setIsUpdate(false);
-                setNotificationStatus('updateIsFail')
+                // setCloseNotification(true);
+                // setIsUpdate(false);
+                // setNotificationStatus('updateIsFail')
+                NotificationManager.error('Thất bại', 'Cập nhật cửa hàng');
                 console.error(error);
             }
         }
@@ -179,7 +180,7 @@ const StoreForm = ({ onClose, storeData }) => {
                                     className='text-stroke stroke-update'
                                     value={store.dia_chi_cua_hang}
                                     onChange={handleInputChange}
-                                />
+                                ></textarea>
                             </div>
                         </div>
 
@@ -204,8 +205,10 @@ const StoreForm = ({ onClose, storeData }) => {
                         <button onClick={handleSubmitUpdate} className='store-form_btn1'>Cập nhật</button>
                         <button className='store-form_btn2' onClick={handleCloseStoreForm}>Thoát</button>
                     </div>
-                </div>
 
+                   
+                </div>
+                <NotificationContainer />
                 {notificationStatus === 'updateIsGood' && closeNotification === true && (
                     <NotificationUI
                         type="success"
@@ -225,6 +228,8 @@ const StoreForm = ({ onClose, storeData }) => {
                         keyPage={"bookForm"}
                     />
                 )}
+
+                <NotificationContainer />
             </div>
         </div>
     );

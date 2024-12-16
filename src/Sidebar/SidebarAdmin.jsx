@@ -62,6 +62,9 @@ const SidebarAdmin = () => {
                                     <Link to="/admin/new-book" className='submenu-item'>
                                         Sách mới
                                     </Link>
+                                    <Link to="/admin/huy-yeu-cau-duyet" className='submenu-item'>
+                                        Sách bị hủy duyệt
+                                    </Link>
                                     <Link to="/admin/book-infringed" className='submenu-item'>
                                         Sách bị vi phạm
                                     </Link>

@@ -28,7 +28,7 @@ const ProfileUser = () => {
 
     // Hàm lấy dữ liệu người dùng từ API
     useEffect(() => {
-        if(keyForm === 4){
+        if (keyForm === 4) {
             setKey(keyForm)
         }
         const fetchUserData = async () => {
@@ -45,13 +45,13 @@ const ProfileUser = () => {
     }, []);
 
     const handleClickOption = (key) => {
-            setKey(key);
+        setKey(key);
     };
 
     return (
         <div className="profile-page" >
             {/* Sử dụng HeaderUser */}
-            <HeaderUser />
+            <HeaderUser fixed={true} />
 
             <section className="profile-section" >
                 <div className="profile-container">
@@ -68,7 +68,7 @@ const ProfileUser = () => {
                         </div>
 
                         <ul>
-                        <li onClick={() => handleClickOption(1)} className={key === 1 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faUser}></FontAwesomeIcon>Tài khoản của tôi</li>
+                            <li onClick={() => handleClickOption(1)} className={key === 1 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faUser}></FontAwesomeIcon>Tài khoản của tôi</li>
                             <li onClick={() => handleClickOption(2)} className={key === 2 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faLocationDot}></FontAwesomeIcon>Địa chỉ</li>
                             <li onClick={() => handleClickOption(3)} className={key === 3 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faUnlock}></FontAwesomeIcon>Đổi mật khẩu</li>
                             <li onClick={() => handleClickOption(4)} className={key === 4 ? ' li_active' : ''}><FontAwesomeIcon className='icon-user' icon={faFileInvoiceDollar}></FontAwesomeIcon>Đơn mua</li>
@@ -83,16 +83,16 @@ const ProfileUser = () => {
                             key === 1 && <><MyInformation /></>
                         }
                         {
-                            key === 2 && <><AddressUser/></>
+                            key === 2 && <><AddressUser /></>
                         }
                         {
-                            key === 3 && <><ChangePassword/></>
+                            key === 3 && <><ChangePassword /></>
                         }
                         {
-                            key === 4 && <><DonHang/></>
+                            key === 4 && <><DonHang /></>
                         }
                         {
-                            key === 5 && <><KhoVoucher/></>
+                            key === 5 && <><KhoVoucher /></>
                         }
                     </div>
                 </div>
