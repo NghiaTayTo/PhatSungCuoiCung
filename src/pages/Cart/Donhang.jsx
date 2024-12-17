@@ -201,12 +201,12 @@ const DonHang = () => {
                                     {
                                         detail.phuong_thuc_thanh_toan?.id !== 3 ? (
                                             <>
-                                                <del>₫{(detail.gia * detail.so_luong).toLocaleString()}</del>
+                                               
                                                 <p style={{ fontSize: '15px' }}>₫{(detail.gia * detail.so_luong).toLocaleString()}</p>
                                             </>
                                         ) : (
                                             <>
-                                                <del>{(detail.gia * detail.so_luong).toLocaleString()} SOL</del>
+                                              
                                                 <p style={{ fontSize: '15px' }}>{(detail.gia * detail.so_luong)}
                                                     <img src='/images/solana.png' />
                                                 </p>

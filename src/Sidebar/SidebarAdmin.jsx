@@ -240,9 +240,9 @@ const SidebarAdmin = () => {
                         <div className='bg_white'>
                             {openMenu === "reportall" && (
                                 <div className={openMenu === "reportall" ? "submenu submenu-open" : "submenu"}>
-                                    <Link to="/admin/report-store" className='submenu-item'>
+                                    {/* <Link to="/admin/report-store" className='submenu-item'>
                                         Báo cáo cửa hàng
-                                    </Link>
+                                    </Link> */}
                                     <Link to="/admin/report-comment" className='submenu-item '>
                                         Báo cáo đánh giá
                                     </Link>
@@ -284,11 +284,11 @@ const SidebarAdmin = () => {
                     </Link>
                 </li>
 
-                <li>
+                {/* <li>
                     <Link className={openMenu === "btc" ? 'itemStyle-click itemStyle' : 'itemStyle'} onClick={() => handleMenuClick("btc")} to="/admin">
                         <FontAwesomeIcon className='mr-5' icon={faBtc}></FontAwesomeIcon>
                         Doanh thu tiền mã hóa</Link>
-                </li>
+                </li> */}
 
                 <li>
                     <Link style={{marginBottom: '12px'}} className={openMenu === "statistical" ? 'itemStyle-click itemStyle' : 'itemStyle'} onClick={() => handleMenuClick("statistical")}>

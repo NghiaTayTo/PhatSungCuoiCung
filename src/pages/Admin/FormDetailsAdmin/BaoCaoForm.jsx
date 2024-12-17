@@ -105,7 +105,7 @@ const BaoCaoForm = ({ baoCaoID, onClose, trangThaiBaoCao }) => {
                                 <h3 style={{ marginLeft: '20px', color: 'gray' }}>Người dùng bị báo cáo</h3>
                                 <div className='baocao_content_item_flex'>
                                     {/* <img className='baocao_content_item_user_img' src={baoCao.tai_khoan_bi_bao_cao?.anh_dai_dien} alt="Ảnh đại diện người dùng" /> */}
-                                    <img className='baocao_content_item_user_img' src='/images/fukuda.jpg' alt="Ảnh đại diện người dùng" />
+                                    <img className='baocao_content_item_user_img' src={baoCao.tai_khoan_bi_bao_cao?.anh_dai_dien || `/images/avt_default.png`} alt="Ảnh đại diện người dùng" />
                                     <div className='baocao_content_item_user_content'>
                                         <strong>{baoCao.tai_khoan_bi_bao_cao?.ho_ten}</strong>
                                         <p>{baoCao.tai_khoan_bi_bao_cao?.email}</p>

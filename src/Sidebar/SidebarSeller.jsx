@@ -150,11 +150,11 @@ const SidebarSeller = () => {
                         Hỗ trợ khách hàng</Link>
                 </li>
 
-                <li>
+                {/* <li>
                     <Link className={openMenu === "bankrupt" ? 'itemStyle-click itemStyle' : 'itemStyle'} onClick={() => handleMenuClick("bankrupt")} to="/seller/bankrupt">
                         <FontAwesomeIcon className='mr-5' icon={faOutdent}></FontAwesomeIcon>
                         Đóng cửa hàng</Link>
-                </li>
+                </li> */}
 
             </ul>
         </nav>
